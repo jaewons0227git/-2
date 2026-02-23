@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quorv AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <nav id="sideMenu" class="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="menu" class="menu-toggle" onclick="toggleMenu()"></i>
+                <div class="header-right-icons">
+                    <i data-lucide="settings" onclick="openSettings()"></i>
+                </div>
+            </div>
+            
+            <div class="menu-content">
+                <div class="menu-item new-chat" onclick="startNewChat()">
+                    <i data-lucide="plus"></i> 새 채팅
+                </div>
+                <hr class="dotted-hr">
+                <div class="menu-category" onclick="toggleSubMenu()">
+                    <div class="category-left">
+                        <i data-lucide="history"></i> 대화
+                    </div>
+                    <i data-lucide="chevron-down" class="dropdown-icon" style="transform: rotate(180deg);"></i>
+                </div>
+                <div id="subMenu" class="sub-menu open">
+                    <!-- 대화 기록이 동적으로 추가될 예정 -->
+                </div>
+            </div>
+        </nav>
+
+        <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+        <!-- 설정 모달 -->
+        <div id="settingsModal" class="modal-overlay">
+            <div class="modal-window settings-window">
+                <div class="modal-header">
+                    <i data-lucide="chevron-left" class="modal-back" onclick="closeModal('settingsModal')"></i>
+                    <span>Quorv AI 설정</span>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-group">
+                        <div class="settings-item">
+                            <div class="item-text">
+                                <span class="item-title">계정</span>
+                                <span class="item-subtext">jaewons0227@gmail.com</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group-label">유용한 기능</div>
+                    <div class="settings-group">
+                        <div class="settings-item">
+                            <div class="item-text">
+                                <span class="item-title">실험실</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="group-label">개인정보</div>
+                    <div class="settings-group">
+                        <div class="settings-item" onclick="openPrivacy()">
+                            <div class="item-text">
+                                <span class="item-title">개인정보 설정</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+                        <div class="settings-item">
+                            <div class="item-text">
+                                <span class="item-title">개인정보 처리방침</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <div class="settings-item" onclick="openInfo()">
+                            <div class="item-text">
+                                <span class="item-title">Quorv AI 정보</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+                        <div class="settings-item">
+                            <div class="item-text">
+                                <span class="item-title">문의하기</span>
+                            </div>
+                            <i data-lucide="chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 정보 모달 -->
+        <div id="infoModal" class="modal-overlay">
+            <div class="modal-window info-window">
+                <div class="modal-header no-border">
+                    <i data-lucide="chevron-left" class="modal-back" onclick="closeModal('infoModal')"></i>
+                    <div class="header-right-action">
+                        <i data-lucide="info" class="header-info-icon"></i>
+                    </div>
+                </div>
+                <div class="info-content">
+                    <h2 class="info-name">Quorv AI</h2>
+                    <p class="info-version">버전: 4.0.60.0</p>
+                    <p class="info-status">최신 버전입니다.</p>
+                    <div class="info-bottom-buttons">
+                        <button class="info-rect-btn">이용약관</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 개인정보 모달 -->
+        <div id="privacyModal" class="modal-overlay">
+            <div class="modal-window privacy-window">
+                <div class="modal-header">
+                    <i data-lucide="chevron-left" class="modal-back" onclick="closeModal('privacyModal')"></i>
+                    <span>개인정보 설정</span>
+                </div>
+                <div class="privacy-body">
+                    <div class="privacy-card">
+                        <h3>데이터 보안 및 관리</h3>
+                        <p>Quorv AI는 사용자의 대화 기록을 암호화하여 로컬에 저장하며, 외부로 무단 유출하지 않습니다.</p>
+                        <div class="privacy-toggle">
+                            <span>대화 기록 저장 사용</span>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main id="mainContent" class="main-container">
+            <header class="main-header">
+                <i data-lucide="menu" class="nav-menu-btn" onclick="toggleMenu()"></i>
+                <span class="logo-text">Quorv</span>
+                <i data-lucide="sparkles" class="chat-icon"></i>
+            </header>
+
+            <section class="content-body" id="contentBody">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="greeting-container">
+                        <h1 class="main-greeting">무엇을 도와드릴까요?</h1>
+                        <p id="timeGreeting" class="sub-greeting">오늘 하루도 수고 많으셨습니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="bottom-footer">
+                <div class="input-container">
+                    <textarea placeholder="메시지를 입력해주세요." rows="1"></textarea>
+                    <div class="input-actions">
+                        <div class="action-left">
+                            <i data-lucide="paperclip"></i>
+                            <i data-lucide="globe"></i>
+                        </div>
+                        <button class="send-btn">
+                            <i data-lucide="arrow-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="disclaimer-text">
+                    Quorv는 실수할 수 있습니다. 중요한 정보는 한번 더 확인하세요.
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
