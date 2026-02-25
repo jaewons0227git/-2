@@ -1477,17 +1477,15 @@
                 if (!response.ok) throw new Error("Server error");
 
                 const loadingElem = document.getElementById(loadingId);
-                if (loadingElem) loadingElem.remove();
+                // [수정] 분석 중 텍스트를 삭제하지 않고 유지하여 레이아웃 급변 방지
                 if (timers) timers.forEach(t => clearTimeout(t));
 
-                const botRow = document.createElement('div');
-                botRow.classList.add('message-row', 'bot');
+                const botRow = loadingElem; 
                 botContent = document.createElement('div');
                 botContent.classList.add('bot-text');
                 botContent.classList.add('animate-in'); 
 
                 botRow.appendChild(botContent);
-                chatContainer.appendChild(botRow);
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
@@ -1612,6 +1610,16 @@
 
                 botContent.innerHTML = marked.parse(cleanTextDisplay);
 
+                // [수정] 답변 완료 시 텍스트 변경
+                const analyzingText = loadingElem.querySelector('.analyzing-text');
+                if (analyzingText) {
+                    analyzingText.innerText = "답변완료됨";
+                    analyzingText.style.animation = "none";
+                    analyzingText.style.background = "none";
+                    analyzingText.style.webkitTextFillColor = "#9CA3AF";
+                    analyzingText.style.color = "#9CA3AF";
+                }
+
                 // 최종 여백 조정
                 const finalBotHeight = botContent.offsetHeight;
                 chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
@@ -1628,7 +1636,7 @@
 
             } catch (error) {
                 const loadingElem = document.getElementById(loadingId);
-                if (loadingElem) loadingElem.remove();
+                if (loadingElem) loadingElem.remove(); // 에러 시에는 제거
                 if (timers) timers.forEach(t => clearTimeout(t));
 
                 if (error.name === 'AbortError') {
