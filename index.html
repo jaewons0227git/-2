@@ -1835,56 +1835,64 @@
 
                 // [수정] 3~7단어씩 랜덤하게 끊어서 출력하는 루프
                 const processBuffer = async () => {
-                    while (!isStreamingFinished || textBuffer.length > 0) {
-                        if (textBuffer.length > 0) {
-                            // 단어(\S+)와 공백/줄바꿈(\s+)을 모두 분리하여 보존
-                            const tokens = textBuffer.match(/(\S+|\s+)/g) || [];
-                            
-                            // 최소 3개 이상의 단어 토큰이 있거나 스트리밍이 끝났을 때 처리
-                            let wordTokens = tokens.filter(t => /\S/.test(t));
-                            if (wordTokens.length >= 3 || (isStreamingFinished && tokens.length > 0)) {
+                    try {
+                        while (!isStreamingFinished || textBuffer.length > 0) {
+                            if (textBuffer.length > 0) {
+                                // 단어(\S+)와 공백/줄바꿈(\s+)을 모두 분리하여 보존
+                                const tokens = textBuffer.match(/(\S+|\s+)/g) || [];
                                 
-                                let takeIndex = 0;
-                                let wordCount = 0;
-                                const targetWordCount = Math.floor(Math.random() * 5) + 3;
+                                // 최소 3개 이상의 단어 토큰이 있거나 스트리밍이 끝났을 때 처리
+                                let wordTokens = tokens.filter(t => /\S/.test(t));
+                                if (wordTokens.length >= 3 || (isStreamingFinished && tokens.length > 0)) {
+                                    
+                                    let takeIndex = 0;
+                                    let wordCount = 0;
+                                    const targetWordCount = Math.floor(Math.random() * 5) + 3;
 
-                                for (let i = 0; i < tokens.length; i++) {
-                                    if (/\S/.test(tokens[i])) wordCount++;
-                                    takeIndex = i + 1;
-                                    if (wordCount >= targetWordCount) break;
+                                    for (let i = 0; i < tokens.length; i++) {
+                                        if (/\S/.test(tokens[i])) wordCount++;
+                                        takeIndex = i + 1;
+                                        if (wordCount >= targetWordCount) break;
+                                    }
+
+                                    const chunk = tokens.slice(0, takeIndex).join('');
+                                    displayedText += chunk;
+                                    // 처리한 만큼만 버퍼에서 제거 (중요: 뒷부분에 새로 들어온 데이터 보존)
+                                    textBuffer = textBuffer.substring(chunk.length);
+
+                                    const parsed = parseStream(displayedText);
+                                    
+                                    // 스크롤 위치 고정
+                                    const savedScrollY = window.scrollY;
+                                    renderer.codeCount = 0; // 매번 리셋하여 순서대로 ID 부여
+                                    
+                                    try {
+                                        botContent.innerHTML = marked.parse(parsed.cleanText);
+                                        lucide.createIcons();
+                                        if (parsed.cleanText.includes('```')) {
+                                            Prism.highlightAllUnder(botContent);
+                                        }
+                                    } catch (err) {
+                                        console.error("Markdown parse error during stream:", err);
+                                    }
+                                    
+                                    // 여백 조정
+                                    const currentBotHeight = botContent.offsetHeight;
+                                    chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
+                                    
+                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
+                                    window.scrollTo(0, savedScrollY);
+                                    
+                                    await new Promise(r => setTimeout(r, Math.random() * 40 + 30));
+                                } else {
+                                    await new Promise(r => setTimeout(r, 10));
                                 }
-
-                                const chunk = tokens.slice(0, takeIndex).join('');
-                                displayedText += chunk;
-                                textBuffer = tokens.slice(takeIndex).join('');
-
-                                const parsed = parseStream(displayedText);
-                                
-                                // 스크롤 위치 고정
-                                const savedScrollY = window.scrollY;
-                                renderer.codeCount = 0; // 매번 리셋하여 순서대로 ID 부여
-                                botContent.innerHTML = marked.parse(parsed.cleanText);
-                                
-                                // 아이콘 및 하이라이트 초기화
-                                try {
-                                    lucide.createIcons();
-                                    Prism.highlightAllUnder(botContent);
-                                } catch (e) { console.error(e); }
-                                
-                                // 여백 조정
-                                const currentBotHeight = botContent.offsetHeight;
-                                chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
-                                
-                                // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
-                                window.scrollTo(0, savedScrollY);
-                                
-                                await new Promise(r => setTimeout(r, Math.random() * 40 + 30));
                             } else {
                                 await new Promise(r => setTimeout(r, 10));
                             }
-                        } else {
-                            await new Promise(r => setTimeout(r, 10));
                         }
+                    } catch (e) {
+                        console.error("processBuffer error:", e);
                     }
                 };
 
@@ -1902,10 +1910,10 @@
                     rawFullText += cleanChunk;
 
                     const parsed = parseStream(rawFullText);
-                    // 버퍼에 추가 (아직 처리되지 않은 부분만)
-                    const newContent = parsed.cleanText.substring(displayedText.length + textBuffer.length);
-                    if (newContent) {
-                        textBuffer += newContent;
+                    // [수정] 버퍼 추가 로직 개선 (데이터 유실 방지)
+                    const currentTotal = displayedText + textBuffer;
+                    if (parsed.cleanText.length > currentTotal.length) {
+                        textBuffer += parsed.cleanText.substring(currentTotal.length);
                     }
                     
                     currentMetadata.thought = parsed.thoughts;
