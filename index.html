@@ -149,6 +149,18 @@
         font-size: 13px !important;
         line-height: 1.6 !important;
         border-radius: 0 !important;
+        color: #1F2937 !important; /* 기본 글자색 검정 계열로 고정 */
+    }
+
+    .code-block-body pre code {
+        color: inherit !important;
+        text-shadow: none !important;
+    }
+
+    /* 실행 불가 버튼 스타일 */
+    .toggle-btn.disabled-run {
+        opacity: 0.4;
+        cursor: not-allowed;
     }
 
     /* 에디터 스타일 */
@@ -1148,16 +1160,14 @@
                         <button class="code-action-btn" id="edit-btn-${uniqueId}" onclick="toggleEdit('${uniqueId}')" title="편집">
                             <i data-lucide="pencil"></i>
                         </button>
-                        ${isHtml ? `
                         <div class="code-toggle-group">
                             <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="코드 보기">
                                 <i data-lucide="terminal"></i>
                             </button>
-                            <button class="toggle-btn" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run')" title="실행">
+                            <button class="toggle-btn ${!isHtml ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isHtml})" title="${isHtml ? '실행' : '실행 불가'}">
                                 <i data-lucide="play"></i>
                             </button>
                         </div>
-                        ` : ''}
                     </div>
                 </div>
                 <div class="code-block-body">
@@ -1226,7 +1236,7 @@
             }
         };
 
-        window.setViewMode = function(id, mode) {
+        window.setViewMode = function(id, mode, isExecutable = true) {
             const pre = document.getElementById(`pre-${id}`);
             const editor = document.getElementById(`editor-${id}`);
             const preview = document.getElementById(`preview-${id}`);
@@ -1246,6 +1256,11 @@
                 codeBtn.classList.add('active');
                 runBtn.classList.remove('active');
             } else {
+                // 실행 모드일 때 실행 가능한 언어인지 확인
+                if (!isExecutable) {
+                    return; // 실행 불가능한 언어면 아무것도 하지 않음
+                }
+
                 editor.style.display = 'none';
                 pre.style.display = 'none';
                 if (preview) {
