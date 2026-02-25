@@ -1110,9 +1110,22 @@
 
         // --- [NEW] Marked.js 커스텀 렌더러 ---
         const renderer = new marked.Renderer();
+        renderer.codeCount = 0;
+        renderer.codePrefix = 'static';
+
+        // 특수문자 이스케이프 함수
+        const escapeHtml = function(html) {
+            return html.replace(/&/g, '&amp;')
+                       .replace(/</g, '&lt;')
+                       .replace(/>/g, '&gt;')
+                       .replace(/"/g, '&quot;')
+                       .replace(/'/g, '&#39;');
+        };
+
         renderer.code = function(code, language) {
             const lang = language || 'text';
-            const uniqueId = 'code-' + Math.random().toString(36).substring(2, 9);
+            this.codeCount++;
+            const uniqueId = `${this.codePrefix}-${this.codeCount}`;
             const isHtml = lang.toLowerCase() === 'html';
 
             return `
@@ -1142,34 +1155,27 @@
                     </div>
                 </div>
                 <div class="code-block-body">
-                    <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${this.escape(code)}</code></pre>
-                    <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${code}</textarea>
+                    <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${escapeHtml(code)}</code></pre>
+                    <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${escapeHtml(code)}</textarea>
                     ${isHtml ? `<iframe class="code-preview" id="preview-${uniqueId}"></iframe>` : ''}
                 </div>
             </div>`;
         };
         
-        // 특수문자 이스케이프 함수 (renderer 내부에서 사용)
-        renderer.escape = function(html) {
-            return html.replace(/&/g, '&amp;')
-                       .replace(/</g, '&lt;')
-                       .replace(/>/g, '&gt;')
-                       .replace(/"/g, '&quot;')
-                       .replace(/'/g, '&#39;');
-        };
-
         marked.setOptions({ renderer: renderer, breaks: true, sanitize: false });
 
         // --- [NEW] 코드 블록 기능 함수들 ---
         window.copyCode = function(id) {
-            const code = document.getElementById(`editor-${id}`).value;
+            const editor = document.getElementById(`editor-${id}`);
+            if (!editor) return;
+            const code = editor.value;
             navigator.clipboard.writeText(code).then(() => {
                 const btn = document.querySelector(`#container-${id} [title="복사"]`);
-                const originalContent = btn.innerHTML;
+                const originalHTML = btn.innerHTML;
                 btn.innerHTML = '<i data-lucide="check" style="color:#10B981;"></i>';
                 lucide.createIcons();
                 setTimeout(() => {
-                    btn.innerHTML = originalContent;
+                    btn.innerHTML = originalHTML;
                     lucide.createIcons();
                 }, 2000);
             });
@@ -1179,6 +1185,8 @@
             const pre = document.getElementById(`pre-${id}`);
             const editor = document.getElementById(`editor-${id}`);
             const btn = document.getElementById(`edit-btn-${id}`);
+            if (!pre || !editor) return;
+            
             const isEditing = editor.style.display === 'block';
 
             if (isEditing) {
@@ -1190,26 +1198,22 @@
                 pre.style.display = 'none';
                 btn.classList.add('active');
                 editor.focus();
-                // 높이 자동 조절
                 editor.style.height = 'auto';
                 editor.style.height = editor.scrollHeight + 'px';
             }
         };
 
         window.updateCodeHighlight = function(id, lang) {
-            const pre = document.getElementById(`pre-${id}`);
             const codeElem = document.getElementById(`code-content-${id}`);
             const editor = document.getElementById(`editor-${id}`);
+            if (!codeElem || !editor) return;
             
-            // pre 태그 안의 내용을 업데이트하고 Prism 다시 적용
             codeElem.textContent = editor.value;
             Prism.highlightElement(codeElem);
             
-            // 에디터 높이 조절
             editor.style.height = 'auto';
             editor.style.height = editor.scrollHeight + 'px';
             
-            // 실행 모드라면 프리뷰도 업데이트
             const preview = document.getElementById(`preview-${id}`);
             if (preview && preview.style.display === 'block') {
                 updatePreview(id);
@@ -1225,7 +1229,7 @@
             const editBtn = document.getElementById(`edit-btn-${id}`);
 
             if (mode === 'code') {
-                preview.style.display = 'none';
+                if (preview) preview.style.display = 'none';
                 if (editBtn.classList.contains('active')) {
                     editor.style.display = 'block';
                     pre.style.display = 'none';
@@ -1236,27 +1240,30 @@
                 codeBtn.classList.add('active');
                 runBtn.classList.remove('active');
             } else {
-                // 실행 모드
                 editor.style.display = 'none';
                 pre.style.display = 'none';
-                preview.style.display = 'block';
+                if (preview) {
+                    preview.style.display = 'block';
+                    updatePreview(id);
+                }
                 codeBtn.classList.remove('active');
                 runBtn.classList.add('active');
-                updatePreview(id);
             }
         };
 
         function updatePreview(id) {
-            const code = document.getElementById(`editor-${id}`).value;
+            const editor = document.getElementById(`editor-${id}`);
             const preview = document.getElementById(`preview-${id}`);
+            if (!editor || !preview) return;
+            
+            const code = editor.value;
             const doc = preview.contentDocument || preview.contentWindow.document;
             doc.open();
             doc.write(code);
             doc.close();
             
-            // 아이프레임 높이 자동 조절
             setTimeout(() => {
-                preview.style.height = doc.body.scrollHeight + 40 + 'px';
+                preview.style.height = Math.max(200, doc.body.scrollHeight + 20) + 'px';
             }, 100);
         }
 
@@ -1781,6 +1788,9 @@
 
                 botRow.appendChild(botContent);
 
+                // [수정] 코드 블록 ID 안정화
+                renderer.codePrefix = loadingId;
+
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 
@@ -1852,11 +1862,14 @@
                                 
                                 // 스크롤 위치 고정
                                 const savedScrollY = window.scrollY;
+                                renderer.codeCount = 0; // 매번 리셋하여 순서대로 ID 부여
                                 botContent.innerHTML = marked.parse(parsed.cleanText);
                                 
                                 // 아이콘 및 하이라이트 초기화
-                                lucide.createIcons();
-                                Prism.highlightAllUnder(botContent);
+                                try {
+                                    lucide.createIcons();
+                                    Prism.highlightAllUnder(botContent);
+                                } catch (e) { console.error(e); }
                                 
                                 // 여백 조정
                                 const currentBotHeight = botContent.offsetHeight;
@@ -1906,9 +1919,12 @@
                 currentMetadata.thought = finalParsed.thoughts;
                 currentMetadata.citations = finalParsed.citations;
 
+                renderer.codeCount = 0;
                 botContent.innerHTML = marked.parse(cleanTextDisplay);
-                lucide.createIcons();
-                Prism.highlightAllUnder(botContent);
+                try {
+                    lucide.createIcons();
+                    Prism.highlightAllUnder(botContent);
+                } catch (e) { console.error(e); }
 
                 // [수정] 답변 완료 시 텍스트 변경
                 const analyzingText = loadingElem.querySelector('.analyzing-text');
@@ -2088,6 +2104,7 @@
             } else {
                 const contentDiv = document.createElement('div');
                 contentDiv.classList.add('bot-text'); 
+                renderer.codeCount = 0;
                 contentDiv.innerHTML = marked.parse(text);
                 rowDiv.appendChild(contentDiv);
             }
