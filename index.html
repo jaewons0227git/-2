@@ -915,6 +915,9 @@
     </div>
 
     <script>
+        // [설정] 스크롤 시 여백 오차 조정 (값이 클수록 여백이 줄어듦)
+        const SCROLL_PADDING_OFFSET = 150; 
+
         const chatContainer = document.getElementById('chatContainer');
         const centerLogo = document.getElementById('centerLogo');
         const chatInput = document.getElementById('chatInput');
@@ -1403,8 +1406,8 @@
             const text = textOverride || chatInput.value.trim();
             if (text.length === 0) return;
 
-            // [수정] 새로운 메시지 시작 시 충분한 여백 확보 (뷰포트 높이만큼)
-            const initialPadding = window.innerHeight;
+            // [수정] 새로운 메시지 시작 시 충분한 여백 확보 (뷰포트 높이 - 오차)
+            const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
             chatContainer.style.transition = 'none'; // 즉시 적용
             chatContainer.style.paddingBottom = initialPadding + 'px';
 
