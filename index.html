@@ -464,6 +464,26 @@
     @media (max-width: 768px) {
         .share-btn { font-size: 11px; padding: 4px 8px; }
         .top-bar { padding: 0 10px; }
+
+        /* [수정] 모바일 메세지 폰트 크기 축소 */
+        .user-bubble { font-size: 13px; padding: 6px 12px; }
+        .bot-text { font-size: 13px; }
+
+        /* [수정] 모바일 하단 입력창 레이아웃 (바닥/옆 완전히 밀착) */
+        .bottom-fixed-wrapper { 
+            padding: 0 !important; 
+            background: transparent !important; /* 배경 그라데이션 제거 */
+        }
+        .chat-input-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 20px 20px 0 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            /* 하단 안전 영역 무시하고 바닥에 붙이기 */
+            padding-bottom: env(safe-area-inset-bottom, 10px); 
+        }
+        .disclaimer-text { display: none; }
     }
 
     /* --- 채팅 영역 --- */
@@ -1901,11 +1921,15 @@
                                     const currentBotHeight = botContent.offsetHeight;
                                     chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                     
-                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
-                                    window.scrollTo(0, savedScrollY);
-                                    
-                                    await new Promise(r => setTimeout(r, Math.random() * 40 + 30));
-                                } else {
+                                                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
+                                                                    window.scrollTo(0, savedScrollY);
+                                                                    
+                                                                    // [추가] 모바일 햅틱 진동 (아주 미세하게)
+                                                                    if (window.navigator && window.navigator.vibrate) {
+                                                                        window.navigator.vibrate(5);
+                                                                    }
+                                                                    
+                                                                    await new Promise(r => setTimeout(r, Math.random() * 40 + 30));                                } else {
                                     await new Promise(r => setTimeout(r, 10));
                                 }
                             } else {
