@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MinsuGPT</title>
+<title>quorv</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -853,7 +853,7 @@
     </header>
 
     <div id="centerLogo" class="center-logo">
-        <img src="https://i.postimg.cc/Sxd0rHV1/image-removebg-preview.png" alt="MinsuGPT">
+        <img src="https://i.postimg.cc/Sxd0rHV1/image-removebg-preview.png" alt="quorv">
     </div>
 
     <div id="chatContainer" class="chat-container"></div>
@@ -878,7 +878,7 @@
                 <button id="sendBtn" class="send-btn" disabled><span class="material-symbols-rounded">arrow_upward</span></button>
             </div>
         </div>
-        <div class="disclaimer-text">MinsuGPT는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
+        <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
     </div>
 
     <div id="deleteModalOverlay" class="modal-overlay">
@@ -982,12 +982,12 @@
 
         // --- 로컬 스토리지 관리 ---
         function getSavedChats() {
-            const stored = localStorage.getItem('minsuGptChats');
+            const stored = localStorage.getItem('quorvChats');
             return stored ? JSON.parse(stored) : {};
         }
 
         function saveChatsToStorage(chats) {
-            localStorage.setItem('minsuGptChats', JSON.stringify(chats));
+            localStorage.setItem('quorvChats', JSON.stringify(chats));
             renderSidebar();
         }
 
@@ -1463,7 +1463,11 @@
                 const response = await fetch(isSearchMode ? "https://jaewondev6.pythonanywhere.com/ask" : "https://jaewondev6.pythonanywhere.com/askfast", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: text, history: conversationHistory }),
+                    body: JSON.stringify({ 
+                        message: text, 
+                        history: conversationHistory,
+                        image_base64: [] // Ensure compatibility with backend's expected field
+                    }),
                     signal: abortController.signal
                 });
 
@@ -1745,4 +1749,3 @@
     </script>
 </body>
 </html>
-
