@@ -1460,7 +1460,7 @@
             let currentMetadata = { thought: "", citations: [] };
 
             try {
-                const response = await fetch(isSearchMode ? "https://jaewondev.pythonanywhere.com/ask" : "https://jaewondev.pythonanywhere.com/askfast", {
+                const response = await fetch(isSearchMode ? "https://jaewondev6.pythonanywhere.com/ask" : "https://jaewondev6.pythonanywhere.com/askfast", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message: text, history: conversationHistory }),
@@ -1745,3 +1745,4 @@
     </script>
 </body>
 </html>
+
