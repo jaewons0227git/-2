@@ -324,6 +324,7 @@
         padding-bottom: 160px;
         box-sizing: border-box;
         display: flex; flex-direction: column; gap: 24px; 
+        overflow-anchor: none; /* 스크롤 안정화 */
         
         transition: margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
@@ -1491,6 +1492,10 @@
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 
+                let textBuffer = "";
+                let displayedText = "";
+                let isStreamingFinished = false;
+
                 const parseStream = (fullText) => {
                     let extractedThoughts = "";
                     let citations = [];
@@ -1526,27 +1531,62 @@
                     };
                 };
 
+                // [수정] 3~7단어씩 랜덤하게 끊어서 출력하는 루프
+                const processBuffer = async () => {
+                    while (!isStreamingFinished || textBuffer.length > 0) {
+                        if (textBuffer.length > 0) {
+                            const words = textBuffer.trim().split(/\s+/);
+                            if (words.length >= 3 || (isStreamingFinished && words.length > 0)) {
+                                // 3~7단어 사이로 랜덤하게 선택 (남은 단어가 적으면 남은 만큼)
+                                const count = Math.min(words.length, Math.floor(Math.random() * 5) + 3);
+                                const chunk = words.splice(0, count).join(' ');
+                                
+                                displayedText += (displayedText ? " " : "") + chunk;
+                                textBuffer = words.join(' ');
+
+                                const parsed = parseStream(displayedText);
+                                botContent.innerHTML = marked.parse(parsed.cleanText);
+                                
+                                // 여백 조정
+                                const currentBotHeight = botContent.offsetHeight;
+                                chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
+                                
+                                // 부드러운 출력을 위한 지연
+                                await new Promise(r => setTimeout(r, Math.random() * 50 + 50));
+                            } else {
+                                await new Promise(r => setTimeout(r, 50));
+                            }
+                        } else {
+                            await new Promise(r => setTimeout(r, 50));
+                        }
+                    }
+                };
+
+                const bufferPromise = processBuffer();
+
                 while (true) {
                     const { done, value } = await reader.read();
-                    if (done) break;
+                    if (done) {
+                        isStreamingFinished = true;
+                        break;
+                    }
                     
                     const chunk = decoder.decode(value, { stream: true });
                     const cleanChunk = chunk.replace(/\[DONE\]/g, "");
                     rawFullText += cleanChunk;
 
                     const parsed = parseStream(rawFullText);
-                    cleanTextDisplay = parsed.cleanText;
+                    // 버퍼에 추가 (아직 처리되지 않은 부분만)
+                    const newContent = parsed.cleanText.substring(displayedText.length + textBuffer.length);
+                    if (newContent) {
+                        textBuffer += newContent;
+                    }
+                    
                     currentMetadata.thought = parsed.thoughts;
                     currentMetadata.citations = parsed.citations;
-
-
-                    if (cleanTextDisplay.length > 0) {
-                        botContent.innerHTML = marked.parse(cleanTextDisplay);
-                        // [수정] 봇 메세지가 길어지는 만큼 하단 여백을 줄임
-                        const currentBotHeight = botContent.offsetHeight;
-                        chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
-                    }
                 }
+
+                await bufferPromise;
                 
                 const finalParsed = parseStream(rawFullText);
                 cleanTextDisplay = finalParsed.cleanText;
