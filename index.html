@@ -15,6 +15,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+<!-- Prism.js for Syntax Highlighting -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
 <style>
     :root {
         /* 크기 및 반경 변수 */
@@ -34,6 +42,138 @@
         --sidebar-width: 240px;    
         --sidebar-mini-width: 56px; 
         --content-max-width: 700px; 
+    }
+
+    /* --- [NEW] 커스텀 코드 블록 스타일 --- */
+    .code-block-container {
+        margin: 16px 0;
+        border: 1px solid #E5E7EB;
+        border-radius: 16px;
+        background-color: #F9FAFB;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .code-block-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px;
+        background-color: #F3F4F6;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    .code-lang-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #374151;
+        text-transform: uppercase;
+    }
+
+    .code-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .code-action-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        color: #6B7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .code-action-btn:hover {
+        background-color: #E5E7EB;
+        color: #1F2937;
+    }
+
+    .code-action-btn.active {
+        background-color: #fff;
+        color: var(--primary-color);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .code-action-btn .lucide {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* 실행/코드 토글 스위치 스타일 */
+    .code-toggle-group {
+        display: flex;
+        background-color: #E5E7EB;
+        padding: 2px;
+        border-radius: 8px;
+        margin-left: 8px;
+    }
+
+    .toggle-btn {
+        padding: 4px 8px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        color: #6B7280;
+        transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+        background-color: #fff;
+        color: #1F2937;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .code-block-body {
+        position: relative;
+        flex: 1;
+        min-height: 50px;
+    }
+
+    .code-block-body pre {
+        margin: 0 !important;
+        padding: 16px !important;
+        background: transparent !important;
+        font-size: 13px !important;
+        line-height: 1.6 !important;
+        border-radius: 0 !important;
+    }
+
+    /* 에디터 스타일 */
+    .code-editor {
+        display: none;
+        width: 100%;
+        min-height: 100px;
+        border: none;
+        background-color: #fff;
+        padding: 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        outline: none;
+        resize: vertical;
+        color: #1F2937;
+    }
+
+    /* 프리뷰 스타일 */
+    .code-preview {
+        display: none;
+        width: 100%;
+        min-height: 200px;
+        border: none;
+        background-color: #fff;
     }
 
     html {
@@ -968,7 +1108,157 @@
         // 메시지별 메타데이터 저장 (사고과정, 인용 등)
         let messageMetadata = {}; 
 
-        marked.setOptions({ breaks: true, sanitize: false });
+        // --- [NEW] Marked.js 커스텀 렌더러 ---
+        const renderer = new marked.Renderer();
+        renderer.code = function(code, language) {
+            const lang = language || 'text';
+            const uniqueId = 'code-' + Math.random().toString(36).substring(2, 9);
+            const isHtml = lang.toLowerCase() === 'html';
+
+            return `
+            <div class="code-block-container" id="container-${uniqueId}">
+                <div class="code-block-header">
+                    <div class="code-lang-info">
+                        <i data-lucide="code-2"></i>
+                        <span>${lang}</span>
+                    </div>
+                    <div class="code-actions">
+                        <button class="code-action-btn" onclick="copyCode('${uniqueId}')" title="복사">
+                            <i data-lucide="copy"></i>
+                        </button>
+                        <button class="code-action-btn" id="edit-btn-${uniqueId}" onclick="toggleEdit('${uniqueId}')" title="편집">
+                            <i data-lucide="pencil"></i>
+                        </button>
+                        ${isHtml ? `
+                        <div class="code-toggle-group">
+                            <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="코드 보기">
+                                <i data-lucide="terminal"></i>
+                            </button>
+                            <button class="toggle-btn" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run')" title="실행">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="code-block-body">
+                    <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${this.escape(code)}</code></pre>
+                    <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${code}</textarea>
+                    ${isHtml ? `<iframe class="code-preview" id="preview-${uniqueId}"></iframe>` : ''}
+                </div>
+            </div>`;
+        };
+        
+        // 특수문자 이스케이프 함수 (renderer 내부에서 사용)
+        renderer.escape = function(html) {
+            return html.replace(/&/g, '&amp;')
+                       .replace(/</g, '&lt;')
+                       .replace(/>/g, '&gt;')
+                       .replace(/"/g, '&quot;')
+                       .replace(/'/g, '&#39;');
+        };
+
+        marked.setOptions({ renderer: renderer, breaks: true, sanitize: false });
+
+        // --- [NEW] 코드 블록 기능 함수들 ---
+        window.copyCode = function(id) {
+            const code = document.getElementById(`editor-${id}`).value;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector(`#container-${id} [title="복사"]`);
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" style="color:#10B981;"></i>';
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        };
+
+        window.toggleEdit = function(id) {
+            const pre = document.getElementById(`pre-${id}`);
+            const editor = document.getElementById(`editor-${id}`);
+            const btn = document.getElementById(`edit-btn-${id}`);
+            const isEditing = editor.style.display === 'block';
+
+            if (isEditing) {
+                editor.style.display = 'none';
+                pre.style.display = 'block';
+                btn.classList.remove('active');
+            } else {
+                editor.style.display = 'block';
+                pre.style.display = 'none';
+                btn.classList.add('active');
+                editor.focus();
+                // 높이 자동 조절
+                editor.style.height = 'auto';
+                editor.style.height = editor.scrollHeight + 'px';
+            }
+        };
+
+        window.updateCodeHighlight = function(id, lang) {
+            const pre = document.getElementById(`pre-${id}`);
+            const codeElem = document.getElementById(`code-content-${id}`);
+            const editor = document.getElementById(`editor-${id}`);
+            
+            // pre 태그 안의 내용을 업데이트하고 Prism 다시 적용
+            codeElem.textContent = editor.value;
+            Prism.highlightElement(codeElem);
+            
+            // 에디터 높이 조절
+            editor.style.height = 'auto';
+            editor.style.height = editor.scrollHeight + 'px';
+            
+            // 실행 모드라면 프리뷰도 업데이트
+            const preview = document.getElementById(`preview-${id}`);
+            if (preview && preview.style.display === 'block') {
+                updatePreview(id);
+            }
+        };
+
+        window.setViewMode = function(id, mode) {
+            const pre = document.getElementById(`pre-${id}`);
+            const editor = document.getElementById(`editor-${id}`);
+            const preview = document.getElementById(`preview-${id}`);
+            const codeBtn = document.getElementById(`view-code-${id}`);
+            const runBtn = document.getElementById(`run-code-${id}`);
+            const editBtn = document.getElementById(`edit-btn-${id}`);
+
+            if (mode === 'code') {
+                preview.style.display = 'none';
+                if (editBtn.classList.contains('active')) {
+                    editor.style.display = 'block';
+                    pre.style.display = 'none';
+                } else {
+                    editor.style.display = 'none';
+                    pre.style.display = 'block';
+                }
+                codeBtn.classList.add('active');
+                runBtn.classList.remove('active');
+            } else {
+                // 실행 모드
+                editor.style.display = 'none';
+                pre.style.display = 'none';
+                preview.style.display = 'block';
+                codeBtn.classList.remove('active');
+                runBtn.classList.add('active');
+                updatePreview(id);
+            }
+        };
+
+        function updatePreview(id) {
+            const code = document.getElementById(`editor-${id}`).value;
+            const preview = document.getElementById(`preview-${id}`);
+            const doc = preview.contentDocument || preview.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+            
+            // 아이프레임 높이 자동 조절
+            setTimeout(() => {
+                preview.style.height = doc.body.scrollHeight + 40 + 'px';
+            }, 100);
+        }
 
         // Lucide 아이콘 초기화
         lucide.createIcons();
@@ -1040,6 +1330,10 @@
                          }
                     }
                 });
+                
+                // 아이콘 및 하이라이트 초기화
+                lucide.createIcons();
+                Prism.highlightAllUnder(chatContainer);
                 
                 isFirstMessage = false;
                 document.body.style.overflowY = 'auto';
@@ -1556,9 +1850,13 @@
 
                                 const parsed = parseStream(displayedText);
                                 
-                                // 스크롤 위치 고정 (답변 도중 튀는 현상 방지)
+                                // 스크롤 위치 고정
                                 const savedScrollY = window.scrollY;
                                 botContent.innerHTML = marked.parse(parsed.cleanText);
+                                
+                                // 아이콘 및 하이라이트 초기화
+                                lucide.createIcons();
+                                Prism.highlightAllUnder(botContent);
                                 
                                 // 여백 조정
                                 const currentBotHeight = botContent.offsetHeight;
@@ -1609,6 +1907,8 @@
                 currentMetadata.citations = finalParsed.citations;
 
                 botContent.innerHTML = marked.parse(cleanTextDisplay);
+                lucide.createIcons();
+                Prism.highlightAllUnder(botContent);
 
                 // [수정] 답변 완료 시 텍스트 변경
                 const analyzingText = loadingElem.querySelector('.analyzing-text');
