@@ -1113,9 +1113,10 @@
         renderer.codeCount = 0;
         renderer.codePrefix = 'static';
 
-        // 특수문자 이스케이프 함수
+        // 특수문자 이스케이프 함수 (안전하게 문자열로 변환 후 처리)
         const escapeHtml = function(html) {
-            return html.replace(/&/g, '&amp;')
+            const str = String(html || '');
+            return str.replace(/&/g, '&amp;')
                        .replace(/</g, '&lt;')
                        .replace(/>/g, '&gt;')
                        .replace(/"/g, '&quot;')
@@ -1123,10 +1124,15 @@
         };
 
         renderer.code = function(code, language) {
-            const lang = language || 'text';
+            // marked v1.x 이상에서는 code가 객체로 올 수 있으므로 처리
+            const codeStr = typeof code === 'object' ? code.text : code;
+            const lang = (typeof code === 'object' ? code.lang : language) || 'text';
+            
             this.codeCount++;
             const uniqueId = `${this.codePrefix}-${this.codeCount}`;
             const isHtml = lang.toLowerCase() === 'html';
+
+            const escapedCode = escapeHtml(codeStr);
 
             return `
             <div class="code-block-container" id="container-${uniqueId}">
@@ -1155,8 +1161,8 @@
                     </div>
                 </div>
                 <div class="code-block-body">
-                    <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${escapeHtml(code)}</code></pre>
-                    <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${escapeHtml(code)}</textarea>
+                    <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${escapedCode}</code></pre>
+                    <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${codeStr}</textarea>
                     ${isHtml ? `<iframe class="code-preview" id="preview-${uniqueId}"></iframe>` : ''}
                 </div>
             </div>`;
