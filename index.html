@@ -1286,46 +1286,21 @@
         });
 
         function forceScrollToMessage(element) {
-            // 대화 내역이 유저 메시지 1개뿐이라면(첫 번째 질문) 스크롤하지 않음
-            if (conversationHistory.length <= 1) return;
+            if (!element) return;
 
             const headerHeight = 50;
             const topGap = 20;
             const targetVisualTop = headerHeight + topGap;
-
-            // 충분한 계산을 위해 잠시 레이아웃을 확정
-            chatContainer.style.transition = 'none';
 
             requestAnimationFrame(() => {
                 const rect = element.getBoundingClientRect();
                 const absoluteElementTop = window.scrollY + rect.top;
                 const targetScrollY = absoluteElementTop - targetVisualTop;
 
-                // 이미 충분히 위에 있다면 스크롤만 수행
-                if (targetScrollY <= window.scrollY) {
-                    window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
-                    return;
-                }
-
-                // [핵심] 뷰포트 하단에 메시지를 상단으로 밀어올릴 수 있는 가상의 공간을 더함
-                // 필요한 총 높이 = 현재 위치에서 목표까지의 거리 + 현재 뷰포트 높이
-                const neededSpace = targetScrollY + window.innerHeight;
-                const currentDocHeight = document.documentElement.scrollHeight;
-                
-                if (neededSpace > currentDocHeight) {
-                    const currentPadding = parseInt(window.getComputedStyle(chatContainer).paddingBottom) || 160;
-                    const extraPaddingNeeded = neededSpace - currentDocHeight;
-                    chatContainer.style.paddingBottom = (currentPadding + extraPaddingNeeded) + 'px';
-                }
-
                 window.scrollTo({
-                    top: targetScrollY,
+                    top: Math.max(0, targetScrollY),
                     behavior: 'smooth'
                 });
-
-                setTimeout(() => {
-                    chatContainer.style.transition = 'padding-bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
-                }, 50);
             });
         }
 
@@ -1428,8 +1403,10 @@
             const text = textOverride || chatInput.value.trim();
             if (text.length === 0) return;
 
-            // 새로운 메시지 시작 시 이전 여백 초기화
-            chatContainer.style.paddingBottom = '160px';
+            // [수정] 새로운 메시지 시작 시 충분한 여백 확보 (뷰포트 높이만큼)
+            const initialPadding = window.innerHeight;
+            chatContainer.style.transition = 'none'; // 즉시 적용
+            chatContainer.style.paddingBottom = initialPadding + 'px';
 
             if (isFirstMessage) {
                 document.body.style.overflowY = 'auto';
@@ -1562,6 +1539,9 @@
 
                     if (cleanTextDisplay.length > 0) {
                         botContent.innerHTML = marked.parse(cleanTextDisplay);
+                        // [수정] 봇 메세지가 길어지는 만큼 하단 여백을 줄임
+                        const currentBotHeight = botContent.offsetHeight;
+                        chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                     }
                 }
                 
@@ -1571,6 +1551,10 @@
                 currentMetadata.citations = finalParsed.citations;
 
                 botContent.innerHTML = marked.parse(cleanTextDisplay);
+
+                // 최종 여백 조정
+                const finalBotHeight = botContent.offsetHeight;
+                chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
 
                 const msgIndex = conversationHistory.length + 1; 
                 messageMetadata[msgIndex] = currentMetadata;
@@ -1604,7 +1588,8 @@
                 sendBtn.innerHTML = '<span class="material-symbols-rounded">arrow_upward</span>';
                 sendBtn.disabled = true; 
                 
-                // 답변 도중/직후에 여백을 갑자기 줄이지 않음 (다음 메시지 전송 시 초기화)
+                // 트랜지션 복구
+                chatContainer.style.transition = 'padding-bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
                 
                 adjustHeight(); 
                 checkScrollPosition();
