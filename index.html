@@ -1535,29 +1535,46 @@
                 const processBuffer = async () => {
                     while (!isStreamingFinished || textBuffer.length > 0) {
                         if (textBuffer.length > 0) {
-                            const words = textBuffer.trim().split(/\s+/);
-                            if (words.length >= 3 || (isStreamingFinished && words.length > 0)) {
-                                // 3~7단어 사이로 랜덤하게 선택 (남은 단어가 적으면 남은 만큼)
-                                const count = Math.min(words.length, Math.floor(Math.random() * 5) + 3);
-                                const chunk = words.splice(0, count).join(' ');
+                            // 단어(\S+)와 공백/줄바꿈(\s+)을 모두 분리하여 보존
+                            const tokens = textBuffer.match(/(\S+|\s+)/g) || [];
+                            
+                            // 최소 3개 이상의 단어 토큰이 있거나 스트리밍이 끝났을 때 처리
+                            let wordTokens = tokens.filter(t => /\S/.test(t));
+                            if (wordTokens.length >= 3 || (isStreamingFinished && tokens.length > 0)) {
                                 
-                                displayedText += (displayedText ? " " : "") + chunk;
-                                textBuffer = words.join(' ');
+                                let takeIndex = 0;
+                                let wordCount = 0;
+                                const targetWordCount = Math.floor(Math.random() * 5) + 3;
+
+                                for (let i = 0; i < tokens.length; i++) {
+                                    if (/\S/.test(tokens[i])) wordCount++;
+                                    takeIndex = i + 1;
+                                    if (wordCount >= targetWordCount) break;
+                                }
+
+                                const chunk = tokens.slice(0, takeIndex).join('');
+                                displayedText += chunk;
+                                textBuffer = tokens.slice(takeIndex).join('');
 
                                 const parsed = parseStream(displayedText);
+                                
+                                // 스크롤 위치 고정 (답변 도중 튀는 현상 방지)
+                                const savedScrollY = window.scrollY;
                                 botContent.innerHTML = marked.parse(parsed.cleanText);
                                 
                                 // 여백 조정
                                 const currentBotHeight = botContent.offsetHeight;
                                 chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                 
-                                // 부드러운 출력을 위한 지연
-                                await new Promise(r => setTimeout(r, Math.random() * 50 + 50));
+                                // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
+                                window.scrollTo(0, savedScrollY);
+                                
+                                await new Promise(r => setTimeout(r, Math.random() * 40 + 30));
                             } else {
-                                await new Promise(r => setTimeout(r, 50));
+                                await new Promise(r => setTimeout(r, 10));
                             }
                         } else {
-                            await new Promise(r => setTimeout(r, 50));
+                            await new Promise(r => setTimeout(r, 10));
                         }
                     }
                 };
