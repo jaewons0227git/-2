@@ -698,41 +698,43 @@
         border: 1px solid transparent; /* 기본 보더 투명 */
     }
 
-    /* [NEW] 입력창 글로우 애니메이션 (핑크 & 블루 회전) */
+    /* [NEW] 입력창 글로우 애니메이션 (테두리 따라 회전하는 핑크 & 블루) */
     @keyframes rotate-glow {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(360deg); }
     }
     .chat-input-container.generating {
-        overflow: hidden;
-        border-color: transparent;
+        position: relative;
+        overflow: hidden; /* 내부 회전 요소를 테두리에 맞게 자름 */
+        border: 1px solid transparent;
+        background-color: transparent; /* 배경은 ::after에서 처리 */
     }
     .chat-input-container.generating::before {
         content: "";
         position: absolute;
-        top: -150%;
-        left: -150%;
-        width: 400%;
-        height: 400%;
+        top: 50%;
+        left: 50%;
+        width: 200%; /* 충분히 크게 설정하여 모서리까지 커버 */
+        aspect-ratio: 1;
         background: conic-gradient(
             from 0deg,
-            transparent, 
-            #FFB6C1 10%, /* Pink */
-            #87CEEB 20%, /* Sky Blue */
-            transparent 30%,
+            transparent 0%,
+            #FFB6C1 5%,  /* Pink */
+            #87CEEB 15%, /* Sky Blue */
+            transparent 25%,
             transparent 50%,
-            #FFB6C1 60%,
-            #87CEEB 70%,
-            transparent 80%
+            #FFB6C1 55%,
+            #87CEEB 65%,
+            transparent 75%
         );
         animation: rotate-glow 3s linear infinite;
-        z-index: -1;
-        filter: blur(8px);
+        z-index: -2;
+        filter: blur(4px); /* 테두리에 약간의 번짐 효과 */
     }
     .chat-input-container.generating::after {
         content: "";
         position: absolute;
-        inset: 2px;
+        inset: 2px; /* 테두리 두께만큼 안쪽으로 */
         background: #F4F4F5;
         border-radius: calc(var(--radius-input) - 2px);
         z-index: -1;
@@ -1010,12 +1012,9 @@
         body:not(.pc-sidebar-open) .sidebar-menu-btn span {
             display: none;
         }
-        body:not(.pc-sidebar-open) #sidebarSearchContainer {
-            display: none !important;
-        }
         body:not(.pc-sidebar-open) .sidebar-section-title,
         body:not(.pc-sidebar-open) #savedChatList {
-            display: none;
+            display: none !important;
         }
         body:not(.pc-sidebar-open) .sidebar-footer {
             margin: 0 auto 8px auto;
@@ -1551,8 +1550,9 @@
                 isFirstMessage = false;
                 document.body.style.overflowY = 'auto';
                 
-                // URL 업데이트 (/chat/UUID)
-                history.pushState({ chatId: id }, '', `/chat/${id}`);
+                // URL 업데이트 (?chat=UUID)
+                const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
+                history.pushState({ chatId: id }, '', newUrl);
                 
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
                 
@@ -1740,7 +1740,7 @@
             adjustHeight();
             scrollToBottomBtn.classList.remove('show'); 
 
-            history.pushState({}, '', '/');
+            history.pushState({}, '', window.location.origin + window.location.pathname);
             renderSidebar();
         }
 
@@ -1750,10 +1750,10 @@
         window.addEventListener('load', () => {
             // renderSidebar()는 initialLoader가 끝난 뒤 호출됨
             
-            const path = window.location.pathname;
-            const match = path.match(/\/chat\/([a-zA-Z0-9-]+)/);
-            if (match && match[1]) {
-                loadChatFromStorage(match[1]);
+            const urlParams = new URLSearchParams(window.location.search);
+            const chatId = urlParams.get('chat');
+            if (chatId) {
+                loadChatFromStorage(chatId);
             }
         });
 
@@ -1948,7 +1948,8 @@
             // 채팅 ID 및 URL 설정
             if (!currentChatId) {
                 currentChatId = generateUUID();
-                history.pushState({ chatId: currentChatId }, '', `/chat/${currentChatId}`);
+                const newUrl = window.location.origin + window.location.pathname + '?chat=' + currentChatId;
+                history.pushState({ chatId: currentChatId }, '', newUrl);
             }
 
             let userMsgElement;
