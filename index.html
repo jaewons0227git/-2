@@ -586,8 +586,8 @@
     }
 
     .user-bubble {
-        background-color: var(--user-bubble-bg);
-        color: var(--user-bubble-text);          
+        background-color: var(--user-bubble-bg, #F4F4F5);
+        color: var(--user-bubble-text, #1F2937);          
         padding: 8px 14px;
         border-radius: var(--radius-bubble);
         word-break: break-word;
@@ -1045,9 +1045,189 @@
         
         body:not(.pc-sidebar-open) .pc-sidebar-open-btn { display: inline-block; }
     }
+
+    /* --- [NEW] 프로필 메뉴 및 테마/설정 스타일 --- */
+    .profile-menu {
+        position: absolute;
+        bottom: 70px;
+        left: 10px;
+        width: calc(var(--sidebar-width) - 20px);
+        background-color: #fff;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        z-index: 2100;
+        display: none;
+        flex-direction: column;
+        padding: 6px;
+    }
+    .profile-menu.show { display: flex; }
+    
+    /* 미니 사이드바일 때 메뉴 위치 조정 */
+    body:not(.pc-sidebar-open) .profile-menu {
+        left: 60px;
+        bottom: 10px;
+        width: 180px;
+    }
+
+    .profile-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #1F2937;
+        transition: background-color 0.2s;
+        position: relative;
+    }
+    .profile-menu-item:hover { background-color: #F3F4F6; }
+    .profile-menu-item .lucide { width: 18px; height: 18px; }
+
+    /* 테마 서브메뉴 */
+    .theme-submenu {
+        position: absolute;
+        left: 100%;
+        bottom: 0;
+        margin-left: 8px;
+        background-color: #fff;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: none;
+        flex-direction: column;
+        padding: 6px;
+        width: 120px;
+    }
+    .profile-menu-item.theme-item:hover .theme-submenu {
+        display: flex;
+    }
+    .theme-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+    .theme-option:hover { background-color: #F3F4F6; }
+    .theme-option.active { color: var(--primary-color); font-weight: 600; }
+    .theme-option .check-icon { display: none; width: 14px; height: 14px; }
+    .theme-option.active .check-icon { display: block; }
+
+    /* 설정 모달 전용 스타일 */
+    .settings-modal-window {
+        background-color: #fff;
+        width: 360px;
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+    }
+    .settings-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .settings-desc { color: #6B7280; margin-bottom: 24px; font-size: 14px; }
+
+    /* 다크 테마 변수 및 스타일 */
+    [data-theme="dark"] {
+        --user-bubble-bg: #2f2f2f;
+        --user-bubble-text: #ececec;
+        --primary-color: #4F46E5;
+        --sidebar-bg: #171717;
+        --body-bg: #212121;
+        --text-color: #ececec;
+        --border-color: #333;
+    }
+    [data-theme="dark"] body { background-color: var(--body-bg); color: var(--text-color); }
+    [data-theme="dark"] .sidebar { background-color: var(--sidebar-bg); border-right-color: var(--border-color); }
+    [data-theme="dark"] .top-bar { background-color: rgba(33, 33, 33, 0.95); border-bottom: 1px solid var(--border-color); color: var(--text-color); }
+    [data-theme="dark"] .sidebar-footer:hover,
+    [data-theme="dark"] .sidebar-menu-btn:hover,
+    [data-theme="dark"] .chat-history-item:hover,
+    [data-theme="dark"] .chat-history-item.active { background-color: #2f2f2f; color: #fff; }
+    [data-theme="dark"] .sidebar-logo,
+    [data-theme="dark"] .sidebar-menu-btn,
+    [data-theme="dark"] .user-name,
+    [data-theme="dark"] .top-left,
+    [data-theme="dark"] .chat-title,
+    [data-theme="dark"] .bot-text,
+    [data-theme="dark"] .sidebar-section-title { color: var(--text-color); }
+    [data-theme="dark"] .profile-menu,
+    [data-theme="dark"] .theme-submenu,
+    [data-theme="dark"] .modal-window { background-color: #171717; border-color: var(--border-color); color: var(--text-color); }
+    [data-theme="dark"] .profile-menu-item:hover,
+    [data-theme="dark"] .theme-option:hover { background-color: #2f2f2f; }
+    [data-theme="dark"] .profile-menu-item { color: var(--text-color); }
+    [data-theme="dark"] .chat-input-container { background-color: #2f2f2f; }
+    [data-theme="dark"] .chat-textarea { color: var(--text-color); }
+    [data-theme="dark"] .bottom-fixed-wrapper { background: linear-gradient(to top, var(--body-bg) 80%, rgba(33,33,33,0)) !important; }
+    [data-theme="dark"] .chat-container { background-color: var(--body-bg) !important; }
+    [data-theme="dark"] .spinner-small { color: var(--text-color); }
+    [data-theme="dark"] #initialLoader { background-color: var(--body-bg); }
+    [data-theme="dark"] .profile-menu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
+    [data-theme="dark"] .theme-submenu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
+    [data-theme="dark"] .modal-window { background-color: var(--sidebar-bg); border-color: var(--border-color); color: var(--text-color); }
+    [data-theme="dark"] .details-panel { background-color: var(--sidebar-bg); border-left-color: var(--border-color); color: var(--text-color); }
+    [data-theme="dark"] .details-header { border-bottom-color: var(--border-color); color: var(--text-color); }
+    [data-theme="dark"] .details-tab-btn { border-color: var(--border-color); color: #9CA3AF; }
+    [data-theme="dark"] .details-tab-btn.active { background-color: #2f2f2f; color: var(--primary-color); border-color: var(--primary-color); }
+    [data-theme="dark"] .citation-card { background-color: #1a1a1a; border-color: var(--border-color); }
+    [data-theme="dark"] .citation-title { color: #ececec; }
+    [data-theme="dark"] .attach-menu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
+    [data-theme="dark"] .menu-item { color: #ececec; }
+    [data-theme="dark"] .scroll-to-bottom-btn { background-color: #2f2f2f; border-color: var(--border-color); }
+    [data-theme="dark"] .scroll-to-bottom-btn i, [data-theme="dark"] .scroll-to-bottom-btn span { color: #ececec; }
+    [data-theme="dark"] .modal-input { background-color: #1a1a1a; border-color: var(--border-color); color: #ececec; }
+    
+    /* 코드 블록 및 프리뷰 다크모드 대응 */
+    [data-theme="dark"] .code-block-container { border-color: var(--border-color); background-color: #1a1a1a; }
+    [data-theme="dark"] .code-block-header { background-color: #2a2a2a; border-bottom-color: var(--border-color); }
+    [data-theme="dark"] .code-lang-info { color: #ccc; }
+    [data-theme="dark"] .code-block-body pre { color: #ececec !important; }
+    [data-theme="dark"] .code-editor { background-color: #1a1a1a; color: #ececec; }
+    [data-theme="dark"] .code-action-btn:hover { background-color: #3a3a3a; color: #fff; }
+    [data-theme="dark"] .code-toggle-group { background-color: #333; }
+    [data-theme="dark"] .toggle-btn.active { background-color: #444; color: #fff; }
+    [data-theme="dark"] .code-preview { background-color: #fff; } /* 실행 결과는 가독성을 위해 흰색 유지할 수 있으나 필요시 변경 */
+
+    [data-theme="dark"] .top-right .dots-btn,
+    [data-theme="dark"] .top-right .share-btn { color: var(--text-color); border-color: var(--border-color); }
+    [data-theme="dark"] .top-right .share-btn:hover { background-color: #2f2f2f; }
 </style>
 </head>
 <body class="pc-sidebar-open"> 
+    <script>
+        async function checkAuth() {
+            try {
+                const response = await fetch('/user_info');
+                if (!response.ok) {
+                    location.href = 'login.html';
+                    return;
+                }
+                const data = await response.json();
+                const userNames = document.querySelectorAll('.user-name');
+                userNames.forEach(el => el.innerText = data.name);
+                
+                // If admin, show admin panel button in profile menu
+                if (data.role === 'admin') {
+                    const profileMenu = document.getElementById('profileMenu');
+                    const adminItem = document.createElement('div');
+                    adminItem.className = 'profile-menu-item';
+                    adminItem.onclick = () => location.href = 'admin.html';
+                    adminItem.innerHTML = '<i data-lucide="shield-check"></i> <span>관리자 페이지</span>';
+                    profileMenu.insertBefore(adminItem, profileMenu.firstChild);
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                location.href = 'login.html';
+            }
+        }
+        checkAuth();
+        
+        async function logout() {
+            await fetch('/logout', { method: 'POST' });
+            location.href = 'login.html';
+        }
+    </script>
 
     <!-- [NEW] 초기 로딩 화면 -->
     <div id="initialLoader">
@@ -1100,6 +1280,31 @@
             <div class="user-info">
                 <span class="user-name">게스트</span>
                 <span class="user-plan">Free</span>
+            </div>
+        </div>
+
+        <!-- [NEW] 프로필 메뉴 -->
+        <div id="profileMenu" class="profile-menu">
+            <div class="profile-menu-item" onclick="logout()">
+                <i data-lucide="log-out"></i> <span>로그아웃</span>
+            </div>
+            <div class="profile-menu-item" id="settingsBtn">
+                <i data-lucide="settings"></i> <span>설정</span>
+            </div>
+            <div class="profile-menu-item theme-item">
+                <i data-lucide="palette"></i> <span>테마</span>
+                <i data-lucide="chevron-right" style="margin-left: auto; width: 14px;"></i>
+                <div class="theme-submenu">
+                    <div class="theme-option" onclick="setTheme('auto')" data-theme-val="auto">
+                        <span>자동</span> <i data-lucide="check" class="check-icon"></i>
+                    </div>
+                    <div class="theme-option" onclick="setTheme('light')" data-theme-val="light">
+                        <span>라이트</span> <i data-lucide="check" class="check-icon"></i>
+                    </div>
+                    <div class="theme-option" onclick="setTheme('dark')" data-theme-val="dark">
+                        <span>다크</span> <i data-lucide="check" class="check-icon"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </aside>
@@ -1171,6 +1376,17 @@
         </div>
     </div>
 
+    <!-- [NEW] 설정 모달 -->
+    <div id="settingsModalOverlay" class="modal-overlay">
+        <div class="modal-window settings-modal-window">
+            <div class="settings-title">설정</div>
+            <div class="settings-desc">아직 준비 중입니다. 곧 찾아뵐게요!</div>
+            <div class="modal-actions" style="justify-content: center;">
+                <button class="modal-btn btn-confirm" id="settingsCloseBtn">확인</button>
+            </div>
+        </div>
+    </div>
+
     <div id="detailsPanel" class="details-panel">
         <div class="details-header">
             <span>상세 정보</span>
@@ -1196,6 +1412,14 @@
         const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
         const newChatBtn = document.getElementById('newChatBtn');
         const savedChatList = document.getElementById('savedChatList');
+
+        // [NEW] 프로필 및 설정 관련
+        const sidebarFooter = document.querySelector('.sidebar-footer');
+        const profileMenu = document.getElementById('profileMenu');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModalOverlay = document.getElementById('settingsModalOverlay');
+        const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+        const themeOptions = document.querySelectorAll('.theme-option');
 
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1223,6 +1447,66 @@
         const detailsCloseBtn = document.getElementById('detailsCloseBtn');
         const detailsTabs = document.getElementById('detailsTabs');
         const detailsContent = document.getElementById('detailsContent');
+
+        // --- [NEW] 프로필 메뉴 및 테마/설정 로직 ---
+        sidebarFooter.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.contains(e.target) && !sidebarFooter.contains(e.target)) {
+                profileMenu.classList.remove('show');
+            }
+        });
+
+        settingsBtn.addEventListener('click', () => {
+            settingsModalOverlay.classList.add('open');
+            profileMenu.classList.remove('show');
+        });
+
+        settingsCloseBtn.addEventListener('click', () => {
+            settingsModalOverlay.classList.remove('open');
+        });
+
+        // 테마 설정 함수
+        window.setTheme = function(theme) {
+            const root = document.documentElement;
+            const body = document.body;
+            
+            if (theme === 'auto') {
+                localStorage.removeItem('quorvTheme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                body.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            } else {
+                localStorage.setItem('quorvTheme', theme);
+                body.setAttribute('data-theme', theme);
+            }
+            
+            updateThemeUI(theme);
+        };
+
+        function updateThemeUI(activeTheme) {
+            themeOptions.forEach(opt => {
+                const val = opt.getAttribute('data-theme-val');
+                if (val === activeTheme) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+        }
+
+        // 초기 테마 적용
+        const savedTheme = localStorage.getItem('quorvTheme') || 'auto';
+        setTheme(savedTheme);
+
+        // 시스템 테마 변경 감지
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (localStorage.getItem('quorvTheme') === null) {
+                document.body.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
 
         let conversationHistory = [];
         let abortController = null;
