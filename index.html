@@ -2284,13 +2284,15 @@
             let currentMetadata = { thought: "", citations: [] };
 
             try {
-                const response = await fetch(isSearchMode ? "https://jaewondev6.pythonanywhere.com/ask" : "https://jaewondev6.pythonanywhere.com/askfast", {
+                const endpoint = isSearchMode ? "/ask" : "/askfast";
+                const response = await fetch(`${BACKEND_URL}${endpoint}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
+                    credentials: 'include', // 필수: 세션 쿠키 전송
                     body: JSON.stringify({ 
                         message: text, 
                         history: conversationHistory,
-                        image_base64: [] // Ensure compatibility with backend's expected field
+                        image_base64: [] 
                     }),
                     signal: abortController.signal
                 });
