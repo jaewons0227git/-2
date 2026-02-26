@@ -242,9 +242,13 @@
     </div>
 
     <script>
+        const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+
         async function checkAdmin() {
             try {
-                const response = await fetch('/user_info');
+                const response = await fetch(`${BACKEND_URL}/user_info`, {
+                    credentials: 'include'
+                });
                 if (!response.ok) {
                     location.href = 'login.html';
                     return;
@@ -281,7 +285,9 @@
         }
 
         async function loadUsers() {
-            const response = await fetch('/admin/users');
+            const response = await fetch(`${BACKEND_URL}/admin/users`, {
+                credentials: 'include'
+            });
             const users = await response.json();
             const unapprovedList = document.getElementById('unapprovedList');
             const approvedList = document.getElementById('approvedList');
@@ -309,9 +315,10 @@
         }
 
         async function updateStatus(userId, status) {
-            const response = await fetch('/admin/approve', {
+            const response = await fetch(`${BACKEND_URL}/admin/approve`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ user_id: userId, status: status })
             });
             if (response.ok) loadUsers();
@@ -320,7 +327,9 @@
 
         async function viewUsage(userId, userName) {
             document.getElementById('usageModalTitle').innerText = `${userName}님의 사용 현황`;
-            const response = await fetch(`/admin/usage/${userId}`);
+            const response = await fetch(`${BACKEND_URL}/admin/usage/${userId}`, {
+                credentials: 'include'
+            });
             const usage = await response.json();
             const usageList = document.getElementById('usageList');
             usageList.innerHTML = '';

@@ -254,6 +254,8 @@
             emailToggleBtn.style.display = 'none';
         });
 
+        const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+
         emailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -261,9 +263,10 @@
             submitBtn.innerText = '로그인 중...';
             
             try {
-                const response = await fetch('/login', {
+                const response = await fetch(`${BACKEND_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', // 세션 쿠키 전송을 위해 필수
                     body: JSON.stringify({
                         username: emailInput.value.trim(),
                         password: passwordInput.value

@@ -1196,9 +1196,13 @@
 </head>
 <body class="pc-sidebar-open"> 
     <script>
+        const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+
         async function checkAuth() {
             try {
-                const response = await fetch('/user_info');
+                const response = await fetch(`${BACKEND_URL}/user_info`, {
+                    credentials: 'include'
+                });
                 if (!response.ok) {
                     location.href = 'login.html';
                     return;
@@ -1207,7 +1211,6 @@
                 const userNames = document.querySelectorAll('.user-name');
                 userNames.forEach(el => el.innerText = data.name);
                 
-                // If admin, show admin panel button in profile menu
                 if (data.role === 'admin') {
                     const profileMenu = document.getElementById('profileMenu');
                     const adminItem = document.createElement('div');
@@ -1224,7 +1227,10 @@
         checkAuth();
         
         async function logout() {
-            await fetch('/logout', { method: 'POST' });
+            await fetch(`${BACKEND_URL}/logout`, { 
+                method: 'POST',
+                credentials: 'include'
+            });
             location.href = 'login.html';
         }
     </script>

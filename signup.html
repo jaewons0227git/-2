@@ -330,14 +330,17 @@
         passwordInput.addEventListener('input', validatePassword);
         confirmPasswordInput.addEventListener('input', validatePassword);
 
+        const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+
         finishBtn.addEventListener('click', async () => {
             finishBtn.disabled = true;
             finishBtn.innerText = '처리 중...';
             
             try {
-                const response = await fetch('/signup', {
+                const response = await fetch(`${BACKEND_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({
                         username: emailInput.value.trim(),
                         email: emailInput.value.trim(),
