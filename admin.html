@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 패널 - quorv</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #000;
+            --border-color: #e5e7eb;
+            --bg-color: #f9fafb;
+            --card-bg: #fff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* --- 초기 로딩 화면 스타일 --- */
+        #initialLoader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fff; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .spinner-small {
+            width: 22px; height: 22px;
+            color: #000;
+            animation: spin 0.8s linear infinite;
+        }
+        .spinner-small svg { width: 100%; height: 100%; display: block; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: none; /* 권한 확인 전까지 숨김 */
+        }
+        .initial-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 100px;
+        }
+        .action-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-color: #000;
+        }
+        .action-card i {
+            width: 32px;
+            height: 32px;
+        }
+        .action-card span {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        #adminPanel {
+            display: none;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 40px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .user-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .user-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        .label { color: var(--text-muted); }
+        .value { font-weight: 500; }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn:hover { background: #f9fafb; }
+        .btn.primary { background: #000; color: #fff; border-color: #000; }
+        .btn.primary:hover { background: #222; }
+        .btn.danger { color: var(--danger); }
+        .btn.danger:hover { background: #fef2f2; border-color: var(--danger); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #fff; padding: 30px; border-radius: 20px;
+            max-width: 600px; width: 90%; max-height: 80vh;
+            overflow-y: auto; position: relative;
+        }
+        .close-modal { position: absolute; right: 20px; top: 20px; cursor: pointer; color: var(--text-muted); }
+        .usage-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-size: 14px; }
+        .usage-item:last-child { border-bottom: none; }
+        .usage-endpoint { font-weight: 600; }
+        .usage-time { color: var(--text-muted); font-size: 12px; }
+
+        .badge { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge.unapproved { background: #fef2f2; color: #ef4444; }
+        .badge.approved { background: #ecfdf5; color: #10b981; }
+    </style>
+</head>
+<body>
+    <!-- [NEW] 초기 로딩 화면 -->
+    <div id="initialLoader">
+        <div class="spinner-small">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <header id="mainHeader" style="display:none;">
+        <a href="index.html" class="logo">quorv Admin</a>
+        <button class="btn" onclick="location.href='index.html'">메인으로</button>
+    </header>
+
+    <div class="container" id="mainContainer">
+        <div id="initialActions" class="initial-actions">
+            <div class="action-card" onclick="location.href='https://ai.quorv.kro.kr'">
+                <i data-lucide="external-link"></i>
+                <span>쿼브로 이동</span>
+            </div>
+            <div class="action-card" onclick="openAdminPanel()">
+                <i data-lucide="settings"></i>
+                <span>관리자 페이지</span>
+            </div>
+        </div>
+
+        <div id="adminPanel">
+            <div class="panel-header">
+                <h2 style="margin:0;">사용자 관리</h2>
+                <button class="btn" onclick="loadUsers()">새로고침</button>
+            </div>
+
+            <div class="section-title">
+                <i data-lucide="user-plus"></i> 미승인 사용자
+            </div>
+            <div id="unapprovedList" class="user-grid"></div>
+
+            <div class="section-title">
+                <i data-lucide="users"></i> 승인된 사용자
+            </div>
+            <div id="approvedList" class="user-grid"></div>
+        </div>
+    </div>
+
+    <div id="usageModal" class="modal">
+        <div class="modal-content">
+            <i data-lucide="x" class="close-modal" onclick="closeUsageModal()"></i>
+            <h2 id="usageModalTitle">사용 현황</h2>
+            <div id="usageList"></div>
+        </div>
+    </div>
+
+    <script>
+        async function checkAdmin() {
+            try {
+                const response = await fetch('/user_info');
+                if (!response.ok) {
+                    location.href = 'login.html';
+                    return;
+                }
+                const data = await response.json();
+                if (data.role !== 'admin') {
+                    location.href = 'login.html';
+                    return;
+                }
+                
+                // 인증 성공 시 화면 표시
+                setTimeout(() => {
+                    const loader = document.getElementById('initialLoader');
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        document.getElementById('mainHeader').style.display = 'flex';
+                        document.getElementById('mainContainer').style.display = 'block';
+                    }, 300);
+                }, 800);
+
+            } catch (e) {
+                location.href = 'login.html';
+            }
+        }
+        checkAdmin();
+
+        lucide.createIcons();
+
+        function openAdminPanel() {
+            document.getElementById('initialActions').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadUsers();
+        }
+
+        async function loadUsers() {
+            const response = await fetch('/admin/users');
+            const users = await response.json();
+            const unapprovedList = document.getElementById('unapprovedList');
+            const approvedList = document.getElementById('approvedList');
+            unapprovedList.innerHTML = '';
+            approvedList.innerHTML = '';
+            
+            users.forEach(user => {
+                if (user.role === 'admin') return;
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                card.innerHTML = `
+                    <div class="user-info-row"><span class="label">이름</span><span class="value">${user.name}</span></div>
+                    <div class="user-info-row"><span class="label">아이디/이메일</span><span class="value">${user.email}</span></div>
+                    <div class="user-info-row"><span class="label">생년월일</span><span class="value">${user.birthdate}</span></div>
+                    <div class="user-info-row"><span class="label">상태</span><span class="badge ${user.status}">${user.status === 'approved' ? '승인됨' : '미승인'}</span></div>
+                    <div class="card-actions">
+                        <button class="btn" onclick="viewUsage(${user.id}, '${user.name}')">더보기</button>
+                        ${user.status === 'unapproved' ? `<button class="btn primary" onclick="updateStatus(${user.id}, 'approved')">승인하기</button>` : `<button class="btn danger" onclick="updateStatus(${user.id}, 'unapproved')">승인취소</button>`}
+                    </div>
+                `;
+                if (user.status === 'approved') approvedList.appendChild(card);
+                else unapprovedList.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        async function updateStatus(userId, status) {
+            const response = await fetch('/admin/approve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, status: status })
+            });
+            if (response.ok) loadUsers();
+            else alert('상태 업데이트 실패');
+        }
+
+        async function viewUsage(userId, userName) {
+            document.getElementById('usageModalTitle').innerText = `${userName}님의 사용 현황`;
+            const response = await fetch(`/admin/usage/${userId}`);
+            const usage = await response.json();
+            const usageList = document.getElementById('usageList');
+            usageList.innerHTML = '';
+            
+            if (usage.length === 0) {
+                usageList.innerHTML = '<p style="text-align:center; color:var(--text-muted); margin-top:20px;">사용 기록이 없습니다.</p>';
+            } else {
+                const counts = {};
+                usage.forEach(u => { counts[u.endpoint] = (counts[u.endpoint] || 0) + 1; });
+                let summaryHtml = '<div style="margin-bottom:20px; background:#f3f4f6; padding:15px; border-radius:12px;"><strong>요약: </strong>';
+                for (const [ep, count] of Object.entries(counts)) { summaryHtml += `<span style="margin-right:15px;">${ep}: ${count}회</span>`; }
+                summaryHtml += '</div>';
+                usageList.innerHTML = summaryHtml;
+                usage.forEach(u => {
+                    const item = document.createElement('div');
+                    item.className = 'usage-item';
+                    item.innerHTML = `<span class="usage-endpoint">${u.endpoint}</span><span class="usage-time">${u.timestamp}</span>`;
+                    usageList.appendChild(item);
+                });
+            }
+            document.getElementById('usageModal').style.display = 'flex';
+            lucide.createIcons();
+        }
+        function closeUsageModal() { document.getElementById('usageModal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == document.getElementById('usageModal')) closeUsageModal(); }
+    </script>
+</body>
+</html>
