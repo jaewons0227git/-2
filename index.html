@@ -15,6 +15,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+<!-- Pyodide for Python Execution -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
 <!-- Prism.js for Syntax Highlighting -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -24,6 +27,34 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
 <style>
+    /* --- [NEW] 초기 로딩 화면 스타일 --- */
+    #initialLoader {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #fff; z-index: 9999;
+        display: flex; justify-content: center; align-items: center;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+    .spinner-small {
+        width: 22px; height: 22px;
+        color: #000;
+        animation: spin 0.8s linear infinite;
+    }
+    .spinner-small svg {
+        width: 100%; height: 100%;
+        display: block;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* 사이드바 로딩 스피너 */
+    .sidebar-loader-container {
+        display: flex; justify-content: center; align-items: center;
+        flex: 1; /* 남은 공간을 모두 차지하도록 */
+        width: 100%;
+    }
+
     :root {
         /* 크기 및 반경 변수 */
         --radius-input: 24px;      
@@ -516,13 +547,15 @@
     /* [NEW] 중앙 로고 */
     .center-logo {
         position: fixed;
-        top: 50%;
+        /* 상단바(50px)와 하단 입력창 영역 사이의 중간 지점 */
+        top: calc(50% - 40px); 
         left: 50%;
         transform: translate(-50%, -50%);
-        opacity: 0.8; /* 흐릿하지 않게 조정 */
-        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-in-out, visibility 0.5s;
+        opacity: 0.8;
         z-index: 10;
         pointer-events: none;
+        /* 부드럽게 없어지는 것 제거를 위해 transition에서 opacity/visibility 제외하거나 시간 0 */
+        transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
     .center-logo img {
         width: 80px; height: 80px; object-fit: contain;
@@ -539,8 +572,7 @@
         }
     }
     .center-logo.hidden {
-        opacity: 0;
-        visibility: hidden;
+        display: none !important; /* 즉시 없어지도록 display none 사용 */
     }
 
     .message-row { display: flex; width: 100%; flex-direction: column; position: relative; }
@@ -663,17 +695,51 @@
         padding: 10px 10px; box-sizing: border-box;
         display: flex; flex-direction: column; position: relative; 
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid transparent; /* 기본 보더 투명 */
     }
 
-    /* [NEW] 입력창 글로우 애니메이션 */
-    @keyframes generating-glow {
-        0% { box-shadow: 0 0 10px rgba(255, 182, 193, 0.7), 0 0 20px rgba(135, 206, 235, 0.4); }
-        50% { box-shadow: 0 0 20px rgba(135, 206, 235, 0.7), 0 0 10px rgba(255, 182, 193, 0.4); }
-        100% { box-shadow: 0 0 10px rgba(255, 182, 193, 0.7), 0 0 20px rgba(135, 206, 235, 0.4); }
+    /* [NEW] 입력창 글로우 애니메이션 (핑크 & 블루 회전) */
+    @keyframes rotate-glow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
     .chat-input-container.generating {
-        animation: generating-glow 2s infinite ease-in-out;
-        border: 1.5px solid rgba(255, 182, 193, 0.2);
+        overflow: hidden;
+        border-color: transparent;
+    }
+    .chat-input-container.generating::before {
+        content: "";
+        position: absolute;
+        top: -150%;
+        left: -150%;
+        width: 400%;
+        height: 400%;
+        background: conic-gradient(
+            from 0deg,
+            transparent, 
+            #FFB6C1 10%, /* Pink */
+            #87CEEB 20%, /* Sky Blue */
+            transparent 30%,
+            transparent 50%,
+            #FFB6C1 60%,
+            #87CEEB 70%,
+            transparent 80%
+        );
+        animation: rotate-glow 3s linear infinite;
+        z-index: -1;
+        filter: blur(8px);
+    }
+    .chat-input-container.generating::after {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        background: #F4F4F5;
+        border-radius: calc(var(--radius-input) - 2px);
+        z-index: -1;
+    }
+    /* 테두리 진해지지 않도록 포커스 스타일 명시적 조정 */
+    .chat-textarea:focus {
+        outline: none;
     }
 
     /* [NEW] 삭제 확인 모달 */
@@ -984,6 +1050,15 @@
 </head>
 <body class="pc-sidebar-open"> 
 
+    <!-- [NEW] 초기 로딩 화면 -->
+    <div id="initialLoader">
+        <div class="spinner-small">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
     <aside id="sidebar" class="sidebar">
@@ -1158,6 +1233,29 @@
         let renameTargetId = null;
         let deleteTargetId = null;
         
+        // [NEW] Pyodide 인스턴스
+        let pyodide = null;
+        async function initPyodide() {
+            if (!pyodide) {
+                pyodide = await loadPyodide();
+            }
+        }
+
+        // [NEW] 초기 로더 처리 (1초)
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('initialLoader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        // 전체 로딩이 끝나고 사이드바 로딩 시작
+                        renderSidebar();
+                    }, 300);
+                }
+            }, 1000);
+        });
+
         // 메시지별 메타데이터 저장 (사고과정, 인용 등)
         let messageMetadata = {}; 
 
@@ -1183,7 +1281,10 @@
             
             this.codeCount++;
             const uniqueId = `${this.codePrefix}-${this.codeCount}`;
-            const isHtml = lang.toLowerCase() === 'html';
+            const langLower = lang.toLowerCase();
+            const isHtml = langLower === 'html';
+            const isPython = langLower === 'python' || langLower === 'py';
+            const isExecutable = isHtml || isPython;
 
             const escapedCode = escapeHtml(codeStr);
 
@@ -1205,7 +1306,7 @@
                             <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="코드 보기">
                                 <i data-lucide="terminal"></i>
                             </button>
-                            <button class="toggle-btn ${!isHtml ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isHtml})" title="${isHtml ? '실행' : '실행 불가'}">
+                            <button class="toggle-btn ${!isExecutable ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isExecutable}, '${langLower}')" title="${isExecutable ? '실행' : '실행 불가'}">
                                 <i data-lucide="play"></i>
                             </button>
                         </div>
@@ -1215,6 +1316,7 @@
                     <pre id="pre-${uniqueId}"><code class="language-${lang}" id="code-content-${uniqueId}">${escapedCode}</code></pre>
                     <textarea class="code-editor" id="editor-${uniqueId}" oninput="updateCodeHighlight('${uniqueId}', '${lang}')" spellcheck="false">${codeStr}</textarea>
                     ${isHtml ? `<iframe class="code-preview" id="preview-${uniqueId}"></iframe>` : ''}
+                    ${isPython ? `<div class="code-preview python-output" id="preview-${uniqueId}" style="padding: 16px; background: #000; color: #0f0; font-family: monospace; white-space: pre-wrap; display: none; min-height: 50px;"></div>` : ''}
                 </div>
             </div>`;
         };
@@ -1273,11 +1375,13 @@
             
             const preview = document.getElementById(`preview-${id}`);
             if (preview && preview.style.display === 'block') {
-                updatePreview(id);
+                const langLower = lang.toLowerCase();
+                if (langLower === 'html') updatePreview(id);
+                else if (langLower === 'python' || langLower === 'py') runPythonCode(id);
             }
         };
 
-        window.setViewMode = function(id, mode, isExecutable = true) {
+        window.setViewMode = function(id, mode, isExecutable = true, lang = 'html') {
             const pre = document.getElementById(`pre-${id}`);
             const editor = document.getElementById(`editor-${id}`);
             const preview = document.getElementById(`preview-${id}`);
@@ -1306,7 +1410,8 @@
                 pre.style.display = 'none';
                 if (preview) {
                     preview.style.display = 'block';
-                    updatePreview(id);
+                    if (lang === 'html') updatePreview(id);
+                    else if (lang === 'python' || lang === 'py') runPythonCode(id);
                 }
                 codeBtn.classList.remove('active');
                 runBtn.classList.add('active');
@@ -1327,6 +1432,41 @@
             setTimeout(() => {
                 preview.style.height = Math.max(200, doc.body.scrollHeight + 20) + 'px';
             }, 100);
+        }
+
+        async function runPythonCode(id) {
+            const editor = document.getElementById(`editor-${id}`);
+            const outputDiv = document.getElementById(`preview-${id}`);
+            if (!editor || !outputDiv) return;
+
+            outputDiv.style.display = 'block';
+            outputDiv.innerText = "Python 실행 중...";
+            outputDiv.style.color = "#0f0";
+            
+            try {
+                if (!pyodide) {
+                    outputDiv.innerText = "Pyodide 로딩 중 (처음 실행 시 몇 초 정도 소요될 수 있습니다)...";
+                    await initPyodide();
+                }
+                
+                // 표준 출력을 캡처하기 위한 리다이렉션
+                pyodide.runPython(`
+                    import sys
+                    import io
+                    sys.stdout = io.StringIO()
+                    sys.stderr = io.StringIO()
+                `);
+                
+                await pyodide.runPythonAsync(editor.value);
+                
+                const stdout = pyodide.runPython("sys.stdout.getvalue()");
+                const stderr = pyodide.runPython("sys.stderr.getvalue()");
+                
+                outputDiv.innerText = (stdout + stderr) || "(출력 없음)";
+            } catch (err) {
+                outputDiv.innerText = "에러: " + err.message;
+                outputDiv.style.color = "#ff4444";
+            }
         }
 
         // Lucide 아이콘 초기화
@@ -1389,6 +1529,10 @@
                 chatContainer.innerHTML = '';
                 centerLogo.classList.add('hidden');
                 
+                // [수정] 코드 블록 ID 초기화
+                renderer.codeCount = 0;
+                renderer.codePrefix = 'history-' + id;
+
                 conversationHistory.forEach((msg, index) => {
                     const row = addMessage(msg.content, msg.role, false);
                     if (msg.role === 'assistant') {
@@ -1476,10 +1620,30 @@
         }
 
         // --- 사이드바 렌더링 및 검색 ---
-        function renderSidebar(filterText = '') {
+        let sidebarLoading = false;
+        function renderSidebar(filterText = '', skipDelay = false) {
             const chats = getSavedChats();
             const sortedChats = Object.values(chats).sort((a, b) => b.lastUpdated - a.lastUpdated);
             
+            // [NEW] 로딩 상태 처리 (최초 1회만, 필터가 없을 때만)
+            if (!skipDelay && !sidebarLoading && !filterText) {
+                sidebarLoading = true;
+                savedChatList.style.display = 'flex';
+                savedChatList.style.flexDirection = 'column';
+                savedChatList.innerHTML = `
+                    <div class="sidebar-loader-container">
+                        <div class="spinner-small">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>`;
+                setTimeout(() => {
+                    renderSidebar(filterText, true);
+                }, 1000);
+                return;
+            }
+
             savedChatList.innerHTML = '';
             sortedChats.forEach(chat => {
                 if (filterText && !chat.title.toLowerCase().includes(filterText.toLowerCase())) {
@@ -1584,7 +1748,7 @@
 
         // --- 초기 로드 및 URL 처리 ---
         window.addEventListener('load', () => {
-            renderSidebar();
+            // renderSidebar()는 initialLoader가 끝난 뒤 호출됨
             
             const path = window.location.pathname;
             const match = path.match(/\/chat\/([a-zA-Z0-9-]+)/);
