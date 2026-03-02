@@ -677,6 +677,12 @@
         background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         animation: textShimmer 3s linear infinite; transition: all 0.2s ease;
     }
+    /* 검색 모드 등 자식이 있을 때는 배경 클립을 해제하여 자식 텍스트가 보이게 함 */
+    .analyzing-text:has(div) {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #9CA3AF;
+    }
     .analyzing-text:hover { background: none; -webkit-text-fill-color: #000000; color: #000000; animation: none; }
 
     /* --- 하단 입력창 및 래퍼 --- */
