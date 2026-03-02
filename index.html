@@ -2272,7 +2272,19 @@
             
             let allocatedPadding = 160;
 
-            const isSearchMode = searchBtn.classList.contains('active');
+            const isManualSearch = searchBtn.classList.contains('active');
+            
+            // 검색 의도 감지 키워드
+            const searchKeywords = [
+                "검색해줘", "검색해", "찾아줘", "찾아봐", "알려줘", "뉴스", "날씨", "주가", 
+                "최신", "현재", "오늘", "정보", "어떻게 돼", "뭐야", "위키", "구글", 
+                "네이버", "실시간", "확인해줘", "나무위키", "검색"
+            ];
+            const hasSearchIntent = searchKeywords.some(keyword => text.includes(keyword));
+            
+            // 수동 검색 모드이거나 검색 의도가 감지된 경우 isSearchMode를 true로 설정
+            const isSearchMode = isManualSearch || hasSearchIntent;
+
             const loadingId = 'loading-' + Date.now();
             const timers = addLoadingMessage(loadingId, isSearchMode);
 
@@ -2597,9 +2609,27 @@
             
             let timers = [];
             if (isSearchMode) {
-                contentDiv.innerText = "검색을 진행하는 중...";
-                timers.push(setTimeout(() => { const el = document.getElementById(id); if(el) el.querySelector('.analyzing-text').innerText = "검색은 시간이 소요될 수 있습니다."; }, 3000));
-                timers.push(setTimeout(() => { const el = document.getElementById(id); if(el) el.querySelector('.analyzing-text').innerText = "질문을 분석하는중..."; }, 6000));
+                // "질문을 분석하는중..." 기본 텍스트
+                contentDiv.innerHTML = '<div style="margin-bottom: 4px;">질문을 분석하는중...</div>';
+                
+                // 그 아래에 더 작은 글씨로 "검색을 진행하는 중" 추가
+                const searchProgress = document.createElement('div');
+                searchProgress.style.fontSize = '0.85em';
+                searchProgress.style.opacity = '0.7';
+                searchProgress.style.fontWeight = 'normal';
+                searchProgress.innerText = "검색을 진행하는 중";
+                contentDiv.appendChild(searchProgress);
+
+                // 1초 후 그 아래에 "검색한 내용을 분석하는 중"이 뜨게 설정
+                timers.push(setTimeout(() => {
+                    const analysisProgress = document.createElement('div');
+                    analysisProgress.style.fontSize = '0.85em';
+                    analysisProgress.style.opacity = '0.7';
+                    analysisProgress.style.fontWeight = 'normal';
+                    analysisProgress.style.marginTop = '2px';
+                    analysisProgress.innerText = "검색한 내용을 분석하는 중";
+                    contentDiv.appendChild(analysisProgress);
+                }, 1000));
             } else {
                 contentDiv.innerText = "질문을 분석하는중...";
             }
