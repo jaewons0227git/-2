@@ -2615,18 +2615,20 @@
             
             let timers = [];
             if (isSearchMode) {
-                // "질문을 분석하는중..." 기본 텍스트
+                // "질문을 분석하는중..." 기본 텍스트 (즉시)
                 contentDiv.innerHTML = '<div style="margin-bottom: 4px;">질문을 분석하는중...</div>';
                 
-                // 그 아래에 더 작은 글씨로 "검색을 진행하는 중" 추가
-                const searchProgress = document.createElement('div');
-                searchProgress.style.fontSize = '0.85em';
-                searchProgress.style.opacity = '0.7';
-                searchProgress.style.fontWeight = 'normal';
-                searchProgress.innerText = "검색을 진행하는 중";
-                contentDiv.appendChild(searchProgress);
+                // 1초 후 "검색을 진행하는 중" 추가
+                timers.push(setTimeout(() => {
+                    const searchProgress = document.createElement('div');
+                    searchProgress.style.fontSize = '0.85em';
+                    searchProgress.style.opacity = '0.7';
+                    searchProgress.style.fontWeight = 'normal';
+                    searchProgress.innerText = "검색을 진행하는 중";
+                    contentDiv.appendChild(searchProgress);
+                }, 1000));
 
-                // 1초 후 그 아래에 "검색한 내용을 분석하는 중"이 뜨게 설정
+                // 2초 후 (검색 진행 1초 후) "검색한 내용을 분석하는 중" 추가
                 timers.push(setTimeout(() => {
                     const analysisProgress = document.createElement('div');
                     analysisProgress.style.fontSize = '0.85em';
@@ -2635,7 +2637,18 @@
                     analysisProgress.style.marginTop = '2px';
                     analysisProgress.innerText = "검색한 내용을 분석하는 중";
                     contentDiv.appendChild(analysisProgress);
-                }, 1000));
+                }, 2000));
+
+                // 5초 후 (분석 시작 3초 후) "마무리 하는중" 추가
+                timers.push(setTimeout(() => {
+                    const finalProgress = document.createElement('div');
+                    finalProgress.style.fontSize = '0.85em';
+                    finalProgress.style.opacity = '0.7';
+                    finalProgress.style.fontWeight = 'normal';
+                    finalProgress.style.marginTop = '2px';
+                    finalProgress.innerText = "마무리 하는중";
+                    contentDiv.appendChild(finalProgress);
+                }, 5000));
             } else {
                 contentDiv.innerText = "질문을 분석하는중...";
             }
