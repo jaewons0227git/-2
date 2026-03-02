@@ -2303,7 +2303,7 @@
 
             try {
                 const endpoint = isSearchMode ? "/ask" : "/askfast";
-                const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+                let response = await fetch(`${BACKEND_URL}${endpoint}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     credentials: 'include', // 필수: 세션 쿠키 전송
@@ -2314,6 +2314,33 @@
                     }),
                     signal: abortController.signal
                 });
+
+                // 한도 초과(429) 처리
+                if (isSearchMode && response.status === 429) {
+                    const loadingElem = document.getElementById(loadingId);
+                    const analyzingText = loadingElem ? loadingElem.querySelector('.analyzing-text') : null;
+                    if (analyzingText) {
+                        analyzingText.innerHTML = '<div style="color: #EF4444; margin-bottom: 4px;">검색에 실패함</div>';
+                        const failMsg = document.createElement('div');
+                        failMsg.style.fontSize = '0.85em';
+                        failMsg.style.color = '#EF4444';
+                        failMsg.innerText = "한도 초과로 인해 빠른 모델로 전환합니다.";
+                        analyzingText.appendChild(failMsg);
+                    }
+                    
+                    // 재빠르게 빠른 모델로 재요청
+                    response = await fetch(`${BACKEND_URL}/askfast`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: 'include',
+                        body: JSON.stringify({ 
+                            message: "⚠️ 현재 검색 한도를 초과하여 검색을 사용할 수 없습니다.\n\n" + text, 
+                            history: conversationHistory,
+                            image_base64: [] 
+                        }),
+                        signal: abortController.signal
+                    });
+                }
 
                 if (!response.ok) throw new Error("Server error");
 
