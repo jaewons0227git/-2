@@ -15,10 +15,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<!-- Pyodide for Python Execution -->
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
-<!-- Prism.js for Syntax Highlighting -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
@@ -1198,6 +1196,60 @@
     [data-theme="dark"] .top-right .dots-btn,
     [data-theme="dark"] .top-right .share-btn { color: var(--text-color); border-color: var(--border-color); }
     [data-theme="dark"] .top-right .share-btn:hover { background-color: #2f2f2f; }
+
+    /* ==========================================================================
+       [수정/추가] 요청사항 커스텀 스타일 영역
+       ========================================================================== */
+
+    /* [수정] 화면 하단 검은색 그라데이션 제거 */
+    .bottom-fixed-wrapper, [data-theme="dark"] .bottom-fixed-wrapper {
+        background: none !important;
+    }
+
+    /* [수정] 모바일 대화창 텍스트 크기 축소 및 사이드바 전체화면 밀기 */
+    @media (max-width: 768px) {
+        .user-bubble, .bot-text {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+        }
+        .sidebar {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            border-right: none !important;
+            transform: translateX(-100%);
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+    }
+
+    /* [추가] 파일 첨부 미리보기 UI 스타일 */
+    #preview-container {
+        display: flex; gap: 10px; overflow-x: auto;
+        max-height: 0; padding: 0;
+        transition: max-height 0.2s ease, padding 0.2s ease;
+    }
+    #preview-container.active {
+        max-height: 100px; padding: 10px 10px 0 10px;
+    }
+    .preview-card {
+        position: relative; width: 70px; height: 70px;
+        border-radius: 8px; background-color: #2c2c2c;
+        flex-shrink: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        overflow: hidden; border: 1px solid #444;
+    }
+    .preview-card img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-card .file-info { padding: 4px; text-align: center; color: #fff; width: 100%; box-sizing: border-box; }
+    .preview-card .file-name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+    .preview-card .file-size { font-size: 9px; color: #aaa; }
+    .remove-file-btn {
+        position: absolute; top: 2px; right: 2px;
+        background: rgba(0,0,0,0.6); color: white; border: none;
+        border-radius: 50%; width: 16px; height: 16px;
+        font-size: 10px; cursor: pointer; display: flex;
+        align-items: center; justify-content: center; z-index: 10;
+    }
 </style>
 </head>
 <body class="pc-sidebar-open"> 
@@ -1241,7 +1293,6 @@
         }
     </script>
 
-    <!-- [NEW] 초기 로딩 화면 -->
     <div id="initialLoader">
         <div class="spinner-small">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1286,16 +1337,14 @@
         </div>
 
         <div class="sidebar-footer">
-            <div class="user-avatar">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7iy-t1yxu4sxSnbqwbSb_8LBpN1ocQKzk8w&s" alt="User">
+            <div class="user-avatar" style="width: 32px; height: 32px; background: #555; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <span class="material-symbols-rounded" style="color: white; font-size: 20px;">person</span>
             </div>
             <div class="user-info">
-                <span class="user-name">게스트</span>
-                <span class="user-plan">Free</span>
+                <span class="user-name" style="font-size: 15px; font-weight: 500;">신재원</span>
             </div>
         </div>
 
-        <!-- [NEW] 프로필 메뉴 -->
         <div id="profileMenu" class="profile-menu">
             <div class="profile-menu-item" onclick="logout()">
                 <i data-lucide="log-out"></i> <span>로그아웃</span>
@@ -1345,6 +1394,9 @@
 
     <div class="bottom-fixed-wrapper">
         <div class="chat-input-container">
+            <input type="file" id="fileInput" multiple style="display: none;">
+            <div id="preview-container"></div>
+
             <div id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="맨 아래로 이동">
                 <span class="material-symbols-rounded">arrow_downward</span>
             </div>
@@ -1388,7 +1440,6 @@
         </div>
     </div>
 
-    <!-- [NEW] 설정 모달 -->
     <div id="settingsModalOverlay" class="modal-overlay">
         <div class="modal-window settings-modal-window">
             <div class="settings-title">설정</div>
@@ -2733,16 +2784,12 @@
         });
         sendBtn.addEventListener('click', () => sendMessage());
         
+        // [수정] 첨부 버튼 클릭 시 기존 메뉴 대신 파일 탐색기가 열리도록 수정
         attachBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (attachMenu.classList.contains('open')) {
-                attachMenu.classList.remove('open');
-                setTimeout(() => attachMenu.style.display='none', 200);
-            } else {
-                attachMenu.style.display='flex';
-                setTimeout(() => attachMenu.classList.add('open'), 10);
-            }
+            e.preventDefault();
+            document.getElementById('fileInput').click();
         });
+
         searchBtn.addEventListener('click', function() { this.classList.toggle('active'); });
         document.addEventListener('click', (e) => {
             if (attachMenu.classList.contains('open') && !attachMenu.contains(e.target)) {
@@ -2753,6 +2800,71 @@
 
         window.addEventListener('resize', () => {
         });
+
+        // [추가] 파일 첨부 로직 (이미지 미리보기 및 일반 파일 정보 표시)
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('preview-container');
+        let attachedFiles = [];
+
+        if(fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    attachedFiles.push(file);
+                    const card = document.createElement('div');
+                    card.className = 'preview-card';
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-file-btn';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = () => {
+                        card.remove();
+                        attachedFiles = attachedFiles.filter(f => f !== file);
+                        updatePreviewContainer();
+                    };
+
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(file);
+                        card.appendChild(img);
+                    } else {
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'file-info';
+                        
+                        const nameSpan = document.createElement('div');
+                        nameSpan.className = 'file-name';
+                        nameSpan.textContent = file.name;
+                        
+                        const sizeSpan = document.createElement('div');
+                        sizeSpan.className = 'file-size';
+                        let size = file.size / 1024;
+                        let unit = 'KB';
+                        if (size > 1024) { size = size / 1024; unit = 'MB'; }
+                        sizeSpan.textContent = size.toFixed(1) + unit;
+                        
+                        infoDiv.appendChild(nameSpan);
+                        infoDiv.appendChild(sizeSpan);
+                        card.appendChild(infoDiv);
+                    }
+                    
+                    card.appendChild(removeBtn);
+                    previewContainer.appendChild(card);
+                });
+                
+                updatePreviewContainer();
+                fileInput.value = ''; // 같은 파일을 다시 선택할 수 있도록 초기화
+            });
+        }
+
+        function updatePreviewContainer() {
+            if (previewContainer.children.length > 0) {
+                previewContainer.classList.add('active');
+            } else {
+                previewContainer.classList.remove('active');
+            }
+            if(typeof adjustHeight === 'function') adjustHeight(); 
+        }
+
     </script>
 </body>
-</html>
+    </html>
