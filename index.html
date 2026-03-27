@@ -15,8 +15,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+<!-- Pyodide for Python Execution -->
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
+<!-- Prism.js for Syntax Highlighting -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
@@ -1021,12 +1023,13 @@
             display: none !important;
         }
         body:not(.pc-sidebar-open) .sidebar-footer {
-            margin: 0 auto 8px auto;
+            margin: 8px auto;
             padding: 0;
             width: 40px;
             height: 40px;
             justify-content: center;
             border-radius: 10px;
+            cursor: pointer;
         }
         body:not(.pc-sidebar-open) .user-avatar img {
             width: 28px;
@@ -1073,6 +1076,11 @@
         bottom: 10px;
         width: 180px;
     }
+    body:not(.pc-sidebar-open) .theme-submenu {
+        left: 100%;
+        margin-left: 8px;
+        bottom: 0;
+    }
 
     .profile-menu-item {
         display: flex;
@@ -1103,8 +1111,9 @@
         flex-direction: column;
         padding: 6px;
         width: 120px;
+        z-index: 2200;
     }
-    .profile-menu-item.theme-item:hover .theme-submenu {
+    .profile-menu-item.theme-item .theme-submenu.show {
         display: flex;
     }
     .theme-option {
@@ -1130,126 +1139,6 @@
     }
     .settings-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
     .settings-desc { color: #6B7280; margin-bottom: 24px; font-size: 14px; }
-
-    /* 다크 테마 변수 및 스타일 */
-    [data-theme="dark"] {
-        --user-bubble-bg: #2f2f2f;
-        --user-bubble-text: #ececec;
-        --primary-color: #4F46E5;
-        --sidebar-bg: #171717;
-        --body-bg: #212121;
-        --text-color: #ececec;
-        --border-color: #333;
-    }
-    [data-theme="dark"] body { background-color: var(--body-bg); color: var(--text-color); }
-    [data-theme="dark"] .sidebar { background-color: var(--sidebar-bg); border-right-color: var(--border-color); }
-    [data-theme="dark"] .top-bar { background-color: rgba(33, 33, 33, 0.95); border-bottom: 1px solid var(--border-color); color: var(--text-color); }
-    [data-theme="dark"] .sidebar-footer:hover,
-    [data-theme="dark"] .sidebar-menu-btn:hover,
-    [data-theme="dark"] .chat-history-item:hover,
-    [data-theme="dark"] .chat-history-item.active { background-color: #2f2f2f; color: #fff; }
-    [data-theme="dark"] .sidebar-logo,
-    [data-theme="dark"] .sidebar-menu-btn,
-    [data-theme="dark"] .user-name,
-    [data-theme="dark"] .top-left,
-    [data-theme="dark"] .chat-title,
-    [data-theme="dark"] .bot-text,
-    [data-theme="dark"] .sidebar-section-title { color: var(--text-color); }
-    [data-theme="dark"] .profile-menu,
-    [data-theme="dark"] .theme-submenu,
-    [data-theme="dark"] .modal-window { background-color: #171717; border-color: var(--border-color); color: var(--text-color); }
-    [data-theme="dark"] .profile-menu-item:hover,
-    [data-theme="dark"] .theme-option:hover { background-color: #2f2f2f; }
-    [data-theme="dark"] .profile-menu-item { color: var(--text-color); }
-    [data-theme="dark"] .chat-input-container { background-color: #2f2f2f; }
-    [data-theme="dark"] .chat-textarea { color: var(--text-color); }
-    [data-theme="dark"] .bottom-fixed-wrapper { background: linear-gradient(to top, var(--body-bg) 80%, rgba(33,33,33,0)) !important; }
-    [data-theme="dark"] .chat-container { background-color: var(--body-bg) !important; }
-    [data-theme="dark"] .spinner-small { color: var(--text-color); }
-    [data-theme="dark"] #initialLoader { background-color: var(--body-bg); }
-    [data-theme="dark"] .profile-menu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
-    [data-theme="dark"] .theme-submenu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
-    [data-theme="dark"] .modal-window { background-color: var(--sidebar-bg); border-color: var(--border-color); color: var(--text-color); }
-    [data-theme="dark"] .details-panel { background-color: var(--sidebar-bg); border-left-color: var(--border-color); color: var(--text-color); }
-    [data-theme="dark"] .details-header { border-bottom-color: var(--border-color); color: var(--text-color); }
-    [data-theme="dark"] .details-tab-btn { border-color: var(--border-color); color: #9CA3AF; }
-    [data-theme="dark"] .details-tab-btn.active { background-color: #2f2f2f; color: var(--primary-color); border-color: var(--primary-color); }
-    [data-theme="dark"] .citation-card { background-color: #1a1a1a; border-color: var(--border-color); }
-    [data-theme="dark"] .citation-title { color: #ececec; }
-    [data-theme="dark"] .attach-menu { background-color: var(--sidebar-bg); border-color: var(--border-color); }
-    [data-theme="dark"] .menu-item { color: #ececec; }
-    [data-theme="dark"] .scroll-to-bottom-btn { background-color: #2f2f2f; border-color: var(--border-color); }
-    [data-theme="dark"] .scroll-to-bottom-btn i, [data-theme="dark"] .scroll-to-bottom-btn span { color: #ececec; }
-    [data-theme="dark"] .modal-input { background-color: #1a1a1a; border-color: var(--border-color); color: #ececec; }
-    
-    /* 코드 블록 및 프리뷰 다크모드 대응 */
-    [data-theme="dark"] .code-block-container { border-color: var(--border-color); background-color: #1a1a1a; }
-    [data-theme="dark"] .code-block-header { background-color: #2a2a2a; border-bottom-color: var(--border-color); }
-    [data-theme="dark"] .code-lang-info { color: #ccc; }
-    [data-theme="dark"] .code-block-body pre { color: #ececec !important; }
-    [data-theme="dark"] .code-editor { background-color: #1a1a1a; color: #ececec; }
-    [data-theme="dark"] .code-action-btn:hover { background-color: #3a3a3a; color: #fff; }
-    [data-theme="dark"] .code-toggle-group { background-color: #333; }
-    [data-theme="dark"] .toggle-btn.active { background-color: #444; color: #fff; }
-    [data-theme="dark"] .code-preview { background-color: #fff; } /* 실행 결과는 가독성을 위해 흰색 유지할 수 있으나 필요시 변경 */
-
-    [data-theme="dark"] .top-right .dots-btn,
-    [data-theme="dark"] .top-right .share-btn { color: var(--text-color); border-color: var(--border-color); }
-    [data-theme="dark"] .top-right .share-btn:hover { background-color: #2f2f2f; }
-
-    /* ==========================================================================
-       [수정/추가] 요청사항 커스텀 스타일 영역
-       ========================================================================== */
-
-    /* [수정] 화면 하단 검은색 그라데이션 제거 */
-    .bottom-fixed-wrapper, [data-theme="dark"] .bottom-fixed-wrapper {
-        background: none !important;
-    }
-
-    /* [수정] 모바일 대화창 텍스트 크기 축소 및 사이드바 전체화면 밀기 */
-    @media (max-width: 768px) {
-        .user-bubble, .bot-text {
-            font-size: 13px !important;
-            line-height: 1.5 !important;
-        }
-        .sidebar {
-            width: 100vw !important;
-            max-width: 100vw !important;
-            border-right: none !important;
-            transform: translateX(-100%);
-        }
-        .sidebar.open {
-            transform: translateX(0);
-        }
-    }
-
-    /* [추가] 파일 첨부 미리보기 UI 스타일 */
-    #preview-container {
-        display: flex; gap: 10px; overflow-x: auto;
-        max-height: 0; padding: 0;
-        transition: max-height 0.2s ease, padding 0.2s ease;
-    }
-    #preview-container.active {
-        max-height: 100px; padding: 10px 10px 0 10px;
-    }
-    .preview-card {
-        position: relative; width: 70px; height: 70px;
-        border-radius: 8px; background-color: #2c2c2c;
-        flex-shrink: 0; display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        overflow: hidden; border: 1px solid #444;
-    }
-    .preview-card img { width: 100%; height: 100%; object-fit: cover; }
-    .preview-card .file-info { padding: 4px; text-align: center; color: #fff; width: 100%; box-sizing: border-box; }
-    .preview-card .file-name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-    .preview-card .file-size { font-size: 9px; color: #aaa; }
-    .remove-file-btn {
-        position: absolute; top: 2px; right: 2px;
-        background: rgba(0,0,0,0.6); color: white; border: none;
-        border-radius: 50%; width: 16px; height: 16px;
-        font-size: 10px; cursor: pointer; display: flex;
-        align-items: center; justify-content: center; z-index: 10;
-    }
 </style>
 </head>
 <body class="pc-sidebar-open"> 
@@ -1269,6 +1158,13 @@
                 const userNames = document.querySelectorAll('.user-name');
                 userNames.forEach(el => el.innerText = data.name);
                 
+                // 사용자 아바타 설정 (이름 첫 글자 사용)
+                const userAvatar = document.getElementById('userAvatar');
+                if (userAvatar) {
+                    const firstLetter = data.name.charAt(0).toUpperCase();
+                    userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=4F46E5&color=fff&size=128`;
+                }
+
                 if (data.role === 'admin') {
                     const profileMenu = document.getElementById('profileMenu');
                     const adminItem = document.createElement('div');
@@ -1293,6 +1189,7 @@
         }
     </script>
 
+    <!-- [NEW] 초기 로딩 화면 -->
     <div id="initialLoader">
         <div class="spinner-small">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1318,7 +1215,7 @@
                 <i data-lucide="square-pen"></i> <span>새 채팅</span>
             </button>
             <button class="sidebar-menu-btn" id="sidebarSearchBtn">
-                <i data-lucide="search"></i> <span>채팅 검색</span>
+                <i data-lucide="search"></i> <span>검색</span>
             </button>
             
             <div id="sidebarSearchContainer">
@@ -1337,14 +1234,16 @@
         </div>
 
         <div class="sidebar-footer">
-            <div class="user-avatar" style="width: 32px; height: 32px; background: #555; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <span class="material-symbols-rounded" style="color: white; font-size: 20px;">person</span>
+            <div class="user-avatar">
+                <img id="userAvatar" src="" alt="User">
             </div>
             <div class="user-info">
-                <span class="user-name" style="font-size: 15px; font-weight: 500;">신재원</span>
+                <span class="user-name">게스트</span>
+                <span class="user-plan">Free</span>
             </div>
         </div>
 
+        <!-- [NEW] 프로필 메뉴 -->
         <div id="profileMenu" class="profile-menu">
             <div class="profile-menu-item" onclick="logout()">
                 <i data-lucide="log-out"></i> <span>로그아웃</span>
@@ -1356,14 +1255,8 @@
                 <i data-lucide="palette"></i> <span>테마</span>
                 <i data-lucide="chevron-right" style="margin-left: auto; width: 14px;"></i>
                 <div class="theme-submenu">
-                    <div class="theme-option" onclick="setTheme('auto')" data-theme-val="auto">
-                        <span>자동</span> <i data-lucide="check" class="check-icon"></i>
-                    </div>
                     <div class="theme-option" onclick="setTheme('light')" data-theme-val="light">
                         <span>라이트</span> <i data-lucide="check" class="check-icon"></i>
-                    </div>
-                    <div class="theme-option" onclick="setTheme('dark')" data-theme-val="dark">
-                        <span>다크</span> <i data-lucide="check" class="check-icon"></i>
                     </div>
                 </div>
             </div>
@@ -1394,9 +1287,6 @@
 
     <div class="bottom-fixed-wrapper">
         <div class="chat-input-container">
-            <input type="file" id="fileInput" multiple style="display: none;">
-            <div id="preview-container"></div>
-
             <div id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="맨 아래로 이동">
                 <span class="material-symbols-rounded">arrow_downward</span>
             </div>
@@ -1440,6 +1330,7 @@
         </div>
     </div>
 
+    <!-- [NEW] 설정 모달 -->
     <div id="settingsModalOverlay" class="modal-overlay">
         <div class="modal-window settings-modal-window">
             <div class="settings-title">설정</div>
@@ -1512,20 +1403,32 @@
         const detailsContent = document.getElementById('detailsContent');
 
         // --- [NEW] 프로필 메뉴 및 테마/설정 로직 ---
+        const themeItem = document.querySelector('.theme-item');
+        const themeSubmenu = document.querySelector('.theme-submenu');
+
         sidebarFooter.addEventListener('click', (e) => {
             e.stopPropagation();
+            // 미니 사이드바일 때와 일반 사이드바일 때 모두 처리
             profileMenu.classList.toggle('show');
+            themeSubmenu.classList.remove('show');
+        });
+
+        themeItem.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeSubmenu.classList.toggle('show');
         });
 
         document.addEventListener('click', (e) => {
             if (!profileMenu.contains(e.target) && !sidebarFooter.contains(e.target)) {
                 profileMenu.classList.remove('show');
+                themeSubmenu.classList.remove('show');
             }
         });
 
         settingsBtn.addEventListener('click', () => {
             settingsModalOverlay.classList.add('open');
             profileMenu.classList.remove('show');
+            themeSubmenu.classList.remove('show');
         });
 
         settingsCloseBtn.addEventListener('click', () => {
@@ -1534,18 +1437,7 @@
 
         // 테마 설정 함수
         window.setTheme = function(theme) {
-            const root = document.documentElement;
-            const body = document.body;
-            
-            if (theme === 'auto') {
-                localStorage.removeItem('quorvTheme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                body.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-            } else {
-                localStorage.setItem('quorvTheme', theme);
-                body.setAttribute('data-theme', theme);
-            }
-            
+            localStorage.setItem('quorvTheme', theme);
             updateThemeUI(theme);
         };
 
@@ -1561,15 +1453,8 @@
         }
 
         // 초기 테마 적용
-        const savedTheme = localStorage.getItem('quorvTheme') || 'auto';
+        const savedTheme = localStorage.getItem('quorvTheme') || 'light';
         setTheme(savedTheme);
-
-        // 시스템 테마 변경 감지
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (localStorage.getItem('quorvTheme') === null) {
-                document.body.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-            }
-        });
 
         let conversationHistory = [];
         let abortController = null;
@@ -2784,12 +2669,16 @@
         });
         sendBtn.addEventListener('click', () => sendMessage());
         
-        // [수정] 첨부 버튼 클릭 시 기존 메뉴 대신 파일 탐색기가 열리도록 수정
         attachBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('fileInput').click();
+            e.stopPropagation();
+            if (attachMenu.classList.contains('open')) {
+                attachMenu.classList.remove('open');
+                setTimeout(() => attachMenu.style.display='none', 200);
+            } else {
+                attachMenu.style.display='flex';
+                setTimeout(() => attachMenu.classList.add('open'), 10);
+            }
         });
-
         searchBtn.addEventListener('click', function() { this.classList.toggle('active'); });
         document.addEventListener('click', (e) => {
             if (attachMenu.classList.contains('open') && !attachMenu.contains(e.target)) {
@@ -2800,71 +2689,6 @@
 
         window.addEventListener('resize', () => {
         });
-
-        // [추가] 파일 첨부 로직 (이미지 미리보기 및 일반 파일 정보 표시)
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('preview-container');
-        let attachedFiles = [];
-
-        if(fileInput) {
-            fileInput.addEventListener('change', function(e) {
-                const files = Array.from(e.target.files);
-                files.forEach(file => {
-                    attachedFiles.push(file);
-                    const card = document.createElement('div');
-                    card.className = 'preview-card';
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-file-btn';
-                    removeBtn.innerHTML = '×';
-                    removeBtn.onclick = () => {
-                        card.remove();
-                        attachedFiles = attachedFiles.filter(f => f !== file);
-                        updatePreviewContainer();
-                    };
-
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = URL.createObjectURL(file);
-                        card.appendChild(img);
-                    } else {
-                        const infoDiv = document.createElement('div');
-                        infoDiv.className = 'file-info';
-                        
-                        const nameSpan = document.createElement('div');
-                        nameSpan.className = 'file-name';
-                        nameSpan.textContent = file.name;
-                        
-                        const sizeSpan = document.createElement('div');
-                        sizeSpan.className = 'file-size';
-                        let size = file.size / 1024;
-                        let unit = 'KB';
-                        if (size > 1024) { size = size / 1024; unit = 'MB'; }
-                        sizeSpan.textContent = size.toFixed(1) + unit;
-                        
-                        infoDiv.appendChild(nameSpan);
-                        infoDiv.appendChild(sizeSpan);
-                        card.appendChild(infoDiv);
-                    }
-                    
-                    card.appendChild(removeBtn);
-                    previewContainer.appendChild(card);
-                });
-                
-                updatePreviewContainer();
-                fileInput.value = ''; // 같은 파일을 다시 선택할 수 있도록 초기화
-            });
-        }
-
-        function updatePreviewContainer() {
-            if (previewContainer.children.length > 0) {
-                previewContainer.classList.add('active');
-            } else {
-                previewContainer.classList.remove('active');
-            }
-            if(typeof adjustHeight === 'function') adjustHeight(); 
-        }
-
     </script>
 </body>
-    </html>
+</html>

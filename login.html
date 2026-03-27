@@ -115,6 +115,12 @@
         .email-login-form.show {
             display: flex;
         }
+        .form-inputs {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
         input {
             width: 100%;
             padding: 14px 20px;
@@ -126,6 +132,17 @@
         }
         input:focus {
             border-color: #000;
+        }
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 8px;
+            min-height: 18px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
         }
         .footer-info {
             margin-top: 24px;
@@ -216,8 +233,11 @@
             </button>
 
             <form class="email-login-form" id="emailForm">
-                <input type="text" id="emailInput" placeholder="이메일 또는 아이디" required>
-                <input type="password" id="passwordInput" placeholder="비밀번호" required>
+                <div class="form-inputs">
+                    <input type="text" id="emailInput" placeholder="이메일 또는 아이디" required>
+                    <input type="password" id="passwordInput" placeholder="비밀번호" required>
+                    <div class="error-message" id="loginError"></div>
+                </div>
                 <button type="submit" id="submitBtn" class="login-btn black">계속하기</button>
             </form>
         </div>
@@ -258,23 +278,27 @@
 
         emailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
+            const loginError = document.getElementById('loginError');
+            loginError.classList.remove('show');
+            loginError.innerText = '';
+
             submitBtn.disabled = true;
             submitBtn.innerText = '로그인 중...';
-            
+
             try {
                 const response = await fetch(`${BACKEND_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include', // 세션 쿠키 전송을 위해 필수
+                    credentials: 'include',
                     body: JSON.stringify({
                         username: emailInput.value.trim(),
                         password: passwordInput.value
                     })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (response.ok) {
                     if (result.user && result.user.role === 'admin') {
                         location.href = 'admin.html';
@@ -286,13 +310,15 @@
                     submitBtn.disabled = false;
                     submitBtn.innerText = '계속하기';
                 } else {
-                    alert(result.error || '로그인에 실패했습니다.');
+                    loginError.innerText = result.message || '아이디 또는 비밀번호가 일치하지 않습니다.';
+                    loginError.classList.add('show');
                     submitBtn.disabled = false;
                     submitBtn.innerText = '계속하기';
                 }
             } catch (error) {
                 console.error('Login Error:', error);
-                alert('서버와 통신 중 오류가 발생했습니다.');
+                loginError.innerText = '서버와 통신 중 오류가 발생했습니다.';
+                loginError.classList.add('show');
                 submitBtn.disabled = false;
                 submitBtn.innerText = '계속하기';
             }
