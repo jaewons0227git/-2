@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 - quorv</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="[https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css](https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css)">
     <style>
         :root {
             --primary-color: #000;
@@ -214,7 +214,7 @@
         <a href="index.html" class="logo">quorv</a>
         <div class="top-right-info">
             <strong>quorv</strong>에 로그인 중입니다
-            <i data-lucide="chevron-down" style="width: 14px;"></i>
+            <i class="ti ti-chevron-down" style="font-size: 14px;"></i>
         </div>
     </header>
 
@@ -228,7 +228,7 @@
             </button>
 
             <button class="login-btn" id="emailToggleBtn">
-                <i data-lucide="mail" style="width: 20px;"></i>
+                <i class="ti ti-mail" style="font-size: 20px;"></i>
                 이메일로 로그인
             </button>
 
@@ -251,7 +251,6 @@
         계속 진행함으로써 quorv의 <a href="#">서비스 이용약관</a> 및 <a href="#">개인정보 처리방침</a>에 동의하게 됩니다.
     </div>
 
-    <!-- Unapproved Modal -->
     <div id="unapprovedModal" class="modal">
         <div class="modal-content">
             <h2>승인 대기 중</h2>
@@ -261,8 +260,6 @@
     </div>
 
     <script>
-        lucide.createIcons();
-        
         const emailToggleBtn = document.getElementById('emailToggleBtn');
         const emailForm = document.getElementById('emailForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -274,7 +271,7 @@
             emailToggleBtn.style.display = 'none';
         });
 
-        const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+        const BACKEND_URL = '[https://jaewondev6.pythonanywhere.com](https://jaewondev6.pythonanywhere.com)';
 
         emailForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -300,6 +297,9 @@
                 const result = await response.json();
 
                 if (response.ok) {
+                    // [NEW] 인증 토큰을 로컬스토리지에 저장하여 시크릿창 문제를 해결합니다
+                    localStorage.setItem('quorv_token', result.token);
+                    
                     if (result.user && result.user.role === 'admin') {
                         location.href = 'admin.html';
                     } else {
