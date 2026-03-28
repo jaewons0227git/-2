@@ -10,15 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<!-- Pyodide for Python Execution -->
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 
-<!-- Prism.js for Syntax Highlighting -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
@@ -64,7 +62,7 @@
         --radius-bubble: 18px;     
         
         --line-height: 22px;       
-        --primary-color: #4F46E5; 
+        --primary-color: #000000; 
         
         --user-bubble-bg: #F4F4F5; 
         --user-bubble-text: #1F2937;
@@ -135,9 +133,8 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    .code-action-btn .lucide {
-        width: 16px;
-        height: 16px;
+    .code-action-btn .ti {
+        font-size: 16px;
     }
 
     /* 실행/코드 토글 스위치 스타일 */
@@ -254,7 +251,7 @@
     /* --- 사이드바 (Sidebar) --- */
     .sidebar-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5); z-index: 1900;
+        background-color: transparent; z-index: 1900;
         opacity: 0; visibility: hidden; transition: opacity 0.3s;
     }
     @media (max-width: 768px) {
@@ -271,7 +268,7 @@
 
     .sidebar {
         position: fixed; top: 0; left: 0; height: 100%; width: var(--sidebar-width);
-        background-color: #F7F7F8; z-index: 2000;
+        background-color: #fff; z-index: 2000;
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
@@ -325,7 +322,7 @@
     }
     .sidebar-menu-btn span { transition: opacity 0.3s, width 0.3s; }
     .sidebar-menu-btn:hover { background-color: #E5E7EB; }
-    .sidebar-menu-btn .lucide { width: 20px; height: 20px; color: #000; flex-shrink: 0; }
+    .sidebar-menu-btn .ti { font-size: 20px; color: #000; flex-shrink: 0; }
 
     /* [수정] 검색 입력창 컨테이너 및 스타일 */
     #sidebarSearchContainer {
@@ -359,7 +356,7 @@
         left: 14px;
         top: 50%;
         transform: translateY(-50%);
-        width: 18px; height: 18px;
+        font-size: 18px;
         color: #000;
         pointer-events: none;
     }
@@ -411,8 +408,8 @@
         padding: 2px; border-radius: 4px; color: #000;
         line-height: 0; /* 높이에 영향 주지 않도록 */
     }
-    .chat-item-options .lucide {
-        width: 16px; height: 16px; /* 크기 줄임 */
+    .chat-item-options .ti {
+        font-size: 16px; /* 크기 줄임 */
     }
     .chat-item-options:hover {
         background-color: #D1D5DB; color: #000;
@@ -438,7 +435,7 @@
     }
     .history-menu-item:hover { background-color: #F3F4F6; }
     .history-menu-item.delete { color: #EF4444; }
-    .history-menu-item .lucide { width: 14px; height: 14px; }
+    .history-menu-item .ti { font-size: 14px; }
 
 
     .sidebar-footer {
@@ -850,7 +847,7 @@
     .send-btn .material-symbols-rounded { font-size: 18px; color: #9CA3AF; }
     .send-btn:not(:disabled) { background-color: var(--primary-color); cursor: pointer; }
     .send-btn:not(:disabled) .material-symbols-rounded { color: #ffffff; }
-    .send-btn:not(:disabled):hover { background-color: #4338ca; }
+    .send-btn:not(:disabled):hover { background-color: #333333; }
     .stop-icon-square { width: 10px; height: 10px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
     .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
@@ -1116,7 +1113,7 @@
         position: relative;
     }
     .profile-menu-item:hover { background-color: #F3F4F6; }
-    .profile-menu-item .lucide { width: 18px; height: 18px; }
+    .profile-menu-item .ti { font-size: 18px; }
 
     /* 테마 서브메뉴 */
     .theme-submenu {
@@ -1147,8 +1144,8 @@
     }
     .theme-option:hover { background-color: #F3F4F6; }
     .theme-option.active { color: var(--primary-color); font-weight: 600; }
-    .theme-option .check-icon { display: none; width: 14px; height: 14px; }
-    .theme-option.active .check-icon { display: block; }
+    .theme-option .check-icon { display: none; font-size: 14px; }
+    .theme-option.active .check-icon { display: inline-block; }
 
     /* 설정 모달 전용 스타일 */
     .settings-modal-window {
@@ -1165,10 +1162,12 @@
 <body class="pc-sidebar-open"> 
     <script>
         const BACKEND_URL = 'https://jaewondev6.pythonanywhere.com';
+        const getToken = () => localStorage.getItem('quorv_token') || '';
 
         async function checkAuth() {
             try {
                 const response = await fetch(`${BACKEND_URL}/user_info`, {
+                    headers: { 'Authorization': 'Bearer ' + getToken() },
                     credentials: 'include'
                 });
                 if (!response.ok) {
@@ -1183,7 +1182,7 @@
                 const userAvatar = document.getElementById('userAvatar');
                 if (userAvatar) {
                     const firstLetter = data.name.charAt(0).toUpperCase();
-                    userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=4F46E5&color=fff&size=128`;
+                    userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=000&color=fff&size=128`;
                 }
 
                 if (data.role === 'admin') {
@@ -1191,9 +1190,8 @@
                     const adminItem = document.createElement('div');
                     adminItem.className = 'profile-menu-item';
                     adminItem.onclick = () => location.href = 'admin.html';
-                    adminItem.innerHTML = '<i data-lucide="shield-check"></i> <span>관리자 페이지</span>';
+                    adminItem.innerHTML = '<i class="ti ti-shield-check"></i> <span>관리자 페이지</span>';
                     profileMenu.insertBefore(adminItem, profileMenu.firstChild);
-                    lucide.createIcons();
                 }
             } catch (e) {
                 location.href = 'login.html';
@@ -1204,13 +1202,14 @@
         async function logout() {
             await fetch(`${BACKEND_URL}/logout`, { 
                 method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + getToken() },
                 credentials: 'include'
             });
+            localStorage.removeItem('quorv_token');
             location.href = 'login.html';
         }
     </script>
 
-    <!-- [NEW] 초기 로딩 화면 -->
     <div id="initialLoader">
         <div class="spinner-small">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1227,27 +1226,27 @@
                 <img src="https://i.postimg.cc/Sxd0rHV1/image-removebg-preview.png" alt="Logo">
             </div>
             <div id="sidebarCloseBtn" class="sidebar-close-btn" title="사이드바 닫기">
-                <i data-lucide="panel-left-close"></i>
+                <i class="ti ti-layout-sidebar-left-collapse"></i>
             </div>
         </div>
         
         <div class="sidebar-content">
             <button class="sidebar-menu-btn" id="newChatBtn">
-                <i data-lucide="square-pen"></i> <span>새 채팅</span>
+                <i class="ti ti-edit"></i> <span>새 채팅</span>
             </button>
             <button class="sidebar-menu-btn" id="sidebarSearchBtn">
-                <i data-lucide="search"></i> <span>검색</span>
+                <i class="ti ti-search"></i> <span>검색</span>
             </button>
             
             <div id="sidebarSearchContainer">
                 <div class="search-input-wrapper">
-                    <i data-lucide="search" class="search-icon-inside"></i>
+                    <i class="ti ti-search search-icon-inside"></i>
                     <input type="text" id="sidebarSearchInput" placeholder="채팅 제목 검색...">
                 </div>
             </div>
 
             <button class="sidebar-menu-btn">
-                <i data-lucide="image"></i> <span>이미지</span>
+                <i class="ti ti-photo"></i> <span>이미지</span>
             </button>
             
             <div class="sidebar-section-title">내 채팅</div>
@@ -1264,20 +1263,19 @@
             </div>
         </div>
 
-        <!-- [NEW] 프로필 메뉴 -->
         <div id="profileMenu" class="profile-menu">
             <div class="profile-menu-item" onclick="logout()">
-                <i data-lucide="log-out"></i> <span>로그아웃</span>
+                <i class="ti ti-logout"></i> <span>로그아웃</span>
             </div>
             <div class="profile-menu-item" id="settingsBtn">
-                <i data-lucide="settings"></i> <span>설정</span>
+                <i class="ti ti-settings"></i> <span>설정</span>
             </div>
             <div class="profile-menu-item theme-item">
-                <i data-lucide="palette"></i> <span>테마</span>
-                <i data-lucide="chevron-right" style="margin-left: auto; width: 14px;"></i>
+                <i class="ti ti-palette"></i> <span>테마</span>
+                <i class="ti ti-chevron-right" style="margin-left: auto; font-size: 14px;"></i>
                 <div class="theme-submenu">
                     <div class="theme-option" onclick="setTheme('light')" data-theme-val="light">
-                        <span>라이트</span> <i data-lucide="check" class="check-icon"></i>
+                        <span>라이트</span> <i class="ti ti-check check-icon"></i>
                     </div>
                 </div>
             </div>
@@ -1288,7 +1286,7 @@
     <header class="top-bar">
         <div class="top-left" id="headerTitleArea">
             <span id="pcSidebarOpenBtn" class="pc-sidebar-open-btn" title="사이드바 열기">
-                <i data-lucide="panel-left-open"></i>
+                <i class="ti ti-layout-sidebar-left-expand"></i>
             </span>
             <span id="mobileMenuBtn" class="material-symbols-rounded mobile-menu-icon" style="margin-right: 8px;">menu</span>
             quorv 
@@ -1351,7 +1349,6 @@
         </div>
     </div>
 
-    <!-- [NEW] 설정 모달 -->
     <div id="settingsModalOverlay" class="modal-overlay">
         <div class="modal-window settings-modal-window">
             <div class="settings-title">설정</div>
@@ -1544,22 +1541,22 @@
             <div class="code-block-container" id="container-${uniqueId}">
                 <div class="code-block-header">
                     <div class="code-lang-info">
-                        <i data-lucide="code-2"></i>
+                        <i class="ti ti-code"></i>
                         <span>${lang}</span>
                     </div>
                     <div class="code-actions">
                         <button class="code-action-btn" onclick="copyCode('${uniqueId}')" title="복사">
-                            <i data-lucide="copy"></i>
+                            <i class="ti ti-copy"></i>
                         </button>
                         <button class="code-action-btn" id="edit-btn-${uniqueId}" onclick="toggleEdit('${uniqueId}')" title="편집">
-                            <i data-lucide="pencil"></i>
+                            <i class="ti ti-pencil"></i>
                         </button>
                         <div class="code-toggle-group">
                             <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="코드 보기">
-                                <i data-lucide="terminal"></i>
+                                <i class="ti ti-terminal"></i>
                             </button>
                             <button class="toggle-btn ${!isExecutable ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isExecutable}, '${langLower}')" title="${isExecutable ? '실행' : '실행 불가'}">
-                                <i data-lucide="play"></i>
+                                <i class="ti ti-player-play"></i>
                             </button>
                         </div>
                     </div>
@@ -1583,11 +1580,9 @@
             navigator.clipboard.writeText(code).then(() => {
                 const btn = document.querySelector(`#container-${id} [title="복사"]`);
                 const originalHTML = btn.innerHTML;
-                btn.innerHTML = '<i data-lucide="check" style="color:#10B981;"></i>';
-                lucide.createIcons();
+                btn.innerHTML = '<i class="ti ti-check" style="color:#10B981;"></i>';
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
-                    lucide.createIcons();
                 }, 2000);
             });
         };
@@ -1721,9 +1716,6 @@
             }
         }
 
-        // Lucide 아이콘 초기화
-        lucide.createIcons();
-
         // --- 유틸리티 함수: UUID 생성 ---
         function generateUUID() {
             if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -1797,7 +1789,6 @@
                 });
                 
                 // 아이콘 및 하이라이트 초기화
-                lucide.createIcons();
                 Prism.highlightAllUnder(chatContainer);
                 
                 isFirstMessage = false;
@@ -1908,7 +1899,7 @@
                 itemDiv.innerHTML = `
                     <div class="chat-title">${chat.title}</div>
                     <div class="chat-item-options" data-id="${chat.id}">
-                        <i data-lucide="more-vertical"></i>
+                        <i class="ti ti-dots-vertical"></i>
                     </div>
                 `;
                 
@@ -1925,11 +1916,10 @@
                     const dropdown = document.createElement('div');
                     dropdown.className = 'history-menu-dropdown show';
                     dropdown.innerHTML = `
-                        <div class="history-menu-item" id="menuRename"><i data-lucide="pencil"></i> 이름 변경</div>
-                        <div class="history-menu-item delete" id="menuDelete"><i data-lucide="trash-2"></i> 삭제</div>
+                        <div class="history-menu-item" id="menuRename"><i class="ti ti-pencil"></i> 이름 변경</div>
+                        <div class="history-menu-item delete" id="menuDelete"><i class="ti ti-trash"></i> 삭제</div>
                     `;
                     itemDiv.appendChild(dropdown);
-                    lucide.createIcons();
 
                     dropdown.querySelector('#menuRename').addEventListener('click', (ev) => {
                         ev.stopPropagation();
@@ -1946,7 +1936,6 @@
 
                 savedChatList.appendChild(itemDiv);
             });
-            lucide.createIcons();
         }
         
         // 검색 버튼 토글 (버튼 클릭 시 입력창 노출)
@@ -2262,7 +2251,10 @@
                 const endpoint = isSearchMode ? "/ask" : "/askfast";
                 let response = await fetch(`${BACKEND_URL}${endpoint}`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + getToken()
+                    },
                     credentials: 'include', // 필수: 세션 쿠키 전송
                     body: JSON.stringify({ 
                         message: text, 
@@ -2288,7 +2280,10 @@
                     // 재빠르게 빠른 모델로 재요청
                     response = await fetch(`${BACKEND_URL}/askfast`, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + getToken()
+                        },
                         credentials: 'include',
                         body: JSON.stringify({ 
                             message: "⚠️ 현재 검색 한도를 초과하여 검색을 사용할 수 없습니다.\n\n" + text, 
@@ -2392,7 +2387,6 @@
                                     
                                     try {
                                         botContent.innerHTML = marked.parse(parsed.cleanText);
-                                        lucide.createIcons();
                                         if (parsed.cleanText.includes('```')) {
                                             Prism.highlightAllUnder(botContent);
                                         }
@@ -2404,14 +2398,14 @@
                                     const currentBotHeight = botContent.offsetHeight;
                                     chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                     
-                                                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
-                                                                    window.scrollTo(0, savedScrollY);
-                                                                    
-                                                                                                    // [추가] 모바일 햅틱 진동 (더욱 미세하게)
-                                                                                                    if (window.navigator && window.navigator.vibrate) {
-                                                                                                        window.navigator.vibrate(2);
-                                                                                                    }                                                                    
-                                                                    await new Promise(r => setTimeout(r, Math.random() * 40 + 30));                                } else {
+                                                                                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
+                                                                                                    window.scrollTo(0, savedScrollY);
+                                                                                                    
+                                                                                                                            // [추가] 모바일 햅틱 진동 (더욱 미세하게)
+                                                                                                                            if (window.navigator && window.navigator.vibrate) {
+                                                                                                                                window.navigator.vibrate(2);
+                                                                                                                            }                                                                   
+                                                                                                await new Promise(r => setTimeout(r, Math.random() * 40 + 30));                                } else {
                                     await new Promise(r => setTimeout(r, 10));
                                 }
                             } else {
@@ -2457,7 +2451,6 @@
                 renderer.codeCount = 0;
                 botContent.innerHTML = marked.parse(cleanTextDisplay);
                 try {
-                    lucide.createIcons();
                     Prism.highlightAllUnder(botContent);
                 } catch (e) { console.error(e); }
 
