@@ -263,6 +263,7 @@
             width: 100%;
             height: 100%;
             z-index: 9998;
+            background-color: rgba(0,0,0,0.4); /* 추가된 오버레이 어두운 배경 */
         }
     }
 
@@ -279,9 +280,23 @@
     }
     
     @media (max-width: 768px) {
+        /* [수정] 모바일에서는 바텀 시트 스타일로 위로 올라오도록 설정 */
         .sidebar {
             width: 100% !important;
             background-color: #fff !important;
+            transform: translateY(100%) !important;
+            top: auto !important;
+            bottom: 0 !important;
+            height: 85vh !important;
+            border-radius: 24px 24px 0 0 !important;
+            border-right: none !important;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+        }
+        .sidebar.open {
+            transform: translateY(0) !important;
+        }
+        .sidebar-content {
+            padding: 20px;
         }
     }
 
@@ -301,12 +316,6 @@
     .sidebar-close-btn:hover { background-color: #E5E7EB; }
 
     .sidebar-content { flex: 1; padding: 10px; display: flex; flex-direction: column; overflow: hidden; }
-    
-    @media (max-width: 768px) {
-        .sidebar-content {
-            padding: 20px;
-        }
-    }
     
     .sidebar-menu-btn {
         display: flex; align-items: center; gap: 10px; width: 100%;
@@ -510,15 +519,39 @@
     }
     .dots-btn:hover { background-color: #F3F4F6; }
 
-    @media (max-width: 768px) {
-        .share-btn { font-size: 11px; padding: 4px 8px; }
-        .top-bar { padding: 0 10px; }
+    /* [수정] 모바일 및 PC 전용 요소 처리 */
+    .mobile-only { display: none; }
+    @media (min-width: 769px) {
+        .mobile-only { display: none !important; }
+    }
 
-        /* [수정] 모바일 메세지 폰트 크기 추가 축소 */
+    @media (max-width: 768px) {
+        .pc-only { display: none !important; }
+        .mobile-only { display: flex; align-items: center; }
+        
+        /* [수정] 모바일 상단바 완벽 구현 */
+        .top-bar { 
+            justify-content: space-between; 
+            padding: 0 16px; 
+            background: #fff; 
+            border-bottom: 1px solid transparent; 
+            height: 56px; 
+        }
+        .mobile-title { font-size: 19px; }
+        .mobile-title b { font-weight: 700; color: #1F2937; letter-spacing: -0.5px; }
+        .mobile-title span { font-weight: 500; color: #9CA3AF; margin-left: 5px; font-size: 17px; }
+        
+        .mobile-top-icons { display: flex; gap: 14px; }
+        .mobile-icon-btn { 
+            background: transparent; border: none; font-size: 26px; color: #1F2937; 
+            padding: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        .share-btn { font-size: 11px; padding: 4px 8px; }
+
         .user-bubble { font-size: 12px; padding: 5px 10px; }
         .bot-text { font-size: 12px; }
 
-        /* [복구] PC 버전 스타일의 모바일 하단 레이아웃 */
         .bottom-fixed-wrapper { 
             padding-bottom: 20px !important; 
             padding-top: 10px !important;
@@ -530,10 +563,8 @@
         .chat-input-container {
             width: 90% !important;
             max-width: var(--content-max-width) !important;
-            border-radius: var(--radius-input) !important;
             margin: 0 auto !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            background-color: #F4F4F5;
             border: none !important;
         }
         .bottom-fixed-wrapper::after { display: none; }
@@ -572,7 +603,6 @@
         opacity: 0.8;
         z-index: 10;
         pointer-events: none;
-        /* 부드럽게 없어지는 것 제거를 위해 transition에서 opacity/visibility 제외하거나 시간 0 */
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
     .center-logo img {
@@ -590,7 +620,7 @@
         }
     }
     .center-logo.hidden {
-        display: none !important; /* 즉시 없어지도록 display none 사용 */
+        display: none !important; 
     }
 
     .message-row { display: flex; width: 100%; flex-direction: column; position: relative; }
@@ -713,32 +743,33 @@
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
+    /* [수정] 입력창 컨테이너 레이아웃 가로 정렬로 변경 */
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
-        background-color: #F4F4F5; border-radius: var(--radius-input);
-        padding: 10px 10px; box-sizing: border-box;
-        display: flex; flex-direction: column; position: relative; 
+        background-color: #F4F4F5; border-radius: 26px; /* Pill 형태 강조 */
+        padding: 8px 12px 8px 8px; box-sizing: border-box;
+        display: flex; flex-direction: row; align-items: flex-end; position: relative; 
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid transparent; /* 기본 보더 투명 */
+        border: 1px solid transparent; gap: 8px;
     }
 
-    /* [NEW] 입력창 글로우 애니메이션 (테두리 따라 회전하는 핑크 & 블루) */
+    /* [NEW] 입력창 글로우 애니메이션 */
     @keyframes rotate-glow {
         from { transform: translate(-50%, -50%) rotate(0deg); }
         to { transform: translate(-50%, -50%) rotate(360deg); }
     }
     .chat-input-container.generating {
         position: relative;
-        overflow: hidden; /* 내부 회전 요소를 테두리에 맞게 자름 */
+        overflow: hidden; 
         border: 1px solid transparent;
-        background-color: transparent; /* 배경은 ::after에서 처리 */
+        background-color: transparent; 
     }
     .chat-input-container.generating::before {
         content: "";
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 200%; /* 충분히 크게 설정하여 모서리까지 커버 */
+        width: 200%; 
         aspect-ratio: 1;
         background: conic-gradient(
             from 0deg,
@@ -753,20 +784,17 @@
         );
         animation: rotate-glow 3s linear infinite;
         z-index: -2;
-        filter: blur(4px); /* 테두리에 약간의 번짐 효과 */
+        filter: blur(4px); 
     }
     .chat-input-container.generating::after {
         content: "";
         position: absolute;
-        inset: 2px; /* 테두리 두께만큼 안쪽으로 */
+        inset: 2px; 
         background: #F4F4F5;
-        border-radius: calc(var(--radius-input) - 2px);
+        border-radius: 24px;
         z-index: -1;
     }
-    /* 테두리 진해지지 않도록 포커스 스타일 명시적 조정 */
-    .chat-textarea:focus {
-        outline: none;
-    }
+    .chat-textarea:focus { outline: none; }
 
     /* [NEW] 삭제 확인 모달 */
     #deleteModalOverlay {
@@ -789,9 +817,9 @@
     /* [NEW] 스크롤 다운 버튼 스타일 */
     .scroll-to-bottom-btn {
         position: absolute;
-        top: -45px; /* 입력창 바로 위 */
+        top: -45px; 
         left: 50%;
-        transform: translateX(-50%) scale(0); /* 기본 숨김 (scale 0) */
+        transform: translateX(-50%) scale(0); 
         width: 32px; height: 32px;
         background-color: #fff;
         border: 1px solid #E5E7EB;
@@ -804,7 +832,6 @@
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
         opacity: 0;
     }
-    /* 버튼 보일 때 클래스 */
     .scroll-to-bottom-btn.show {
         transform: translateX(-50%) scale(1);
         opacity: 1;
@@ -818,42 +845,49 @@
         color: #4B5563;
     }
 
+    /* [수정] 입력창 좌측 아이콘 정렬 */
+    .input-left-tools { 
+        display: flex; align-items: center; gap: 2px; margin-bottom: 4px;
+    }
+    .input-left-tools .icon-btn {
+        background: none; border: none; padding: 0;
+        width: 32px; height: 32px;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        color: #6B7280; transition: color 0.2s; border-radius: 50%;
+    }
+    .input-left-tools .icon-btn:hover { background-color: rgba(0,0,0,0.05); color: #374151; }
+    .input-left-tools .icon-btn .ti { font-size: 24px; }
+    #searchBtn.active .ti { color: #0EA5E9; }
+
+    /* [수정] 텍스트 에어리어 스타일 */
     .chat-textarea {
-        width: 100%; border: none; background: transparent; resize: none; outline: none;
+        flex: 1; border: none; background: transparent; resize: none; outline: none;
         font-size: 15px; color: #333; font-family: inherit; padding: 0;
+        margin-top: 8px; margin-bottom: 8px;
         line-height: var(--line-height); height: var(--line-height);
         max-height: calc(var(--line-height) * 8); overflow-y: hidden; scrollbar-width: none;
     }
     .chat-textarea::-webkit-scrollbar { display: none; }
-    .chat-textarea::placeholder { color: #9CA3AF; }
+    .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
 
-    .input-toolbar { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-    .left-tools { display: flex; gap: 6px; }
-    .icon-btn {
-        background: none; border: none; border-radius: var(--radius-icon-btn); padding: 5px;
-        cursor: pointer; display: flex; align-items: center; justify-content: center;
-        color: #6B7280; transition: background-color 0.2s, color 0.2s;
-    }
-    .icon-btn:hover { background-color: rgba(0,0,0,0.05); color: #374151; }
-    .icon-btn .material-symbols-rounded { font-size: 20px; }
-    #searchBtn.active { color: #0EA5E9; background-color: rgba(14, 165, 233, 0.1); }
-    #attachBtn .material-symbols-rounded { transform: rotate(45deg); }
-
+    /* [수정] 동그란 전송 버튼 활성/비활성화 스타일 */
     .send-btn {
-        background-color: #E5E7EB; border: none; border-radius: var(--radius-send-btn);
-        width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;
-        cursor: default; transition: all 0.2s ease-in-out;
+        width: 32px; height: 32px; flex-shrink: 0;
+        background-color: #E5E7EB; border: none; border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        margin-bottom: 4px; transition: background-color 0.2s, color 0.2s;
     }
-    .send-btn .material-symbols-rounded { font-size: 18px; color: #9CA3AF; }
-    .send-btn:not(:disabled) { background-color: var(--primary-color); cursor: pointer; }
-    .send-btn:not(:disabled) .material-symbols-rounded { color: #ffffff; }
-    .send-btn:not(:disabled):hover { background-color: #333333; }
-    .stop-icon-square { width: 10px; height: 10px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
+    .send-btn .arrow-icon { font-size: 20px; color: #9CA3AF; font-weight: 600; transition: color 0.2s; }
+    .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
+    .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
+    .send-btn.generating-state { background-color: #1F2937 !important; cursor: default; }
+    
+    .stop-icon-square { width: 12px; height: 12px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
     .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
 
     .attach-menu {
-        display: none; position: absolute; bottom: 50px; left: 0; width: 130px;
+        display: none; position: absolute; bottom: 60px; left: 0; width: 130px;
         background-color: #FFFFFF; border: 1px solid #E5E7EB; border-radius: var(--radius-window);
         padding: 4px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); z-index: 2000;
         flex-direction: column; gap: 2px; opacity: 0; transform: translateY(10px);
@@ -1284,7 +1318,7 @@
 
 
     <header class="top-bar">
-        <div class="top-left" id="headerTitleArea">
+        <div class="top-left pc-only" id="headerTitleArea">
             <span id="pcSidebarOpenBtn" class="pc-sidebar-open-btn" title="사이드바 열기">
                 <i class="ti ti-layout-sidebar-left-expand"></i>
             </span>
@@ -1292,9 +1326,17 @@
             quorv 
             <span class="material-symbols-rounded" style="font-size:20px; color:#9CA3AF;">expand_more</span>
         </div>
-        <div class="top-right">
+        <div class="top-right pc-only">
             <button class="share-btn"><span class="material-symbols-rounded">ios_share</span> 공유하기</button>
             <button class="dots-btn"><span class="material-symbols-rounded">more_horiz</span></button>
+        </div>
+
+        <div class="mobile-only mobile-title">
+            <b>quorv</b><span>for android</span>
+        </div>
+        <div class="mobile-only mobile-top-icons">
+            <button class="mobile-icon-btn" id="mobileNewChatBtn"><i class="ti ti-edit"></i></button>
+            <button class="mobile-icon-btn" id="mobileMenuBtnRight"><i class="ti ti-list-details"></i></button>
         </div>
     </header>
 
@@ -1315,14 +1357,17 @@
                 <div class="menu-item"><span class="material-symbols-rounded">description</span> <span>문서</span></div>
                 <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>파일</span></div>
             </div>
-            <textarea id="chatInput" class="chat-textarea" placeholder="메시지를 입력해주세요." rows="1"></textarea>
-            <div class="input-toolbar">
-                <div class="left-tools">
-                    <button id="attachBtn" class="icon-btn" title="첨부하기"><span class="material-symbols-rounded">attach_file</span></button>
-                    <button id="searchBtn" class="icon-btn" title="검색 모드"><span class="material-symbols-rounded">language</span></button>
-                </div>
-                <button id="sendBtn" class="send-btn" disabled><span class="material-symbols-rounded">arrow_upward</span></button>
+
+            <div class="input-left-tools">
+                <button id="attachBtn" class="icon-btn" title="첨부하기"><i class="ti ti-plus"></i></button>
+                <button id="searchBtn" class="icon-btn" title="검색 모드"><i class="ti ti-world"></i></button>
             </div>
+
+            <textarea id="chatInput" class="chat-textarea" placeholder="무엇이든 물어보세요" rows="1"></textarea>
+            
+            <button id="sendBtn" class="send-btn" disabled>
+                <i class="ti ti-arrow-up arrow-icon"></i>
+            </button>
         </div>
         <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
     </div>
@@ -1398,6 +1443,10 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
         const pcSidebarOpenBtn = document.getElementById('pcSidebarOpenBtn');
+        
+        // [수정] 모바일 전용 버튼 연동
+        const mobileMenuBtnRight = document.getElementById('mobileMenuBtnRight');
+        const mobileNewChatBtn = document.getElementById('mobileNewChatBtn');
 
         // 검색 관련
         const sidebarSearchBtn = document.getElementById('sidebarSearchBtn');
@@ -1987,6 +2036,7 @@
         }
 
         newChatBtn.addEventListener('click', startNewChat);
+        if (mobileNewChatBtn) mobileNewChatBtn.addEventListener('click', startNewChat);
 
         // --- 초기 로드 및 URL 처리 ---
         window.addEventListener('load', () => {
@@ -2038,6 +2088,7 @@
         }
 
         mobileMenuBtn.addEventListener('click', toggleSidebar);
+        if (mobileMenuBtnRight) mobileMenuBtnRight.addEventListener('click', toggleSidebar);
         sidebarCloseBtn.addEventListener('click', toggleSidebar);
         pcSidebarOpenBtn.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
@@ -2219,7 +2270,9 @@
             const inputContainer = document.querySelector('.chat-input-container');
             if (inputContainer) inputContainer.classList.add('generating');
             
+            // [수정] 전송 중 아이콘 변경 적용 (디자인 구조 반영)
             sendBtn.innerHTML = '<div class="stop-icon-square"></div>'; 
+            sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
             
             let allocatedPadding = 160;
@@ -2398,14 +2451,15 @@
                                     const currentBotHeight = botContent.offsetHeight;
                                     chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                     
-                                                                                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
-                                                                                                    window.scrollTo(0, savedScrollY);
-                                                                                                    
-                                                                                                                            // [추가] 모바일 햅틱 진동 (더욱 미세하게)
-                                                                                                                            if (window.navigator && window.navigator.vibrate) {
-                                                                                                                                window.navigator.vibrate(2);
-                                                                                                                            }                                                                   
-                                                                                                await new Promise(r => setTimeout(r, Math.random() * 40 + 30));                                } else {
+                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
+                                    window.scrollTo(0, savedScrollY);
+                                    
+                                    // [수정] 모바일 햅틱 진동 미세하게 (1ms)
+                                    if (window.navigator && window.navigator.vibrate) {
+                                        window.navigator.vibrate(1);
+                                    }                                                                   
+                                    await new Promise(r => setTimeout(r, Math.random() * 40 + 30));                                
+                                } else {
                                     await new Promise(r => setTimeout(r, 10));
                                 }
                             } else {
@@ -2500,7 +2554,9 @@
                 if (inputContainer) inputContainer.classList.remove('generating');
                 
                 abortController = null;
-                sendBtn.innerHTML = '<span class="material-symbols-rounded">arrow_upward</span>';
+                // [수정] 전송 완료 후 원래 아이콘 및 상태 복원
+                sendBtn.innerHTML = '<i class="ti ti-arrow-up arrow-icon"></i>';
+                sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
                 
                 // 트랜지션 복구
@@ -2705,4 +2761,4 @@
         });
     </script>
 </body>
-</html>
+                </html>
