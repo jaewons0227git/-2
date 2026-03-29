@@ -327,6 +327,7 @@
             background: transparent;
         }
         .sidebar-footer:hover { background: transparent; }
+        .sidebar-footer .user-info { display: flex !important; }
     }
 
     .sidebar.open { transform: translateX(0); }
@@ -522,8 +523,10 @@
     .top-left:hover { background-color: #F3F4F6; }
     .top-left .material-symbols-rounded { font-size: 20px; color: #6B7280; }
     
+    /* [수정] PC 사이드바 열기 아이콘 크기 통일 */
     .pc-sidebar-open-btn { display: none; cursor: pointer; color: #6B7280; margin-right: 6px; transition: transform 0.3s; }
     .pc-sidebar-open-btn:hover { color: #1F2937; }
+    .pc-sidebar-open-btn .ti { font-size: 24px; vertical-align: bottom; }
 
     .top-right { display: flex; align-items: center; gap: 6px; }
 
@@ -588,7 +591,7 @@
             align-items: center;
         }
         
-        /* [수정] 모바일 대화창 좌우 여백 아주 살짝 더 줄임 */
+        /* 모바일 대화창 좌우 여백 아주 살짝 더 줄임 */
         .chat-container {
             padding-left: 12px !important;
             padding-right: 12px !important;
@@ -599,7 +602,6 @@
             max-width: var(--content-max-width) !important;
             margin: 0 auto !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: none !important;
         }
         .bottom-fixed-wrapper::after { display: none; }
         .disclaimer-text { 
@@ -718,6 +720,19 @@
     .bot-text ul, .bot-text ol { margin: 12px 0; padding-left: 20px; }
     .bot-text blockquote { border-left: 3px solid #e5e7eb; margin: 12px 0; padding-left: 12px; color: #6b7280; }
 
+    /* [NEW] 봇 링크 버튼 스타일 */
+    .bot-link-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 14px; margin: 4px 0;
+        background-color: #F3F4F6; border: 1px solid #E5E7EB;
+        border-radius: 20px; 
+        color: #1F2937; text-decoration: none; font-size: 13px; font-weight: 500;
+        max-width: 100%; box-sizing: border-box; transition: background-color 0.2s;
+    }
+    .bot-link-btn:hover { background-color: #E5E7EB; }
+    .bot-link-btn .material-symbols-rounded { font-size: 16px; flex-shrink: 0; color: #6B7280; }
+    .bot-link-btn .link-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
     /* 봇 답변 아래 버튼 영역 */
     .bot-action-bar {
         display: flex; gap: 2px; 
@@ -772,14 +787,16 @@
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* [수정] 입력창 2단 구조 및 둥근 스타일 완벽 적용 */
+    /* [수정] 입력창 2단 구조 및 둥근 스타일, 얇은 회색 윤곽선, 패딩 여백 일치 */
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
-        background-color: #F4F4F5; border-radius: 26px; /* Pill 형태 강조 */
-        padding: 12px 16px; box-sizing: border-box;
+        background-color: #F4F4F5; border-radius: 26px; 
+        padding: 12px; /* 좌상우하 모두 동일 여백 */
+        box-sizing: border-box;
         display: flex; flex-direction: column; position: relative; 
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid transparent; gap: 8px;
+        border: 1px solid #E5E7EB; /* 얇은 회색 윤곽선 */
+        gap: 8px; /* 텍스트박스와 버튼 사이 여백 */
     }
 
     /* [NEW] 입력창 글로우 애니메이션 */
@@ -825,7 +842,7 @@
     }
     .chat-textarea:focus { outline: none; }
 
-    /* [NEW] 삭제 확인 모달 */
+    /* 삭제 확인 모달 */
     #deleteModalOverlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: rgba(0,0,0,0.5); z-index: 3100;
@@ -843,7 +860,33 @@
     .delete-modal-actions { display: flex; gap: 8px; justify-content: center; }
     .delete-btn-confirm { background-color: #EF4444 !important; color: #fff !important; }
 
-    /* [NEW] 스크롤 다운 버튼 스타일 */
+    /* [NEW] 링크 이동 모달 (첨부 이미지 2번 스타일 반영) */
+    #linkModalOverlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5); z-index: 3100;
+        display: none; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.2s;
+    }
+    #linkModalOverlay.open { display: flex; opacity: 1; }
+    .link-modal-window {
+        background: #fff; width: 340px; border-radius: 24px; padding: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;
+        transform: scale(0.95); transition: transform 0.2s;
+    }
+    #linkModalOverlay.open .link-modal-window { transform: scale(1); }
+    .link-modal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #000; }
+    .link-modal-desc { font-size: 14px; color: #6B7280; margin-bottom: 20px; line-height: 1.4; }
+    .link-modal-box {
+        padding: 12px; border: 1.5px dashed #D1D5DB; border-radius: 24px;
+        background-color: #FAFAFA; color: #1F2937; font-size: 14px; margin-bottom: 24px;
+        word-break: break-all;
+    }
+    .link-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .btn-black { background-color: #000; color: #fff; border-radius: 12px; padding: 8px 18px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-gray { background-color: #E5E7EB; color: #374151; border-radius: 12px; padding: 8px 18px; font-weight: 600; cursor: pointer; border: none; }
+
+
+    /* 스크롤 다운 버튼 스타일 */
     .scroll-to-bottom-btn {
         position: absolute;
         top: -45px; 
@@ -884,9 +927,9 @@
     .chat-textarea::-webkit-scrollbar { display: none; }
     .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
 
-    /* [수정] 하단 툴바(좌측 버튼들 + 우측 전송버튼) */
+    /* 하단 툴바(좌측 버튼들 + 우측 전송버튼) */
     .input-bottom-row {
-        display: flex; justify-content: space-between; align-items: center; width: 100%;
+        display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 0;
     }
 
     .input-left-tools { 
@@ -902,14 +945,15 @@
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
-    /* [수정] 동그란 전송 버튼 활성/비활성화 스타일 */
+    /* [수정] 동그란 전송 버튼 활성/비활성화 스타일 및 화살표 얇게 설정 */
     .send-btn {
         width: 32px; height: 32px; flex-shrink: 0;
         background-color: #E5E7EB; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.2s, color 0.2s;
     }
-    .send-btn .arrow-icon { font-size: 20px; color: #9CA3AF; font-weight: 600; transition: color 0.2s; }
+    /* 얇은 화살표 지원을 위한 material-symbols-rounded 가중치 조절 */
+    .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; }
     .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
     .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
     .send-btn.generating-state { background-color: #1F2937 !important; cursor: default; }
@@ -964,7 +1008,7 @@
     .btn-cancel { background-color: #F3F4F6; color: #374151; }
     .btn-confirm { background-color: var(--primary-color); color: #fff; }
 
-    /* [NEW] 사고 과정 / 상세 정보 패널 */
+    /* 사고 과정 / 상세 정보 패널 */
     .details-panel {
         position: fixed; z-index: 2500; background-color: #fff;
         box-shadow: -2px 0 10px rgba(0,0,0,0.1);
@@ -1137,7 +1181,7 @@
         body:not(.pc-sidebar-open) .pc-sidebar-open-btn { display: inline-block; }
     }
 
-    /* --- [NEW] 프로필 메뉴 및 테마/설정 스타일 --- */
+    /* --- 프로필 메뉴 및 테마/설정 스타일 --- */
     .profile-menu {
         position: absolute;
         bottom: 70px;
@@ -1213,6 +1257,20 @@
     .theme-option .check-icon { display: none; font-size: 14px; }
     .theme-option.active .check-icon { display: inline-block; }
 
+    /* [NEW] 모바일 프로필 전용 인라인 액션 버튼 (설정, 로그아웃, 테마) */
+    .mobile-profile-actions { display: none; }
+    .mobile-footer-btn { 
+        background: transparent; border: none; font-size: 18px; 
+        color: #4B5563; padding: 6px; cursor: pointer; border-radius: 6px; 
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .mobile-footer-btn:hover { background-color: #E5E7EB; color: #1F2937; }
+
+    @media (max-width: 768px) {
+        .sidebar-footer { flex-direction: row; justify-content: space-between; align-items: center; cursor: default; }
+        .mobile-profile-actions { display: flex; gap: 4px; align-items: center; }
+    }
+
     /* 설정 모달 전용 스타일 */
     .settings-modal-window {
         background-color: #fff;
@@ -1223,6 +1281,45 @@
     }
     .settings-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
     .settings-desc { color: #6B7280; margin-bottom: 24px; font-size: 14px; }
+
+    /* [NEW] PC 미니 사이드바 검색 모달 전용 스타일 */
+    .pc-search-modal-window {
+        background: #fff; border-radius: 20px; width: 800px; height: 500px;
+        display: flex; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transform: scale(0.95); transition: transform 0.2s;
+    }
+    #pcSearchModalOverlay.open .pc-search-modal-window { transform: scale(1); }
+    .pc-search-left {
+        width: 300px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; padding: 20px;
+    }
+    .pc-search-left-input {
+        width: 100%; padding: 10px 12px; border: 1px solid #E5E7EB; border-radius: 8px;
+        font-size: 13px; outline: none; margin-bottom: 12px; box-sizing: border-box;
+    }
+    .pc-search-left-input:focus { border-color: var(--primary-color); }
+    .pc-search-list-content {
+        flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; scrollbar-width: none;
+    }
+    .pc-search-list-content::-webkit-scrollbar { display: none; }
+    .pc-search-item {
+        padding: 10px 12px; border-radius: 8px; font-size: 13px; color: #1F2937; cursor: pointer;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background-color 0.2s;
+    }
+    .pc-search-item:hover, .pc-search-item.active { background-color: #F3F4F6; font-weight: 500; }
+    
+    .pc-search-right {
+        flex: 1; display: flex; flex-direction: column; position: relative; padding: 20px; background: #F9FAFB;
+    }
+    .pc-search-preview-content {
+        flex: 1; overflow-y: auto; padding-bottom: 40px; scrollbar-width: none;
+    }
+    .pc-search-preview-content::-webkit-scrollbar { display: none; }
+    .pc-search-go-btn {
+        position: absolute; bottom: 20px; right: 20px;
+        background-color: var(--primary-color); color: #fff; border: none;
+        padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: opacity 0.2s;
+    }
 </style>
 </head>
 <body class="pc-sidebar-open"> 
@@ -1323,13 +1420,20 @@
             <div id="savedChatList"></div>
         </div>
 
-        <div class="sidebar-footer">
-            <div class="user-avatar">
-                <img id="userAvatar" src="" alt="User">
+        <div class="sidebar-footer" id="sidebarFooter">
+            <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
+                <div class="user-avatar">
+                    <img id="userAvatar" src="" alt="User">
+                </div>
+                <div class="user-info">
+                    <span class="user-name">게스트</span>
+                    <span class="user-plan">Free</span>
+                </div>
             </div>
-            <div class="user-info">
-                <span class="user-name">게스트</span>
-                <span class="user-plan">Free</span>
+            <div class="mobile-profile-actions">
+                <button class="mobile-footer-btn" id="mobileSettingsIcon" title="설정"><i class="ti ti-settings"></i></button>
+                <button class="mobile-footer-btn" id="mobileThemeIcon" title="테마"><i class="ti ti-palette"></i></button>
+                <button class="mobile-footer-btn" onclick="logout()" title="로그아웃"><i class="ti ti-logout"></i></button>
             </div>
         </div>
 
@@ -1403,15 +1507,30 @@
                 </div>
                 
                 <button id="sendBtn" class="send-btn" disabled>
-                    <i class="ti ti-arrow-up arrow-icon"></i>
+                    <span class="material-symbols-rounded arrow-icon" style="font-variation-settings: 'wght' 300; font-size: 20px;">arrow_upward</span>
                 </button>
             </div>
         </div>
         <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
     </div>
 
+    <div id="pcSearchModalOverlay" class="modal-overlay">
+        <div class="pc-search-modal-window" onclick="event.stopPropagation()">
+            <div class="pc-search-left">
+                <input type="text" id="pcSearchInputModal" class="pc-search-left-input" placeholder="채팅 제목 검색...">
+                <div class="pc-search-list-content" id="pcSearchListContent"></div>
+            </div>
+            <div class="pc-search-right">
+                <div class="pc-search-preview-content" id="pcSearchPreviewContent">
+                    <div style="color:#9CA3AF; text-align:center; margin-top:50px;">대화를 선택하면 미리보기가 표시됩니다.</div>
+                </div>
+                <button class="pc-search-go-btn" id="pcSearchGoBtn" style="display:none;">대화로 이동</button>
+            </div>
+        </div>
+    </div>
+
     <div id="deleteModalOverlay" class="modal-overlay">
-        <div class="modal-window delete-modal-window">
+        <div class="modal-window delete-modal-window" onclick="event.stopPropagation()">
             <div class="delete-modal-title">채팅 삭제</div>
             <div class="delete-modal-desc">이 채팅을 정말 삭제하시겠습니까?</div>
             <div class="modal-actions delete-modal-actions">
@@ -1422,7 +1541,7 @@
     </div>
 
     <div id="renameModalOverlay" class="modal-overlay">
-        <div class="modal-window">
+        <div class="modal-window" onclick="event.stopPropagation()">
             <div class="modal-title">채팅 이름 변경</div>
             <input type="text" id="renameInput" class="modal-input" placeholder="새 이름을 입력하세요">
             <div class="modal-actions">
@@ -1432,8 +1551,20 @@
         </div>
     </div>
 
+    <div id="linkModalOverlay" class="modal-overlay">
+        <div class="link-modal-window" onclick="event.stopPropagation()">
+            <div class="link-modal-title">다음링크로 이동할까요?</div>
+            <div class="link-modal-desc">아래 링크는 안전하지 않을 수 있습니다.<br>신뢰할 수 있는경우 이동하세요.</div>
+            <div class="link-modal-box" id="linkModalUrlDisplay"></div>
+            <div class="link-modal-actions">
+                <button class="modal-btn btn-gray" id="linkCancelBtn">취소</button>
+                <button class="modal-btn btn-black" id="linkGoBtn">이동</button>
+            </div>
+        </div>
+    </div>
+
     <div id="settingsModalOverlay" class="modal-overlay">
-        <div class="modal-window settings-modal-window">
+        <div class="modal-window settings-modal-window" onclick="event.stopPropagation()">
             <div class="settings-title">설정</div>
             <div class="settings-desc">아직 준비 중입니다. 곧 찾아뵐게요!</div>
             <div class="modal-actions" style="justify-content: center;">
@@ -1454,9 +1585,9 @@
     </div>
 
     <script>
-        // [수정] 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
+        // 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
         const PC_SCROLL_PADDING_OFFSET = 150; 
-        const MOBILE_SCROLL_PADDING_OFFSET = 120; // 모바일 전용 여백 조정값
+        const MOBILE_SCROLL_PADDING_OFFSET = 80; // 모바일 전용 여백 조정값
 
         const chatContainer = document.getElementById('chatContainer');
         const centerLogo = document.getElementById('centerLogo');
@@ -1469,13 +1600,17 @@
         const newChatBtn = document.getElementById('newChatBtn');
         const savedChatList = document.getElementById('savedChatList');
 
-        // [NEW] 프로필 및 설정 관련
-        const sidebarFooter = document.querySelector('.sidebar-footer');
+        // 프로필 및 설정 관련
+        const sidebarFooter = document.getElementById('sidebarFooter');
         const profileMenu = document.getElementById('profileMenu');
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsModalOverlay = document.getElementById('settingsModalOverlay');
         const settingsCloseBtn = document.getElementById('settingsCloseBtn');
         const themeOptions = document.querySelectorAll('.theme-option');
+
+        // 모바일 전용 프로필 액션 버튼
+        const mobileSettingsIcon = document.getElementById('mobileSettingsIcon');
+        const mobileThemeIcon = document.getElementById('mobileThemeIcon');
 
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1487,13 +1622,49 @@
         const mobileMenuBtnRight = document.getElementById('mobileMenuBtnRight');
         const mobileNewChatBtn = document.getElementById('mobileNewChatBtn');
 
-        // [NEW] 모바일 사이드바 드래그 핸들 연동
+        // 모바일 사이드바 드래그 핸들 연동
         const sidebarHandle = document.getElementById('mobileDragHandle');
 
         // 검색 관련
         const sidebarSearchBtn = document.getElementById('sidebarSearchBtn');
         const sidebarSearchContainer = document.getElementById('sidebarSearchContainer');
         const sidebarSearchInput = document.getElementById('sidebarSearchInput');
+
+        // PC 미니 사이드바 전용 검색 모달 관련
+        const pcSearchModalOverlay = document.getElementById('pcSearchModalOverlay');
+        const pcSearchInputModal = document.getElementById('pcSearchInputModal');
+        const pcSearchListContent = document.getElementById('pcSearchListContent');
+        const pcSearchPreviewContent = document.getElementById('pcSearchPreviewContent');
+        const pcSearchGoBtn = document.getElementById('pcSearchGoBtn');
+        let previewChatId = null;
+
+        // 링크 이동 모달 관련
+        const linkModalOverlay = document.getElementById('linkModalOverlay');
+        const linkModalUrlDisplay = document.getElementById('linkModalUrlDisplay');
+        const linkCancelBtn = document.getElementById('linkCancelBtn');
+        const linkGoBtn = document.getElementById('linkGoBtn');
+        let targetLinkUrl = '';
+
+        window.openLinkModal = function(url) {
+            targetLinkUrl = url;
+            linkModalUrlDisplay.innerText = url;
+            linkModalOverlay.classList.add('open');
+        };
+
+        linkCancelBtn.addEventListener('click', () => { linkModalOverlay.classList.remove('open'); });
+        linkGoBtn.addEventListener('click', () => {
+            linkModalOverlay.classList.remove('open');
+            window.open(targetLinkUrl, '_blank');
+        });
+
+        // 모달 닫기 공통 (오버레이 클릭 시)
+        [pcSearchModalOverlay, deleteModalOverlay, renameModalOverlay, settingsModalOverlay, linkModalOverlay].forEach(overlay => {
+            if(overlay) {
+                overlay.addEventListener('click', () => {
+                    overlay.classList.remove('open');
+                });
+            }
+        });
 
         // 모달 관련 요소
         const renameModalOverlay = document.getElementById('renameModalOverlay');
@@ -1511,16 +1682,27 @@
         const detailsTabs = document.getElementById('detailsTabs');
         const detailsContent = document.getElementById('detailsContent');
 
-        // --- [NEW] 프로필 메뉴 및 테마/설정 로직 ---
+        // --- 프로필 메뉴 및 테마/설정 로직 ---
         const themeItem = document.querySelector('.theme-item');
         const themeSubmenu = document.querySelector('.theme-submenu');
 
+        // PC 프로필 토글 (모바일에서는 작동안함)
         sidebarFooter.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) return; // 모바일에서는 제외
             e.stopPropagation();
-            // 미니 사이드바일 때와 일반 사이드바일 때 모두 처리
             profileMenu.classList.toggle('show');
             themeSubmenu.classList.remove('show');
         });
+
+        // 모바일 프로필 전용 설정 / 테마 아이콘 클릭
+        if (mobileSettingsIcon) mobileSettingsIcon.addEventListener('click', () => settingsModalOverlay.classList.add('open'));
+        if (mobileThemeIcon) {
+            mobileThemeIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // 모바일에서 테마 메뉴는 필요 시 확장, 여기선 라이트로 토글만 구현하거나 그대로 둠
+                setTheme('light'); 
+            });
+        }
 
         themeItem.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1573,15 +1755,12 @@
         let renameTargetId = null;
         let deleteTargetId = null;
         
-        // [NEW] Pyodide 인스턴스
         let pyodide = null;
         async function initPyodide() {
-            if (!pyodide) {
-                pyodide = await loadPyodide();
-            }
+            if (!pyodide) pyodide = await loadPyodide();
         }
 
-        // [NEW] 초기 로더 처리 (1초)
+        // 초기 로더 처리 (1초)
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const loader = document.getElementById('initialLoader');
@@ -1589,22 +1768,19 @@
                     loader.style.opacity = '0';
                     setTimeout(() => {
                         loader.style.display = 'none';
-                        // 전체 로딩이 끝나고 사이드바 로딩 시작
                         renderSidebar();
                     }, 300);
                 }
             }, 1000);
         });
 
-        // 메시지별 메타데이터 저장 (사고과정, 인용 등)
         let messageMetadata = {}; 
 
-        // --- [NEW] Marked.js 커스텀 렌더러 ---
+        // --- Marked.js 커스텀 렌더러 ---
         const renderer = new marked.Renderer();
         renderer.codeCount = 0;
         renderer.codePrefix = 'static';
 
-        // 특수문자 이스케이프 함수 (안전하게 문자열로 변환 후 처리)
         const escapeHtml = function(html) {
             const str = String(html || '');
             return str.replace(/&/g, '&amp;')
@@ -1614,8 +1790,19 @@
                        .replace(/'/g, '&#39;');
         };
 
+        // [NEW] 봇 출력 링크 전용 커스텀 렌더러 등록
+        renderer.link = function(href, title, text) {
+            const linkHref = typeof href === 'object' ? href.href : href;
+            const linkText = typeof href === 'object' ? href.text : text;
+            const displayText = linkText || linkHref;
+            
+            return `<a href="javascript:void(0)" class="bot-link-btn" onclick="openLinkModal('${escapeHtml(linkHref)}')">
+                        <span class="material-symbols-rounded">link</span>
+                        <span class="link-text">${escapeHtml(displayText)}</span>
+                    </a>`;
+        };
+
         renderer.code = function(code, language) {
-            // marked v1.x 이상에서는 code가 객체로 올 수 있으므로 처리
             const codeStr = typeof code === 'object' ? code.text : code;
             const lang = (typeof code === 'object' ? code.lang : language) || 'text';
             
@@ -1663,7 +1850,7 @@
         
         marked.setOptions({ renderer: renderer, breaks: true, sanitize: false });
 
-        // --- [NEW] 코드 블록 기능 함수들 ---
+        // --- 코드 블록 기능 함수들 ---
         window.copyCode = function(id) {
             const editor = document.getElementById(`editor-${id}`);
             if (!editor) return;
@@ -1672,9 +1859,7 @@
                 const btn = document.querySelector(`#container-${id} [title="복사"]`);
                 const originalHTML = btn.innerHTML;
                 btn.innerHTML = '<i class="ti ti-check" style="color:#10B981;"></i>';
-                setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                }, 2000);
+                setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
             });
         };
 
@@ -1739,10 +1924,7 @@
                 codeBtn.classList.add('active');
                 runBtn.classList.remove('active');
             } else {
-                // 실행 모드일 때 실행 가능한 언어인지 확인
-                if (!isExecutable) {
-                    return; // 실행 불가능한 언어면 아무것도 하지 않음
-                }
+                if (!isExecutable) return; 
 
                 editor.style.display = 'none';
                 pre.style.display = 'none';
@@ -1787,7 +1969,6 @@
                     await initPyodide();
                 }
                 
-                // 표준 출력을 캡처하기 위한 리다이렉션
                 pyodide.runPython(`
                     import sys
                     import io
@@ -1864,7 +2045,6 @@
                 chatContainer.innerHTML = '';
                 centerLogo.classList.add('hidden');
                 
-                // [수정] 코드 블록 ID 초기화
                 renderer.codeCount = 0;
                 renderer.codePrefix = 'history-' + id;
 
@@ -1879,19 +2059,15 @@
                     }
                 });
                 
-                // 아이콘 및 하이라이트 초기화
                 Prism.highlightAllUnder(chatContainer);
                 
                 isFirstMessage = false;
                 document.body.style.overflowY = 'auto';
                 
-                // URL 업데이트 (?chat=UUID)
                 const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
                 history.pushState({ chatId: id }, '', newUrl);
                 
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
-                
-                // 스크롤 버튼 숨김 처리
                 scrollToBottomBtn.classList.remove('show');
                 
                 renderSidebar();
@@ -1954,13 +2130,80 @@
             input.addEventListener('blur', finishRename);
         }
 
+        // --- PC 전용 검색 모달 로직 ---
+        function openPcSearchModal() {
+            pcSearchModalOverlay.classList.add('open');
+            renderPcSearchList('');
+            pcSearchInputModal.value = '';
+            pcSearchInputModal.focus();
+        }
+
+        pcSearchInputModal.addEventListener('input', (e) => {
+            renderPcSearchList(e.target.value);
+        });
+
+        function renderPcSearchList(filterText = '') {
+            const chats = getSavedChats();
+            const sortedChats = Object.values(chats).sort((a, b) => b.lastUpdated - a.lastUpdated);
+            pcSearchListContent.innerHTML = '';
+            
+            let count = 0;
+            sortedChats.forEach(chat => {
+                if (filterText && !chat.title.toLowerCase().includes(filterText.toLowerCase())) return;
+                const div = document.createElement('div');
+                div.className = 'pc-search-item';
+                div.innerText = chat.title;
+                div.onclick = () => showPcSearchPreview(chat, div);
+                pcSearchListContent.appendChild(div);
+                count++;
+            });
+            
+            if (count === 0) {
+                pcSearchListContent.innerHTML = '<div style="color:#9CA3AF; padding:10px; font-size:13px;">결과가 없습니다.</div>';
+            }
+            
+            pcSearchPreviewContent.innerHTML = '<div style="color:#9CA3AF; text-align:center; margin-top:50px;">대화를 선택하면 미리보기가 표시됩니다.</div>';
+            pcSearchGoBtn.style.display = 'none';
+        }
+
+        function showPcSearchPreview(chat, activeElem) {
+            previewChatId = chat.id;
+            
+            // 강조 효과
+            const items = pcSearchListContent.querySelectorAll('.pc-search-item');
+            items.forEach(el => el.classList.remove('active'));
+            if (activeElem) activeElem.classList.add('active');
+
+            pcSearchPreviewContent.innerHTML = '';
+            chat.history.forEach(msg => {
+                const row = document.createElement('div');
+                row.style.marginBottom = '12px';
+                row.style.fontSize = '13px';
+                row.style.lineHeight = '1.5';
+                if(msg.role === 'user') {
+                    row.innerHTML = `<span style="font-weight:bold; color:#3B82F6;">User:</span> <span style="color:#1F2937;">${escapeHtml(msg.content)}</span>`;
+                } else {
+                    row.innerHTML = `<span style="font-weight:bold; color:#10B981;">quorv:</span> <span style="color:#4B5563;">${msg.content.substring(0, 150)}...</span>`; 
+                }
+                pcSearchPreviewContent.appendChild(row);
+            });
+            pcSearchGoBtn.style.display = 'block';
+        }
+
+        pcSearchGoBtn.addEventListener('click', () => {
+            if(previewChatId) {
+                pcSearchModalOverlay.classList.remove('open');
+                if(!document.body.classList.contains('pc-sidebar-open')) toggleSidebar();
+                loadChatFromStorage(previewChatId);
+            }
+        });
+
         // --- 사이드바 렌더링 및 검색 ---
         let sidebarLoading = false;
         function renderSidebar(filterText = '', skipDelay = false) {
             const chats = getSavedChats();
             const sortedChats = Object.values(chats).sort((a, b) => b.lastUpdated - a.lastUpdated);
             
-            // [NEW] 로딩 상태 처리 (최초 1회만, 필터가 없을 때만)
             if (!skipDelay && !sidebarLoading && !filterText) {
                 sidebarLoading = true;
                 savedChatList.style.display = 'flex';
@@ -2029,33 +2272,33 @@
             });
         }
         
-        // 검색 버튼 토글 (버튼 클릭 시 입력창 노출)
+        // 검색 버튼 토글 (PC 미니 모드에서는 모달 띄우기)
         sidebarSearchBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            sidebarSearchBtn.style.display = 'none';
-            sidebarSearchContainer.style.display = 'block';
-            sidebarSearchInput.focus();
+            if (window.innerWidth > 768 && !document.body.classList.contains('pc-sidebar-open')) {
+                openPcSearchModal();
+            } else {
+                sidebarSearchBtn.style.display = 'none';
+                sidebarSearchContainer.style.display = 'block';
+                sidebarSearchInput.focus();
+            }
         });
         
-        // 검색 입력 이벤트
         sidebarSearchInput.addEventListener('input', (e) => {
             renderSidebar(e.target.value);
         });
 
-        // 전역 클릭 이벤트 (검색창 외부 클릭 감지 등)
         document.addEventListener('click', (e) => {
-            // 채팅 옵션 메뉴 닫기
             if (!e.target.closest('.chat-history-item')) {
                 document.querySelectorAll('.history-menu-dropdown').forEach(el => el.remove());
             }
 
-            // 검색창 외부 클릭 시 되돌리기
             if (sidebarSearchContainer.style.display === 'block') {
                 if (!sidebarSearchContainer.contains(e.target) && e.target !== sidebarSearchBtn) {
                     sidebarSearchContainer.style.display = 'none';
-                    sidebarSearchBtn.style.display = 'flex'; // 원래 display 속성(flex)으로 복구
-                    sidebarSearchInput.value = ''; // 검색어 초기화
-                    renderSidebar(); // 목록 초기화
+                    sidebarSearchBtn.style.display = 'flex'; 
+                    sidebarSearchInput.value = ''; 
+                    renderSidebar(); 
                 }
             }
         });
@@ -2080,10 +2323,7 @@
         newChatBtn.addEventListener('click', startNewChat);
         if (mobileNewChatBtn) mobileNewChatBtn.addEventListener('click', startNewChat);
 
-        // --- 초기 로드 및 URL 처리 ---
         window.addEventListener('load', () => {
-            // renderSidebar()는 initialLoader가 끝난 뒤 호출됨
-            
             const urlParams = new URLSearchParams(window.location.search);
             const chatId = urlParams.get('chat');
             if (chatId) {
@@ -2099,8 +2339,6 @@
             }
         });
 
-
-        // --- 기능 유지 ---
         function adjustHeight() {
             chatInput.style.height = 'auto'; 
             let scrollHeight = chatInput.scrollHeight;
@@ -2129,7 +2367,7 @@
             }
         }
 
-        // [NEW] 모바일 사이드바 드래그 핸들 이벤트 리스너
+        // 모바일 사이드바 드래그 핸들 이벤트 리스너
         let dragStartY = 0;
         let dragCurrentY = 0;
         let isDragging = false;
@@ -2138,14 +2376,14 @@
             if (window.innerWidth > 768) return;
             dragStartY = e.touches[0].clientY;
             isDragging = true;
-            sidebar.style.transition = 'none'; // 드래그 중에는 부드러운 전환 효과 제거
+            sidebar.style.transition = 'none'; 
         }, { passive: true });
 
         sidebarHandle.addEventListener('touchmove', (e) => {
             if (!isDragging || window.innerWidth > 768) return;
             dragCurrentY = e.touches[0].clientY;
             let diff = dragCurrentY - dragStartY;
-            if (diff > 0) { // 아래로 내릴 때만 움직임 적용
+            if (diff > 0) { 
                 sidebar.style.transform = `translateY(${diff}px)`;
             }
         }, { passive: true });
@@ -2153,16 +2391,14 @@
         sidebarHandle.addEventListener('touchend', (e) => {
             if (!isDragging || window.innerWidth > 768) return;
             isDragging = false;
-            sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; // 전환 효과 복구
+            sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; 
             let diff = dragCurrentY - dragStartY;
             
-            // 150px 이상 닫으면(절반 정도) 완전히 닫기
             if (diff > 150) {
                 sidebar.classList.remove('open');
                 sidebarOverlay.classList.remove('open');
                 setTimeout(() => { sidebar.style.transform = ''; }, 300);
             } else {
-                // 원위치로 스냅백 (열린 상태 유지)
                 sidebar.style.transform = 'translateY(0)';
                 setTimeout(() => { sidebar.style.transform = ''; }, 300);
             }
@@ -2236,7 +2472,6 @@
             let hasThought = data.thought && data.thought.trim().length > 0;
             let hasCitations = data.citations && data.citations.length > 0;
 
-            // 탭 버튼 생성
             if (hasThought) {
                 const tBtn = document.createElement('button');
                 tBtn.className = `details-tab-btn ${defaultTab === 'thought' ? 'active' : ''}`;
@@ -2252,7 +2487,6 @@
                 detailsTabs.appendChild(cBtn);
             }
 
-            // 초기 컨텐츠 표시
             if (defaultTab === 'thought' && hasThought) showTabContent('thought', data);
             else if (hasCitations) showTabContent('citations', data);
 
@@ -2260,7 +2494,6 @@
         }
 
         function showTabContent(type, data) {
-            // 탭 활성화 상태 업데이트
             Array.from(detailsTabs.children).forEach(btn => {
                 if (btn.innerText === (type === 'thought' ? '사고 과정' : '인용')) btn.classList.add('active');
                 else btn.classList.remove('active');
@@ -2308,11 +2541,11 @@
             const text = textOverride || chatInput.value.trim();
             if (text.length === 0) return;
 
-            // [수정] 모바일과 PC 환경에 따라 여백 오차 동적 설정
+            // 모바일과 PC 환경에 따라 여백 오차 동적 설정
             const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
             const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
             
-            chatContainer.style.transition = 'none'; // 즉시 적용
+            chatContainer.style.transition = 'none'; 
             chatContainer.style.paddingBottom = initialPadding + 'px';
 
             if (isFirstMessage) {
@@ -2321,7 +2554,6 @@
                 centerLogo.classList.add('hidden');
             }
 
-            // 채팅 ID 및 URL 설정
             if (!currentChatId) {
                 currentChatId = generateUUID();
                 const newUrl = window.location.origin + window.location.pathname + '?chat=' + currentChatId;
@@ -2335,7 +2567,6 @@
                 chatInput.value = '';
                 adjustHeight();
                 
-                // 즉시 스크롤
                 setTimeout(() => {
                     forceScrollToMessage(userMsgElement);
                 }, 50);
@@ -2353,7 +2584,7 @@
             const inputContainer = document.querySelector('.chat-input-container');
             if (inputContainer) inputContainer.classList.add('generating');
             
-            // [수정] 전송 중 아이콘 변경 적용 (디자인 구조 반영)
+            // [수정] 전송 중 아이콘 변경 (얇은 화살표 지원)
             sendBtn.innerHTML = '<div class="stop-icon-square"></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
@@ -2361,16 +2592,12 @@
             let allocatedPadding = 160;
 
             const isManualSearch = searchBtn.classList.contains('active');
-            
-            // 검색 의도 감지 키워드
             const searchKeywords = [
                 "검색해줘", "검색해", "찾아줘", "찾아봐", "알려줘", "뉴스", "날씨", "주가", 
                 "최신", "현재", "오늘", "정보", "어떻게 돼", "뭐야", "위키", "구글", 
                 "네이버", "실시간", "확인해줘", "나무위키", "검색"
             ];
             const hasSearchIntent = searchKeywords.some(keyword => text.includes(keyword));
-            
-            // 수동 검색 모드이거나 검색 의도가 감지된 경우 isSearchMode를 true로 설정
             const isSearchMode = isManualSearch || hasSearchIntent;
 
             const loadingId = 'loading-' + Date.now();
@@ -2391,7 +2618,7 @@
                         "Content-Type": "application/json",
                         "Authorization": "Bearer " + getToken()
                     },
-                    credentials: 'include', // 필수: 세션 쿠키 전송
+                    credentials: 'include', 
                     body: JSON.stringify({ 
                         message: text, 
                         history: conversationHistory,
@@ -2400,7 +2627,6 @@
                     signal: abortController.signal
                 });
 
-                // 한도 초과(429) 처리
                 if (isSearchMode && response.status === 429) {
                     const loadingElem = document.getElementById(loadingId);
                     const analyzingText = loadingElem ? loadingElem.querySelector('.analyzing-text') : null;
@@ -2413,7 +2639,6 @@
                         analyzingText.appendChild(failMsg);
                     }
                     
-                    // 재빠르게 빠른 모델로 재요청
                     response = await fetch(`${BACKEND_URL}/askfast`, {
                         method: "POST",
                         headers: { 
@@ -2528,7 +2753,6 @@
                                     
                                     window.scrollTo(0, savedScrollY);
                                     
-                                    // [수정] 모바일 햅틱 진동 미세하게 (1ms) 유지
                                     if (window.navigator && window.navigator.vibrate) {
                                         window.navigator.vibrate(1);
                                     }                                                                   
@@ -2625,8 +2849,8 @@
                 if (inputContainer) inputContainer.classList.remove('generating');
                 
                 abortController = null;
-                // [수정] 전송 완료 후 원래 아이콘 및 상태 복원
-                sendBtn.innerHTML = '<i class="ti ti-arrow-up arrow-icon"></i>';
+                // [수정] 전송 완료 후 다시 원래 화살표 복구
+                sendBtn.innerHTML = '<span class="material-symbols-rounded arrow-icon" style="font-variation-settings: \'wght\' 300; font-size: 20px;">arrow_upward</span>';
                 sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
                 
@@ -2637,14 +2861,12 @@
             }
         }
 
-        // --- 봇 버튼 추가 함수 ---
         function addBotButtons(rowElement, textContent, metadata) {
             if (rowElement.querySelector('.bot-action-bar')) return;
 
             const actionBar = document.createElement('div');
             actionBar.className = 'bot-action-bar';
             
-            // 복사 버튼
             const copyBtn = document.createElement('button');
             copyBtn.className = 'action-btn';
             copyBtn.title = '복사';
@@ -2657,7 +2879,6 @@
                 });
             });
 
-            // 재생성 버튼
             const regenBtn = document.createElement('button');
             regenBtn.className = 'action-btn';
             regenBtn.title = '재생성';
@@ -2667,7 +2888,6 @@
             actionBar.appendChild(copyBtn);
             actionBar.appendChild(regenBtn);
             
-            // 사고 과정 버튼
             if (metadata && (metadata.thought || (metadata.citations && metadata.citations.length > 0))) {
                 const thoughtBtn = document.createElement('button');
                 thoughtBtn.className = 'action-btn';
@@ -2685,7 +2905,6 @@
                 actionBar.classList.add('visible');
             });
         }
-
 
         function createAnimatedChunk(container, text) {
             const span = document.createElement('span');
