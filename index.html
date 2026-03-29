@@ -25,6 +25,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
 <style>
+    /* [NEW] 모바일 탭 터치 시 파란색 하이라이트 박스 제거 */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
     /* --- [NEW] 초기 로딩 화면 스타일 --- */
     #initialLoader {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -255,6 +260,7 @@
         opacity: 0; visibility: hidden; transition: opacity 0.3s;
     }
     @media (max-width: 768px) {
+        /* [수정] 오버레이 z-index 조정하여 메뉴 뒷부분만 어두워지도록 설정 */
         .sidebar-overlay.open { opacity: 1; visibility: visible; }
         .sidebar-overlay {
             position: fixed;
@@ -263,7 +269,7 @@
             width: 100%;
             height: 100%;
             z-index: 9998;
-            background-color: rgba(0,0,0,0.4); /* 추가된 오버레이 어두운 배경 */
+            background-color: rgba(0,0,0,0.5); 
         }
     }
 
@@ -279,8 +285,11 @@
         font-size: 13px;
     }
     
+    /* 모바일용 사이드바 드래그 핸들 */
+    .mobile-drag-handle-container { display: none; }
+
     @media (max-width: 768px) {
-        /* [수정] 모바일에서는 바텀 시트 스타일로 위로 올라오도록 설정 */
+        /* 모바일에서는 바텀 시트 스타일로 변경 및 z-index 상향 (오버레이 위로) */
         .sidebar {
             width: 100% !important;
             background-color: #fff !important;
@@ -291,6 +300,7 @@
             border-radius: 24px 24px 0 0 !important;
             border-right: none !important;
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            z-index: 9999 !important; 
         }
         .sidebar.open {
             transform: translateY(0) !important;
@@ -298,6 +308,25 @@
         .sidebar-content {
             padding: 20px;
         }
+
+        /* [NEW] 모바일 전용 드래그 핸들 노출 */
+        .mobile-drag-handle-container {
+            display: flex; justify-content: center; align-items: center;
+            width: 100%; padding: 12px 0 4px 0; order: -2; flex-shrink: 0; cursor: grab;
+        }
+        .mobile-drag-handle {
+            width: 40px; height: 5px; background-color: #D1D5DB; border-radius: 3px;
+        }
+
+        /* [수정] 모바일에서는 로고/닫기버튼 숨기고, 프로필 영역을 위로 올림 */
+        .sidebar-header { display: none !important; }
+        .sidebar-footer { 
+            order: -1; 
+            margin: 0 10px; padding: 10px; 
+            border-bottom: 1px solid #E5E7EB; border-radius: 0; 
+            background: transparent;
+        }
+        .sidebar-footer:hover { background: transparent; }
     }
 
     .sidebar.open { transform: translateX(0); }
@@ -333,10 +362,9 @@
     .sidebar-menu-btn:hover { background-color: #E5E7EB; }
     .sidebar-menu-btn .ti { font-size: 20px; color: #000; flex-shrink: 0; }
 
-    /* [수정] 검색 입력창 컨테이너 및 스타일 */
     #sidebarSearchContainer {
         display: none; 
-        padding: 0 0 2px 0; /* 버튼과 위치 유사하게 */
+        padding: 0 0 2px 0; 
         margin-bottom: 2px;
         flex-shrink: 0;
         transition: opacity 0.3s, visibility 0.3s;
@@ -344,12 +372,12 @@
     .search-input-wrapper {
         position: relative;
         width: 100%;
-        padding: 0 4px; /* 버튼 패딩 고려 */
+        padding: 0 4px; 
         box-sizing: border-box;
     }
     #sidebarSearchInput {
         width: 100%; 
-        padding: 8px 10px 8px 34px; /* 아이콘 공간 확보 */
+        padding: 8px 10px 8px 34px; 
         border: 1px solid #E5E7EB; 
         border-radius: 8px;
         font-size: 13px; outline: none; box-sizing: border-box;
@@ -381,10 +409,10 @@
     #savedChatList {
         display: flex; flex-direction: column; gap: 2px;
         overflow-y: auto; flex: 1;
-        scrollbar-width: none; /* Firefox */
+        scrollbar-width: none; 
         transition: opacity 0.3s, visibility 0.3s;
     }
-    #savedChatList::-webkit-scrollbar { display: none; } /* Chrome, Safari */
+    #savedChatList::-webkit-scrollbar { display: none; } 
     
     .chat-history-item {
         display: flex; align-items: center; justify-content: space-between;
@@ -396,7 +424,7 @@
         font-size: 13px;
         transition: background-color 0.2s;
         position: relative;
-        height: 32px; /* 높이 고정 */
+        height: 32px; 
         box-sizing: border-box;
     }
     .chat-history-item:hover, .chat-history-item.active {
@@ -415,10 +443,10 @@
     .chat-item-options {
         display: none; 
         padding: 2px; border-radius: 4px; color: #000;
-        line-height: 0; /* 높이에 영향 주지 않도록 */
+        line-height: 0; 
     }
     .chat-item-options .ti {
-        font-size: 16px; /* 크기 줄임 */
+        font-size: 16px; 
     }
     .chat-item-options:hover {
         background-color: #D1D5DB; color: #000;
@@ -519,7 +547,6 @@
     }
     .dots-btn:hover { background-color: #F3F4F6; }
 
-    /* [수정] 모바일 및 PC 전용 요소 처리 */
     .mobile-only { display: none; }
     @media (min-width: 769px) {
         .mobile-only { display: none !important; }
@@ -529,7 +556,7 @@
         .pc-only { display: none !important; }
         .mobile-only { display: flex; align-items: center; }
         
-        /* [수정] 모바일 상단바 완벽 구현 */
+        /* 모바일 상단바 완벽 구현 */
         .top-bar { 
             justify-content: space-between; 
             padding: 0 16px; 
@@ -560,8 +587,15 @@
             flex-direction: column;
             align-items: center;
         }
+        
+        /* [수정] 모바일 대화창 좌우 여백 아주 살짝 더 줄임 */
+        .chat-container {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
         .chat-input-container {
-            width: 90% !important;
+            width: 95% !important; /* 모바일에서 폭 살짝 더 넓게 */
             max-width: var(--content-max-width) !important;
             margin: 0 auto !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -593,10 +627,8 @@
                     padding-bottom 0.2s ease-out;
     }
 
-    /* [NEW] 중앙 로고 */
     .center-logo {
         position: fixed;
-        /* 상단바(50px)와 하단 입력창 영역 사이의 중간 지점 */
         top: calc(50% - 40px); 
         left: 50%;
         transform: translate(-50%, -50%);
@@ -653,7 +685,6 @@
     .user-copy-btn:hover { background-color: #F3F4F6; color: #4B5563; }
     .user-bubble-container:hover .user-copy-btn { opacity: 1; pointer-events: auto; }
 
-
     .bot-text {
         color: #1F2937;
         padding: 6px 0;
@@ -687,11 +718,11 @@
     .bot-text ul, .bot-text ol { margin: 12px 0; padding-left: 20px; }
     .bot-text blockquote { border-left: 3px solid #e5e7eb; margin: 12px 0; padding-left: 12px; color: #6b7280; }
 
-    /* 봇 답변 아래 버튼 영역 (수정됨: 아이콘 정렬 보정) */
+    /* 봇 답변 아래 버튼 영역 */
     .bot-action-bar {
-        display: flex; gap: 2px; /* 버튼 간격 줄임 */
+        display: flex; gap: 2px; 
         margin-top: 6px;
-        margin-left: -6px; /* 버튼의 패딩만큼 당겨서 메시지 텍스트 라인과 일치시킴 */
+        margin-left: -6px; 
         opacity: 0; transform: translateY(5px);
         transition: opacity 0.4s ease, transform 0.4s ease;
         pointer-events: none; 
@@ -704,14 +735,13 @@
         display: flex; align-items: center; justify-content: center;
         gap: 4px;
         background: transparent; border: none; cursor: pointer;
-        padding: 6px; /* 텍스트 없이 아이콘만 있으므로 패딩 조정 */
+        padding: 6px; 
         border-radius: 4px;
         color: #6B7280; 
         transition: background-color 0.2s, color 0.2s;
     }
     .action-btn:hover { background-color: #F3F4F6; color: #374151; }
     .action-btn .material-symbols-rounded { font-size: 16px; }
-
 
     @keyframes textShimmer {
         0% { background-position: 200% 0; }
@@ -725,7 +755,6 @@
         background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         animation: textShimmer 3s linear infinite; transition: all 0.2s ease;
     }
-    /* 검색 모드 등 자식이 있을 때는 배경 클립을 해제하여 자식 텍스트가 보이게 함 */
     .analyzing-text:has(div) {
         background: none;
         -webkit-text-fill-color: initial;
@@ -743,12 +772,12 @@
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* [수정] 입력창 컨테이너 레이아웃 가로 정렬로 변경 */
+    /* [수정] 입력창 2단 구조 및 둥근 스타일 완벽 적용 */
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
         background-color: #F4F4F5; border-radius: 26px; /* Pill 형태 강조 */
-        padding: 8px 12px 8px 8px; box-sizing: border-box;
-        display: flex; flex-direction: row; align-items: flex-end; position: relative; 
+        padding: 12px 16px; box-sizing: border-box;
+        display: flex; flex-direction: column; position: relative; 
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         border: 1px solid transparent; gap: 8px;
     }
@@ -845,9 +874,23 @@
         color: #4B5563;
     }
 
-    /* [수정] 입력창 좌측 아이콘 정렬 */
+    /* [수정] 텍스트 에어리어 스타일 */
+    .chat-textarea {
+        flex: none; width: 100%; border: none; background: transparent; resize: none; outline: none;
+        font-size: 15px; color: #333; font-family: inherit; padding: 0;
+        margin: 0; line-height: var(--line-height); height: var(--line-height);
+        max-height: calc(var(--line-height) * 8); overflow-y: auto; scrollbar-width: none;
+    }
+    .chat-textarea::-webkit-scrollbar { display: none; }
+    .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
+
+    /* [수정] 하단 툴바(좌측 버튼들 + 우측 전송버튼) */
+    .input-bottom-row {
+        display: flex; justify-content: space-between; align-items: center; width: 100%;
+    }
+
     .input-left-tools { 
-        display: flex; align-items: center; gap: 2px; margin-bottom: 4px;
+        display: flex; align-items: center; gap: 4px;
     }
     .input-left-tools .icon-btn {
         background: none; border: none; padding: 0;
@@ -859,23 +902,12 @@
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
-    /* [수정] 텍스트 에어리어 스타일 */
-    .chat-textarea {
-        flex: 1; border: none; background: transparent; resize: none; outline: none;
-        font-size: 15px; color: #333; font-family: inherit; padding: 0;
-        margin-top: 8px; margin-bottom: 8px;
-        line-height: var(--line-height); height: var(--line-height);
-        max-height: calc(var(--line-height) * 8); overflow-y: hidden; scrollbar-width: none;
-    }
-    .chat-textarea::-webkit-scrollbar { display: none; }
-    .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
-
     /* [수정] 동그란 전송 버튼 활성/비활성화 스타일 */
     .send-btn {
         width: 32px; height: 32px; flex-shrink: 0;
         background-color: #E5E7EB; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
-        margin-bottom: 4px; transition: background-color 0.2s, color 0.2s;
+        transition: background-color 0.2s, color 0.2s;
     }
     .send-btn .arrow-icon { font-size: 20px; color: #9CA3AF; font-weight: 600; transition: color 0.2s; }
     .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
@@ -1255,6 +1287,10 @@
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
     <aside id="sidebar" class="sidebar">
+        <div class="mobile-drag-handle-container" id="mobileDragHandle">
+            <div class="mobile-drag-handle"></div>
+        </div>
+
         <div class="sidebar-header">
             <div class="sidebar-logo">
                 <img src="https://i.postimg.cc/Sxd0rHV1/image-removebg-preview.png" alt="Logo">
@@ -1358,16 +1394,18 @@
                 <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>파일</span></div>
             </div>
 
-            <div class="input-left-tools">
-                <button id="attachBtn" class="icon-btn" title="첨부하기"><i class="ti ti-plus"></i></button>
-                <button id="searchBtn" class="icon-btn" title="검색 모드"><i class="ti ti-world"></i></button>
-            </div>
-
             <textarea id="chatInput" class="chat-textarea" placeholder="무엇이든 물어보세요" rows="1"></textarea>
             
-            <button id="sendBtn" class="send-btn" disabled>
-                <i class="ti ti-arrow-up arrow-icon"></i>
-            </button>
+            <div class="input-bottom-row">
+                <div class="input-left-tools">
+                    <button id="attachBtn" class="icon-btn" title="첨부하기"><i class="ti ti-plus"></i></button>
+                    <button id="searchBtn" class="icon-btn" title="검색 모드"><i class="ti ti-world"></i></button>
+                </div>
+                
+                <button id="sendBtn" class="send-btn" disabled>
+                    <i class="ti ti-arrow-up arrow-icon"></i>
+                </button>
+            </div>
         </div>
         <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
     </div>
@@ -1416,8 +1454,9 @@
     </div>
 
     <script>
-        // [설정] 스크롤 시 여백 오차 조정 (값이 클수록 여백이 줄어듦)
-        const SCROLL_PADDING_OFFSET = 150; 
+        // [수정] 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
+        const PC_SCROLL_PADDING_OFFSET = 150; 
+        const MOBILE_SCROLL_PADDING_OFFSET = 120; // 모바일 전용 여백 조정값
 
         const chatContainer = document.getElementById('chatContainer');
         const centerLogo = document.getElementById('centerLogo');
@@ -1444,9 +1483,12 @@
         const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
         const pcSidebarOpenBtn = document.getElementById('pcSidebarOpenBtn');
         
-        // [수정] 모바일 전용 버튼 연동
+        // 모바일 전용 버튼 연동
         const mobileMenuBtnRight = document.getElementById('mobileMenuBtnRight');
         const mobileNewChatBtn = document.getElementById('mobileNewChatBtn');
+
+        // [NEW] 모바일 사이드바 드래그 핸들 연동
+        const sidebarHandle = document.getElementById('mobileDragHandle');
 
         // 검색 관련
         const sidebarSearchBtn = document.getElementById('sidebarSearchBtn');
@@ -2087,6 +2129,45 @@
             }
         }
 
+        // [NEW] 모바일 사이드바 드래그 핸들 이벤트 리스너
+        let dragStartY = 0;
+        let dragCurrentY = 0;
+        let isDragging = false;
+
+        sidebarHandle.addEventListener('touchstart', (e) => {
+            if (window.innerWidth > 768) return;
+            dragStartY = e.touches[0].clientY;
+            isDragging = true;
+            sidebar.style.transition = 'none'; // 드래그 중에는 부드러운 전환 효과 제거
+        }, { passive: true });
+
+        sidebarHandle.addEventListener('touchmove', (e) => {
+            if (!isDragging || window.innerWidth > 768) return;
+            dragCurrentY = e.touches[0].clientY;
+            let diff = dragCurrentY - dragStartY;
+            if (diff > 0) { // 아래로 내릴 때만 움직임 적용
+                sidebar.style.transform = `translateY(${diff}px)`;
+            }
+        }, { passive: true });
+
+        sidebarHandle.addEventListener('touchend', (e) => {
+            if (!isDragging || window.innerWidth > 768) return;
+            isDragging = false;
+            sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; // 전환 효과 복구
+            let diff = dragCurrentY - dragStartY;
+            
+            // 150px 이상 닫으면(절반 정도) 완전히 닫기
+            if (diff > 150) {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('open');
+                setTimeout(() => { sidebar.style.transform = ''; }, 300);
+            } else {
+                // 원위치로 스냅백 (열린 상태 유지)
+                sidebar.style.transform = 'translateY(0)';
+                setTimeout(() => { sidebar.style.transform = ''; }, 300);
+            }
+        });
+
         mobileMenuBtn.addEventListener('click', toggleSidebar);
         if (mobileMenuBtnRight) mobileMenuBtnRight.addEventListener('click', toggleSidebar);
         sidebarCloseBtn.addEventListener('click', toggleSidebar);
@@ -2227,8 +2308,10 @@
             const text = textOverride || chatInput.value.trim();
             if (text.length === 0) return;
 
-            // [수정] 새로운 메시지 시작 시 충분한 여백 확보 (뷰포트 높이 - 오차)
+            // [수정] 모바일과 PC 환경에 따라 여백 오차 동적 설정
+            const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
             const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
+            
             chatContainer.style.transition = 'none'; // 즉시 적용
             chatContainer.style.paddingBottom = initialPadding + 'px';
 
@@ -2350,7 +2433,6 @@
                 if (!response.ok) throw new Error("Server error");
 
                 const loadingElem = document.getElementById(loadingId);
-                // [수정] 분석 중 텍스트를 삭제하지 않고 유지하여 레이아웃 급변 방지
                 if (timers) timers.forEach(t => clearTimeout(t));
 
                 const botRow = loadingElem; 
@@ -2360,7 +2442,6 @@
 
                 botRow.appendChild(botContent);
 
-                // [수정] 코드 블록 ID 안정화
                 renderer.codePrefix = loadingId;
 
                 const reader = response.body.getReader();
@@ -2405,15 +2486,12 @@
                     };
                 };
 
-                // [수정] 3~7단어씩 랜덤하게 끊어서 출력하는 루프
                 const processBuffer = async () => {
                     try {
                         while (!isStreamingFinished || textBuffer.length > 0) {
                             if (textBuffer.length > 0) {
-                                // 단어(\S+)와 공백/줄바꿈(\s+)을 모두 분리하여 보존
                                 const tokens = textBuffer.match(/(\S+|\s+)/g) || [];
                                 
-                                // 최소 3개 이상의 단어 토큰이 있거나 스트리밍이 끝났을 때 처리
                                 let wordTokens = tokens.filter(t => /\S/.test(t));
                                 if (wordTokens.length >= 3 || (isStreamingFinished && tokens.length > 0)) {
                                     
@@ -2429,14 +2507,12 @@
 
                                     const chunk = tokens.slice(0, takeIndex).join('');
                                     displayedText += chunk;
-                                    // 처리한 만큼만 버퍼에서 제거 (중요: 뒷부분에 새로 들어온 데이터 보존)
                                     textBuffer = textBuffer.substring(chunk.length);
 
                                     const parsed = parseStream(displayedText);
                                     
-                                    // 스크롤 위치 고정
                                     const savedScrollY = window.scrollY;
-                                    renderer.codeCount = 0; // 매번 리셋하여 순서대로 ID 부여
+                                    renderer.codeCount = 0; 
                                     
                                     try {
                                         botContent.innerHTML = marked.parse(parsed.cleanText);
@@ -2447,14 +2523,12 @@
                                         console.error("Markdown parse error during stream:", err);
                                     }
                                     
-                                    // 여백 조정
                                     const currentBotHeight = botContent.offsetHeight;
                                     chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                     
-                                    // 브라우저의 자동 스크롤 보정을 막고 원래 위치 유지
                                     window.scrollTo(0, savedScrollY);
                                     
-                                    // [수정] 모바일 햅틱 진동 미세하게 (1ms)
+                                    // [수정] 모바일 햅틱 진동 미세하게 (1ms) 유지
                                     if (window.navigator && window.navigator.vibrate) {
                                         window.navigator.vibrate(1);
                                     }                                                                   
@@ -2485,7 +2559,6 @@
                     rawFullText += cleanChunk;
 
                     const parsed = parseStream(rawFullText);
-                    // [수정] 버퍼 추가 로직 개선 (데이터 유실 방지)
                     const currentTotal = displayedText + textBuffer;
                     if (parsed.cleanText.length > currentTotal.length) {
                         textBuffer += parsed.cleanText.substring(currentTotal.length);
@@ -2508,7 +2581,6 @@
                     Prism.highlightAllUnder(botContent);
                 } catch (e) { console.error(e); }
 
-                // [수정] 답변 완료 시 텍스트 변경
                 const analyzingText = loadingElem.querySelector('.analyzing-text');
                 if (analyzingText) {
                     analyzingText.innerText = "답변완료됨";
@@ -2518,7 +2590,6 @@
                     analyzingText.style.color = "#9CA3AF";
                 }
 
-                // 최종 여백 조정
                 const finalBotHeight = botContent.offsetHeight;
                 chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
 
@@ -2534,7 +2605,7 @@
 
             } catch (error) {
                 const loadingElem = document.getElementById(loadingId);
-                if (loadingElem) loadingElem.remove(); // 에러 시에는 제거
+                if (loadingElem) loadingElem.remove(); 
                 if (timers) timers.forEach(t => clearTimeout(t));
 
                 if (error.name === 'AbortError') {
@@ -2559,7 +2630,6 @@
                 sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
                 
-                // 트랜지션 복구
                 chatContainer.style.transition = 'padding-bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
                 
                 adjustHeight(); 
@@ -2567,7 +2637,7 @@
             }
         }
 
-        // --- 봇 버튼 추가 함수 (수정됨: 텍스트 제거 및 아이콘만 표시) ---
+        // --- 봇 버튼 추가 함수 ---
         function addBotButtons(rowElement, textContent, metadata) {
             if (rowElement.querySelector('.bot-action-bar')) return;
 
@@ -2578,12 +2648,10 @@
             const copyBtn = document.createElement('button');
             copyBtn.className = 'action-btn';
             copyBtn.title = '복사';
-            // 텍스트 제거하고 아이콘만
             copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span>';
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(textContent).then(() => {
                     const originalHTML = copyBtn.innerHTML;
-                    // 체크 아이콘으로 변경
                     copyBtn.innerHTML = '<span class="material-symbols-rounded">check</span>';
                     setTimeout(() => copyBtn.innerHTML = originalHTML, 2000);
                 });
@@ -2593,7 +2661,6 @@
             const regenBtn = document.createElement('button');
             regenBtn.className = 'action-btn';
             regenBtn.title = '재생성';
-            // 텍스트 제거하고 아이콘만
             regenBtn.innerHTML = '<span class="material-symbols-rounded">refresh</span>';
             regenBtn.addEventListener('click', regenerateResponse);
 
@@ -2605,7 +2672,6 @@
                 const thoughtBtn = document.createElement('button');
                 thoughtBtn.className = 'action-btn';
                 thoughtBtn.title = '사고 과정';
-                // 텍스트 제거하고 아이콘만
                 thoughtBtn.innerHTML = '<span class="material-symbols-rounded">psychology</span>';
                 thoughtBtn.addEventListener('click', () => {
                     openDetailsPanel(metadata, metadata.thought ? 'thought' : 'citations');
@@ -2648,10 +2714,8 @@
             
             let timers = [];
             if (isSearchMode) {
-                // "질문을 분석하는중..." 기본 텍스트 (즉시)
                 contentDiv.innerHTML = '<div style="margin-bottom: 4px;">질문을 분석하는중...</div>';
                 
-                // 1초 후 "검색을 진행하는 중" 추가
                 timers.push(setTimeout(() => {
                     const searchProgress = document.createElement('div');
                     searchProgress.style.fontSize = '0.85em';
@@ -2661,7 +2725,6 @@
                     contentDiv.appendChild(searchProgress);
                 }, 1000));
 
-                // 2초 후 (검색 진행 1초 후) "검색한 내용을 분석하는 중" 추가
                 timers.push(setTimeout(() => {
                     const analysisProgress = document.createElement('div');
                     analysisProgress.style.fontSize = '0.85em';
@@ -2672,7 +2735,6 @@
                     contentDiv.appendChild(analysisProgress);
                 }, 2000));
 
-                // 5초 후 (분석 시작 3초 후) "마무리 하는중" 추가
                 timers.push(setTimeout(() => {
                     const finalProgress = document.createElement('div');
                     finalProgress.style.fontSize = '0.85em';
@@ -2703,7 +2765,6 @@
                 copyBtn.title = '복사';
                 copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">content_copy</span>';
                 
-                // [수정] 복사 버튼 클릭 시 체크표시 이펙트 추가
                 copyBtn.addEventListener('click', () => {
                     navigator.clipboard.writeText(text).then(() => {
                         const originalHTML = copyBtn.innerHTML;
@@ -2761,4 +2822,4 @@
         });
     </script>
 </body>
-                </html>
+</html>
