@@ -25,12 +25,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
 <style>
-    /* [NEW] 모바일 탭 터치 시 파란색 하이라이트 박스 제거 */
+    /* 모바일 탭 터치 시 파란색 하이라이트 박스 제거 */
     * {
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* --- [NEW] 초기 로딩 화면 스타일 --- */
+    /* 초기 로딩 화면 스타일 */
     #initialLoader {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: #fff; z-index: 9999;
@@ -54,7 +54,7 @@
     /* 사이드바 로딩 스피너 */
     .sidebar-loader-container {
         display: flex; justify-content: center; align-items: center;
-        flex: 1; /* 남은 공간을 모두 차지하도록 */
+        flex: 1; 
         width: 100%;
     }
 
@@ -78,7 +78,7 @@
         --content-max-width: 700px; 
     }
 
-    /* --- [NEW] 커스텀 코드 블록 스타일 --- */
+    /* 커스텀 코드 블록 스타일 */
     .code-block-container {
         margin: 16px 0;
         border: 1px solid #E5E7EB;
@@ -182,7 +182,7 @@
         font-size: 13px !important;
         line-height: 1.6 !important;
         border-radius: 0 !important;
-        color: #1F2937 !important; /* 기본 글자색 검정 계열로 고정 */
+        color: #1F2937 !important; 
     }
 
     .code-block-body pre code {
@@ -246,7 +246,6 @@
         display: block;
     }
 
-    /* Phosphor 아이콘 스타일 */
     .ph {
         font-size: 20px;
         color: #374151;
@@ -260,7 +259,6 @@
         opacity: 0; visibility: hidden; transition: opacity 0.3s;
     }
     @media (max-width: 768px) {
-        /* [수정] 오버레이 z-index 조정하여 메뉴 뒷부분만 어두워지도록 설정 */
         .sidebar-overlay.open { opacity: 1; visibility: visible; }
         .sidebar-overlay {
             position: fixed;
@@ -285,31 +283,29 @@
         font-size: 13px;
     }
     
-    /* 모바일용 사이드바 드래그 핸들 */
     .mobile-drag-handle-container { display: none; }
 
     @media (max-width: 768px) {
-        /* 모바일에서는 바텀 시트 스타일로 변경 및 z-index 상향 (오버레이 위로) */
+        /* [수정] 모바일 사이드바 드래그(스와이프)를 위해 !important 제거 */
         .sidebar {
             width: 100% !important;
             background-color: #fff !important;
-            transform: translateY(100%) !important;
+            transform: translateY(100%); 
             top: auto !important;
             bottom: 0 !important;
             height: 85vh !important;
             border-radius: 24px 24px 0 0 !important;
             border-right: none !important;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 9999 !important; 
         }
         .sidebar.open {
-            transform: translateY(0) !important;
+            transform: translateY(0);
         }
         .sidebar-content {
             padding: 20px;
         }
 
-        /* [NEW] 모바일 전용 드래그 핸들 노출 */
         .mobile-drag-handle-container {
             display: flex; justify-content: center; align-items: center;
             width: 100%; padding: 12px 0 4px 0; order: -2; flex-shrink: 0; cursor: grab;
@@ -318,7 +314,6 @@
             width: 40px; height: 5px; background-color: #D1D5DB; border-radius: 3px;
         }
 
-        /* [수정] 모바일에서는 로고/닫기버튼 숨기고, 프로필 영역을 위로 올림 */
         .sidebar-header { display: none !important; }
         .sidebar-footer { 
             order: -1; 
@@ -344,6 +339,8 @@
 
     .sidebar-close-btn { cursor: pointer; color: #000; padding: 4px; border-radius: 4px; transition: opacity 0.3s, visibility 0.3s; }
     .sidebar-close-btn:hover { background-color: #E5E7EB; }
+    /* [수정] PC 사이드바 닫기 아이콘 크기 키움 */
+    .sidebar-close-btn .ti { font-size: 24px; vertical-align: middle; }
 
     .sidebar-content { flex: 1; padding: 10px; display: flex; flex-direction: column; overflow: hidden; }
     
@@ -456,7 +453,7 @@
         display: flex; align-items: center; justify-content: center;
     }
 
-    /* 채팅 목록 옵션 메뉴 (더보기 클릭 시) */
+    /* 채팅 목록 옵션 메뉴 */
     .history-menu-dropdown {
         position: absolute; right: 10px; top: 30px;
         width: 110px;
@@ -474,7 +471,6 @@
     .history-menu-item:hover { background-color: #F3F4F6; }
     .history-menu-item.delete { color: #EF4444; }
     .history-menu-item .ti { font-size: 14px; }
-
 
     .sidebar-footer {
         padding: 10px; 
@@ -523,7 +519,6 @@
     .top-left:hover { background-color: #F3F4F6; }
     .top-left .material-symbols-rounded { font-size: 20px; color: #6B7280; }
     
-    /* [수정] PC 사이드바 열기 아이콘 크기 통일 */
     .pc-sidebar-open-btn { display: none; cursor: pointer; color: #6B7280; margin-right: 6px; transition: transform 0.3s; }
     .pc-sidebar-open-btn:hover { color: #1F2937; }
     .pc-sidebar-open-btn .ti { font-size: 24px; vertical-align: bottom; }
@@ -559,7 +554,6 @@
         .pc-only { display: none !important; }
         .mobile-only { display: flex; align-items: center; }
         
-        /* 모바일 상단바 완벽 구현 */
         .top-bar { 
             justify-content: space-between; 
             padding: 0 16px; 
@@ -591,14 +585,13 @@
             align-items: center;
         }
         
-        /* 모바일 대화창 좌우 여백 아주 살짝 더 줄임 */
         .chat-container {
             padding-left: 12px !important;
             padding-right: 12px !important;
         }
 
         .chat-input-container {
-            width: 95% !important; /* 모바일에서 폭 살짝 더 넓게 */
+            width: 95% !important; 
             max-width: var(--content-max-width) !important;
             margin: 0 auto !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -622,7 +615,7 @@
         padding-bottom: 160px;
         box-sizing: border-box;
         display: flex; flex-direction: column; gap: 24px; 
-        overflow-anchor: none; /* 스크롤 안정화 */
+        overflow-anchor: none;
         
         transition: margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
@@ -661,7 +654,6 @@
     .message-row.user { align-items: flex-end; }
     .message-row.bot { align-items: flex-start; }
 
-    /* 유저 버블 컨테이너 (버튼 포함) */
     .user-bubble-container {
         display: flex; align-items: center; gap: 8px; flex-direction: row-reverse;
         max-width: 75%;
@@ -678,7 +670,6 @@
         position: relative;
     }
 
-    /* 유저 복사 버튼 */
     .user-copy-btn {
         opacity: 0; pointer-events: none;
         padding: 4px; background: transparent; border: none; cursor: pointer;
@@ -720,7 +711,6 @@
     .bot-text ul, .bot-text ol { margin: 12px 0; padding-left: 20px; }
     .bot-text blockquote { border-left: 3px solid #e5e7eb; margin: 12px 0; padding-left: 12px; color: #6b7280; }
 
-    /* [NEW] 봇 링크 버튼 스타일 */
     .bot-link-btn {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 6px 14px; margin: 4px 0;
@@ -733,7 +723,6 @@
     .bot-link-btn .material-symbols-rounded { font-size: 16px; flex-shrink: 0; color: #6B7280; }
     .bot-link-btn .link-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 봇 답변 아래 버튼 영역 */
     .bot-action-bar {
         display: flex; gap: 2px; 
         margin-top: 6px;
@@ -787,19 +776,17 @@
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* [수정] 입력창 2단 구조 및 둥근 스타일, 얇은 회색 윤곽선, 패딩 여백 일치 */
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
         background-color: #F4F4F5; border-radius: 26px; 
-        padding: 12px; /* 좌상우하 모두 동일 여백 */
+        padding: 12px; 
         box-sizing: border-box;
         display: flex; flex-direction: column; position: relative; 
         transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #E5E7EB; /* 얇은 회색 윤곽선 */
-        gap: 8px; /* 텍스트박스와 버튼 사이 여백 */
+        border: 1px solid #E5E7EB; 
+        gap: 8px; 
     }
 
-    /* [NEW] 입력창 글로우 애니메이션 */
     @keyframes rotate-glow {
         from { transform: translate(-50%, -50%) rotate(0deg); }
         to { transform: translate(-50%, -50%) rotate(360deg); }
@@ -820,8 +807,8 @@
         background: conic-gradient(
             from 0deg,
             transparent 0%,
-            #FFB6C1 5%,  /* Pink */
-            #87CEEB 15%, /* Sky Blue */
+            #FFB6C1 5%,  
+            #87CEEB 15%, 
             transparent 25%,
             transparent 50%,
             #FFB6C1 55%,
@@ -842,38 +829,64 @@
     }
     .chat-textarea:focus { outline: none; }
 
-    /* 삭제 확인 모달 */
-    #deleteModalOverlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5); z-index: 3100;
-        display: none; justify-content: center; align-items: center;
-        opacity: 0; transition: opacity 0.2s;
+    /* [NEW] 첨부 파일 미리보기 스타일 */
+    .attach-preview-item {
+        position: relative;
+        width: 60px; height: 60px;
+        border-radius: 12px;
+        background-color: #1F2937;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
     }
-    #deleteModalOverlay.open { display: flex; opacity: 1; }
+    .attach-preview-item img {
+        width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
+    }
+    .attach-preview-file {
+        width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: #fff; font-size: 10px; text-align: center; padding: 4px; box-sizing: border-box;
+    }
+    .attach-remove-btn {
+        position: absolute; top: -6px; right: -6px;
+        width: 20px; height: 20px; border-radius: 50%; background: #000; color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; cursor: pointer; border: 1px solid #fff;
+    }
+
+    /* [수정] 모든 모달 공통 오버레이 스타일 (부드러운 전환 효과 추가) */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.4); z-index: 3000;
+        display: flex; justify-content: center; align-items: center;
+        visibility: hidden; opacity: 0; transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .modal-overlay.open { visibility: visible; opacity: 1; }
+    
+    .modal-window {
+        background-color: #fff; width: 320px; border-radius: 12px;
+        padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        transform: scale(0.95); transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal-window { transform: scale(1); }
+
     .delete-modal-window {
         background-color: #fff; width: 300px; border-radius: 12px;
         padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         text-align: center;
+        transform: scale(0.95); transition: transform 0.2s;
     }
+    .modal-overlay.open .delete-modal-window { transform: scale(1); }
     .delete-modal-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
     .delete-modal-desc { font-size: 14px; color: #6B7280; margin-bottom: 20px; }
     .delete-modal-actions { display: flex; gap: 8px; justify-content: center; }
     .delete-btn-confirm { background-color: #EF4444 !important; color: #fff !important; }
 
-    /* [NEW] 링크 이동 모달 (첨부 이미지 2번 스타일 반영) */
-    #linkModalOverlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5); z-index: 3100;
-        display: none; justify-content: center; align-items: center;
-        opacity: 0; transition: opacity 0.2s;
-    }
-    #linkModalOverlay.open { display: flex; opacity: 1; }
+    /* 모바일 맞춤 링크 모달 */
     .link-modal-window {
-        background: #fff; width: 340px; border-radius: 24px; padding: 24px;
+        background: #fff; width: 340px; max-width: 90%; border-radius: 24px; padding: 24px; box-sizing: border-box;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;
         transform: scale(0.95); transition: transform 0.2s;
     }
-    #linkModalOverlay.open .link-modal-window { transform: scale(1); }
+    .modal-overlay.open .link-modal-window { transform: scale(1); }
     .link-modal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #000; }
     .link-modal-desc { font-size: 14px; color: #6B7280; margin-bottom: 20px; line-height: 1.4; }
     .link-modal-box {
@@ -885,8 +898,6 @@
     .btn-black { background-color: #000; color: #fff; border-radius: 12px; padding: 8px 18px; font-weight: 600; cursor: pointer; border: none; }
     .btn-gray { background-color: #E5E7EB; color: #374151; border-radius: 12px; padding: 8px 18px; font-weight: 600; cursor: pointer; border: none; }
 
-
-    /* 스크롤 다운 버튼 스타일 */
     .scroll-to-bottom-btn {
         position: absolute;
         top: -45px; 
@@ -917,7 +928,6 @@
         color: #4B5563;
     }
 
-    /* [수정] 텍스트 에어리어 스타일 */
     .chat-textarea {
         flex: none; width: 100%; border: none; background: transparent; resize: none; outline: none;
         font-size: 15px; color: #333; font-family: inherit; padding: 0;
@@ -927,7 +937,6 @@
     .chat-textarea::-webkit-scrollbar { display: none; }
     .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
 
-    /* 하단 툴바(좌측 버튼들 + 우측 전송버튼) */
     .input-bottom-row {
         display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 0;
     }
@@ -945,14 +954,12 @@
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
-    /* [수정] 동그란 전송 버튼 활성/비활성화 스타일 및 화살표 얇게 설정 */
     .send-btn {
         width: 32px; height: 32px; flex-shrink: 0;
         background-color: #E5E7EB; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.2s, color 0.2s;
     }
-    /* 얇은 화살표 지원을 위한 material-symbols-rounded 가중치 조절 */
     .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; }
     .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
     .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
@@ -978,22 +985,6 @@
     .menu-item:hover { background-color: #F3F4F6; }
     .menu-item .material-symbols-rounded { font-size: 18px; color: #4B5563; }
 
-    /* 모달 (이름 변경) */
-    .modal-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5); z-index: 3000;
-        display: none; justify-content: center; align-items: center;
-        opacity: 0; transition: opacity 0.2s;
-    }
-    .modal-overlay.open { display: flex; opacity: 1; }
-    
-    .modal-window {
-        background-color: #fff; width: 320px; border-radius: 12px;
-        padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        transform: scale(0.95); transition: transform 0.2s;
-    }
-    .modal-overlay.open .modal-window { transform: scale(1); }
-    
     .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
     .modal-input {
         width: 100%; padding: 10px; border: 1px solid #E5E7EB; border-radius: 8px;
@@ -1008,7 +999,6 @@
     .btn-cancel { background-color: #F3F4F6; color: #374151; }
     .btn-confirm { background-color: var(--primary-color); color: #fff; }
 
-    /* 사고 과정 / 상세 정보 패널 */
     .details-panel {
         position: fixed; z-index: 2500; background-color: #fff;
         box-shadow: -2px 0 10px rgba(0,0,0,0.1);
@@ -1016,7 +1006,6 @@
         transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
     
-    /* Desktop: 오른쪽 슬라이드 */
     @media (min-width: 769px) {
         .details-panel {
             top: 0; right: 0; width: 400px; height: 100%;
@@ -1026,7 +1015,6 @@
         .details-panel.open { transform: translateX(0); }
     }
     
-    /* Mobile: 아래쪽 슬라이드 모달 */
     @media (max-width: 768px) {
         .details-panel {
             bottom: 0; left: 0; width: 100%; height: 80vh;
@@ -1061,12 +1049,10 @@
         flex: 1; overflow-y: auto; padding: 20px;
     }
 
-    /* 사고 과정 텍스트 스타일 */
     .thought-content {
         font-size: 14px; line-height: 1.6; color: #6B7280; white-space: pre-wrap;
     }
 
-    /* 인용 카드 그리드 */
     .citation-grid {
         display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
     }
@@ -1095,7 +1081,6 @@
         .sidebar { box-shadow: none; border-right: 1px solid #E5E7EB; }
         .mobile-menu-icon { display: none !important; }
 
-        /* [열림 상태] */
         body.pc-sidebar-open .sidebar { transform: translateX(0); width: var(--sidebar-width); }
         body.pc-sidebar-open .top-bar { left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
         body.pc-sidebar-open .bottom-fixed-wrapper { left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
@@ -1116,7 +1101,6 @@
             }
         }
 
-        /* [닫힘 상태 -> 미니 사이드바] */
         body:not(.pc-sidebar-open) .sidebar { 
             transform: translateX(0); 
             width: var(--sidebar-mini-width); 
@@ -1181,7 +1165,6 @@
         body:not(.pc-sidebar-open) .pc-sidebar-open-btn { display: inline-block; }
     }
 
-    /* --- 프로필 메뉴 및 테마/설정 스타일 --- */
     .profile-menu {
         position: absolute;
         bottom: 70px;
@@ -1198,7 +1181,6 @@
     }
     .profile-menu.show { display: flex; }
     
-    /* 미니 사이드바일 때 메뉴 위치 조정 */
     body:not(.pc-sidebar-open) .profile-menu {
         left: 60px;
         bottom: 10px;
@@ -1225,7 +1207,6 @@
     .profile-menu-item:hover { background-color: #F3F4F6; }
     .profile-menu-item .ti { font-size: 18px; }
 
-    /* 테마 서브메뉴 */
     .theme-submenu {
         position: absolute;
         left: 100%;
@@ -1257,7 +1238,6 @@
     .theme-option .check-icon { display: none; font-size: 14px; }
     .theme-option.active .check-icon { display: inline-block; }
 
-    /* [NEW] 모바일 프로필 전용 인라인 액션 버튼 (설정, 로그아웃, 테마) */
     .mobile-profile-actions { display: none; }
     .mobile-footer-btn { 
         background: transparent; border: none; font-size: 18px; 
@@ -1271,24 +1251,24 @@
         .mobile-profile-actions { display: flex; gap: 4px; align-items: center; }
     }
 
-    /* 설정 모달 전용 스타일 */
     .settings-modal-window {
         background-color: #fff;
         width: 360px;
         border-radius: 16px;
         padding: 30px;
         text-align: center;
+        transform: scale(0.95); transition: transform 0.2s;
     }
+    .modal-overlay.open .settings-modal-window { transform: scale(1); }
     .settings-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
     .settings-desc { color: #6B7280; margin-bottom: 24px; font-size: 14px; }
 
-    /* [NEW] PC 미니 사이드바 검색 모달 전용 스타일 */
     .pc-search-modal-window {
         background: #fff; border-radius: 20px; width: 800px; height: 500px;
         display: flex; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         transform: scale(0.95); transition: transform 0.2s;
     }
-    #pcSearchModalOverlay.open .pc-search-modal-window { transform: scale(1); }
+    .modal-overlay.open .pc-search-modal-window { transform: scale(1); }
     .pc-search-left {
         width: 300px; border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; padding: 20px;
     }
@@ -1341,7 +1321,6 @@
                 const userNames = document.querySelectorAll('.user-name');
                 userNames.forEach(el => el.innerText = data.name);
                 
-                // 사용자 아바타 설정 (이름 첫 글자 사용)
                 const userAvatar = document.getElementById('userAvatar');
                 if (userAvatar) {
                     const firstLetter = data.name.charAt(0).toUpperCase();
@@ -1456,7 +1435,6 @@
         </div>
     </aside>
 
-
     <header class="top-bar">
         <div class="top-left pc-only" id="headerTitleArea">
             <span id="pcSidebarOpenBtn" class="pc-sidebar-open-btn" title="사이드바 열기">
@@ -1498,6 +1476,8 @@
                 <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>파일</span></div>
             </div>
 
+            <div id="attachmentPreviewContainer" style="display: none; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; max-height: 100px; overflow-y: auto; scrollbar-width: none;"></div>
+
             <textarea id="chatInput" class="chat-textarea" placeholder="무엇이든 물어보세요" rows="1"></textarea>
             
             <div class="input-bottom-row">
@@ -1530,7 +1510,7 @@
     </div>
 
     <div id="deleteModalOverlay" class="modal-overlay">
-        <div class="modal-window delete-modal-window" onclick="event.stopPropagation()">
+        <div class="delete-modal-window" onclick="event.stopPropagation()">
             <div class="delete-modal-title">채팅 삭제</div>
             <div class="delete-modal-desc">이 채팅을 정말 삭제하시겠습니까?</div>
             <div class="modal-actions delete-modal-actions">
@@ -1564,7 +1544,7 @@
     </div>
 
     <div id="settingsModalOverlay" class="modal-overlay">
-        <div class="modal-window settings-modal-window" onclick="event.stopPropagation()">
+        <div class="settings-modal-window" onclick="event.stopPropagation()">
             <div class="settings-title">설정</div>
             <div class="settings-desc">아직 준비 중입니다. 곧 찾아뵐게요!</div>
             <div class="modal-actions" style="justify-content: center;">
@@ -1583,6 +1563,8 @@
         <div class="details-content-area" id="detailsContent">
             </div>
     </div>
+
+    <input type="file" id="hiddenFileInput" style="display: none;" multiple>
 
     <script>
         const linkModalOverlay = document.getElementById('linkModalOverlay');
@@ -1624,7 +1606,7 @@
 
         // 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
         const PC_SCROLL_PADDING_OFFSET = 150; 
-        const MOBILE_SCROLL_PADDING_OFFSET = 80; // 모바일 전용 여백 조정값
+        const MOBILE_SCROLL_PADDING_OFFSET = 280; // 모바일 전용 여백 조정값
 
         const chatContainer = document.getElementById('chatContainer');
         const centerLogo = document.getElementById('centerLogo');
@@ -1687,19 +1669,22 @@
 
         // PC 프로필 토글 (모바일에서는 작동안함)
         sidebarFooter.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) return; // 모바일에서는 제외
+            if (window.innerWidth <= 768) return; 
             e.stopPropagation();
             profileMenu.classList.toggle('show');
             themeSubmenu.classList.remove('show');
         });
 
         // 모바일 프로필 전용 설정 / 테마 아이콘 클릭
-        if (mobileSettingsIcon) mobileSettingsIcon.addEventListener('click', () => settingsModalOverlay.classList.add('open'));
+        if (mobileSettingsIcon) mobileSettingsIcon.addEventListener('click', () => {
+            settingsModalOverlay.classList.add('open');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+        });
         if (mobileThemeIcon) {
             mobileThemeIcon.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // 모바일에서 테마 메뉴는 필요 시 확장, 여기선 라이트로 토글만 구현하거나 그대로 둠
                 setTheme('light'); 
+                if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
             });
         }
 
@@ -1719,6 +1704,7 @@
             settingsModalOverlay.classList.add('open');
             profileMenu.classList.remove('show');
             themeSubmenu.classList.remove('show');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
         });
 
         settingsCloseBtn.addEventListener('click', () => {
@@ -1742,7 +1728,6 @@
             });
         }
 
-        // 초기 테마 적용
         const savedTheme = localStorage.getItem('quorvTheme') || 'light';
         setTheme(savedTheme);
 
@@ -1759,7 +1744,7 @@
             if (!pyodide) pyodide = await loadPyodide();
         }
 
-        // 초기 로더 처리 (1초)
+        // 초기 로더 처리
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const loader = document.getElementById('initialLoader');
@@ -1771,7 +1756,83 @@
                     }, 300);
                 }
             }, 1000);
+            
+            // 파일 첨부 메뉴 연결
+            document.querySelectorAll('.attach-menu .menu-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.getElementById('hiddenFileInput').click();
+                    attachMenu.classList.remove('open');
+                    setTimeout(() => attachMenu.style.display='none', 200);
+                });
+            });
         });
+
+        // --- [NEW] 첨부 파일 로직 ---
+        let pendingAttachments = []; 
+
+        document.getElementById('hiddenFileInput').addEventListener('change', async (e) => {
+            const files = e.target.files;
+            for(let i=0; i<files.length; i++) {
+                const file = files[i];
+                const isImage = file.type.startsWith('image/');
+                const base64 = await readFileAsBase64(file);
+                pendingAttachments.push({
+                    type: isImage ? 'image' : 'file',
+                    data: base64,
+                    name: file.name,
+                    size: formatBytes(file.size),
+                    extension: file.name.split('.').pop().toUpperCase()
+                });
+            }
+            renderAttachmentPreviews();
+            e.target.value = ''; 
+        });
+
+        function readFileAsBase64(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function formatBytes(bytes, decimals = 1) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        function renderAttachmentPreviews() {
+            const container = document.getElementById('attachmentPreviewContainer');
+            if (pendingAttachments.length === 0) {
+                container.style.display = 'none';
+                container.innerHTML = '';
+                adjustHeight();
+                return;
+            }
+            container.style.display = 'flex';
+            container.innerHTML = '';
+            pendingAttachments.forEach((att, index) => {
+                const div = document.createElement('div');
+                div.className = 'attach-preview-item';
+                if (att.type === 'image') {
+                    div.innerHTML = `<img src="${att.data}" alt="attach"><div class="attach-remove-btn" onclick="removeAttachment(${index})"><i class="ti ti-x"></i></div>`;
+                } else {
+                    div.innerHTML = `<div class="attach-preview-file"><i class="ti ti-file" style="font-size:16px; margin-bottom:2px;"></i><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${att.name}</span><span>${att.size}</span></div><div class="attach-remove-btn" onclick="removeAttachment(${index})"><i class="ti ti-x"></i></div>`;
+                }
+                container.appendChild(div);
+            });
+            adjustHeight();
+            sendBtn.disabled = false;
+        }
+
+        window.removeAttachment = function(index) {
+            pendingAttachments.splice(index, 1);
+            renderAttachmentPreviews();
+        };
 
         let messageMetadata = {}; 
 
@@ -1789,7 +1850,6 @@
                        .replace(/'/g, '&#39;');
         };
 
-        // [NEW] 봇 출력 링크 전용 커스텀 렌더러 등록
         renderer.link = function(href, title, text) {
             const linkHref = typeof href === 'object' ? href.href : href;
             const linkText = typeof href === 'object' ? href.text : text;
@@ -1987,7 +2047,6 @@
             }
         }
 
-        // --- 유틸리티 함수: UUID 생성 ---
         function generateUUID() {
             if (typeof crypto !== 'undefined' && crypto.randomUUID) {
                 return crypto.randomUUID();
@@ -1998,7 +2057,6 @@
             });
         }
 
-        // --- 로컬 스토리지 관리 ---
         function getSavedChats() {
             const stored = localStorage.getItem('quorvChats');
             return stored ? JSON.parse(stored) : {};
@@ -2048,7 +2106,7 @@
                 renderer.codePrefix = 'history-' + id;
 
                 conversationHistory.forEach((msg, index) => {
-                    const row = addMessage(msg.content, msg.role, false);
+                    const row = addMessage(msg.content, msg.role, false, msg.attachments);
                     if (msg.role === 'assistant') {
                          if (messageMetadata[index]) {
                              addBotButtons(row, msg.content, messageMetadata[index]);
@@ -2168,7 +2226,6 @@
         function showPcSearchPreview(chat, activeElem) {
             previewChatId = chat.id;
             
-            // 강조 효과
             const items = pcSearchListContent.querySelectorAll('.pc-search-item');
             items.forEach(el => el.classList.remove('active'));
             if (activeElem) activeElem.classList.add('active');
@@ -2239,6 +2296,8 @@
                 itemDiv.addEventListener('click', (e) => {
                     if (e.target.closest('.chat-item-options') || e.target.closest('.history-menu-dropdown') || e.target.closest('.chat-title-input')) return;
                     loadChatFromStorage(chat.id);
+                    // 모바일 자동 닫기 연동
+                    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
                 });
 
                 const optionBtn = itemDiv.querySelector('.chat-item-options');
@@ -2271,10 +2330,10 @@
             });
         }
         
-        // 검색 버튼 토글 (PC 미니 모드에서는 모달 띄우기)
+        // 검색 버튼 토글
         sidebarSearchBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (window.innerWidth > 768 && !document.body.classList.contains('pc-sidebar-open')) {
+            if (window.innerWidth > 768) {
                 openPcSearchModal();
             } else {
                 sidebarSearchBtn.style.display = 'none';
@@ -2311,12 +2370,17 @@
             chatContainer.innerHTML = '';
             centerLogo.classList.remove('hidden');
             chatInput.value = '';
+            pendingAttachments = [];
+            renderAttachmentPreviews();
             sendBtn.disabled = true;
             adjustHeight();
             scrollToBottomBtn.classList.remove('show'); 
 
             history.pushState({}, '', window.location.origin + window.location.pathname);
             renderSidebar();
+            
+            // 모바일 자동 닫기 연동
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
         }
 
         newChatBtn.addEventListener('click', startNewChat);
@@ -2348,7 +2412,9 @@
                 chatInput.style.height = scrollHeight + 'px';
                 chatInput.style.overflowY = 'hidden'; 
             }
-            if (!isGenerating) sendBtn.disabled = chatInput.value.trim().length === 0;
+            if (!isGenerating) {
+                sendBtn.disabled = chatInput.value.trim().length === 0 && pendingAttachments.length === 0;
+            }
         }
 
         function toggleSidebar() {
@@ -2456,7 +2522,7 @@
             }
             const lastUserMsg = conversationHistory[conversationHistory.length - 1];
             if (!lastUserMsg || lastUserMsg.role !== 'user') return;
-            sendMessage(lastUserMsg.content, true);
+            sendMessage(lastUserMsg.content, true, lastUserMsg.attachments);
         }
 
         // --- 상세 정보 패널 제어 ---
@@ -2531,16 +2597,17 @@
 
 
         // --- 메시지 전송 및 파싱 로직 ---
-        async function sendMessage(textOverride = null, isRegen = false) {
+        async function sendMessage(textOverride = null, isRegen = false, attachmentsOverride = null) {
             if (isGenerating) {
                 if (abortController) abortController.abort();
                 return;
             }
 
-            const text = textOverride || chatInput.value.trim();
-            if (text.length === 0) return;
+            const text = textOverride !== null ? textOverride : chatInput.value.trim();
+            let attachmentsToSend = attachmentsOverride !== null ? attachmentsOverride : [...pendingAttachments];
+            
+            if (text.length === 0 && attachmentsToSend.length === 0) return;
 
-            // 모바일과 PC 환경에 따라 여백 오차 동적 설정
             const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
             const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
             
@@ -2561,8 +2628,11 @@
 
             let userMsgElement;
             if (!isRegen) {
-                userMsgElement = addMessage(text, 'user');
-                conversationHistory.push({ role: "user", content: text });
+                pendingAttachments = [];
+                renderAttachmentPreviews();
+
+                userMsgElement = addMessage(text, 'user', true, attachmentsToSend);
+                conversationHistory.push({ role: "user", content: text, attachments: attachmentsToSend });
                 chatInput.value = '';
                 adjustHeight();
                 
@@ -2583,7 +2653,6 @@
             const inputContainer = document.querySelector('.chat-input-container');
             if (inputContainer) inputContainer.classList.add('generating');
             
-            // [수정] 전송 중 아이콘 변경 (얇은 화살표 지원)
             sendBtn.innerHTML = '<div class="stop-icon-square"></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
@@ -2611,6 +2680,8 @@
 
             try {
                 const endpoint = isSearchMode ? "/ask" : "/askfast";
+                let imageBase64List = attachmentsToSend.filter(a => a.type === 'image').map(a => a.data);
+
                 let response = await fetch(`${BACKEND_URL}${endpoint}`, {
                     method: "POST",
                     headers: { 
@@ -2621,7 +2692,7 @@
                     body: JSON.stringify({ 
                         message: text, 
                         history: conversationHistory,
-                        image_base64: [] 
+                        image_base64: imageBase64List 
                     }),
                     signal: abortController.signal
                 });
@@ -2648,7 +2719,7 @@
                         body: JSON.stringify({ 
                             message: "⚠️ 현재 검색 한도를 초과하여 검색을 사용할 수 없습니다.\n\n" + text, 
                             history: conversationHistory,
-                            image_base64: [] 
+                            image_base64: imageBase64List 
                         }),
                         signal: abortController.signal
                     });
@@ -2848,7 +2919,6 @@
                 if (inputContainer) inputContainer.classList.remove('generating');
                 
                 abortController = null;
-                // [수정] 전송 완료 후 다시 원래 화살표 복구
                 sendBtn.innerHTML = '<span class="material-symbols-rounded arrow-icon" style="font-variation-settings: \'wght\' 300; font-size: 20px;">arrow_upward</span>';
                 sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
@@ -2970,7 +3040,7 @@
             return timers; 
         }
 
-        function addMessage(text, sender, withAnimation = true) {
+        function addMessage(text, sender, withAnimation = true, attachments = null) {
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('message-row', sender); 
             
@@ -2993,7 +3063,27 @@
 
                 const contentDiv = document.createElement('div');
                 contentDiv.classList.add('user-bubble');
-                contentDiv.innerHTML = text.replace(/\n/g, '<br>');
+                
+                // [NEW] 첨부 파일 렌더링 추가
+                let attachmentHtml = '';
+                if (attachments && attachments.length > 0) {
+                    attachmentHtml = '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; justify-content: flex-end; width: 100%;">';
+                    attachments.forEach(att => {
+                        if (att.type === 'image') {
+                            attachmentHtml += `<div style="width:140px; border-radius:12px; overflow:hidden; border:1px solid #E5E7EB;"><img src="${att.data}" style="width:100%; display:block; object-fit:cover;"></div>`;
+                        } else {
+                            attachmentHtml += `<div style="background:#fff; border: 1px solid #E5E7EB; color:#1F2937; padding:10px 14px; border-radius:12px; font-size:12px; display:flex; flex-direction:column; max-width: 160px; text-align:left;">
+                                <i class="ti ti-file" style="font-size:20px; margin-bottom:4px; color:#6B7280;"></i>
+                                <span style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${att.name}</span>
+                                <span style="color:#6B7280; margin-top:2px;">${att.extension} • ${att.size}</span>
+                            </div>`;
+                        }
+                    });
+                    attachmentHtml += '</div>';
+                }
+
+                const textHtml = text.trim() ? `<div>${text.replace(/\n/g, '<br>')}</div>` : '';
+                contentDiv.innerHTML = attachmentHtml + textHtml;
                 
                 container.appendChild(contentDiv);
                 container.appendChild(copyBtn);
