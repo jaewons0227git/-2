@@ -1585,6 +1585,43 @@
     </div>
 
     <script>
+        const linkModalOverlay = document.getElementById('linkModalOverlay');
+        const linkModalUrlDisplay = document.getElementById('linkModalUrlDisplay');
+        const linkCancelBtn = document.getElementById('linkCancelBtn');
+        const linkGoBtn = document.getElementById('linkGoBtn');
+        let targetLinkUrl = '';
+
+        window.openLinkModal = function(url) {
+            targetLinkUrl = url;
+            linkModalUrlDisplay.innerText = url;
+            linkModalOverlay.classList.add('open');
+        };
+
+        linkCancelBtn.addEventListener('click', () => { linkModalOverlay.classList.remove('open'); });
+        linkGoBtn.addEventListener('click', () => {
+            linkModalOverlay.classList.remove('open');
+            window.open(targetLinkUrl, '_blank');
+        });
+
+        // 모달 관련 요소
+        const renameModalOverlay = document.getElementById('renameModalOverlay');
+        const renameInput = document.getElementById('renameInput');
+        const renameCancelBtn = document.getElementById('renameCancelBtn');
+        const renameConfirmBtn = document.getElementById('renameConfirmBtn');
+
+        const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+        const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+        const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+
+        // 모달 닫기 공통 (오버레이 클릭 시)
+        [document.getElementById('pcSearchModalOverlay'), deleteModalOverlay, renameModalOverlay, document.getElementById('settingsModalOverlay'), linkModalOverlay].forEach(overlay => {
+            if(overlay) {
+                overlay.addEventListener('click', () => {
+                    overlay.classList.remove('open');
+                });
+            }
+        });
+
         // 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
         const PC_SCROLL_PADDING_OFFSET = 150; 
         const MOBILE_SCROLL_PADDING_OFFSET = 80; // 모바일 전용 여백 조정값
@@ -1637,44 +1674,6 @@
         const pcSearchPreviewContent = document.getElementById('pcSearchPreviewContent');
         const pcSearchGoBtn = document.getElementById('pcSearchGoBtn');
         let previewChatId = null;
-
-        // 링크 이동 모달 관련
-        const linkModalOverlay = document.getElementById('linkModalOverlay');
-        const linkModalUrlDisplay = document.getElementById('linkModalUrlDisplay');
-        const linkCancelBtn = document.getElementById('linkCancelBtn');
-        const linkGoBtn = document.getElementById('linkGoBtn');
-        let targetLinkUrl = '';
-
-        window.openLinkModal = function(url) {
-            targetLinkUrl = url;
-            linkModalUrlDisplay.innerText = url;
-            linkModalOverlay.classList.add('open');
-        };
-
-        linkCancelBtn.addEventListener('click', () => { linkModalOverlay.classList.remove('open'); });
-        linkGoBtn.addEventListener('click', () => {
-            linkModalOverlay.classList.remove('open');
-            window.open(targetLinkUrl, '_blank');
-        });
-
-        // 모달 닫기 공통 (오버레이 클릭 시)
-        [pcSearchModalOverlay, deleteModalOverlay, renameModalOverlay, settingsModalOverlay, linkModalOverlay].forEach(overlay => {
-            if(overlay) {
-                overlay.addEventListener('click', () => {
-                    overlay.classList.remove('open');
-                });
-            }
-        });
-
-        // 모달 관련 요소
-        const renameModalOverlay = document.getElementById('renameModalOverlay');
-        const renameInput = document.getElementById('renameInput');
-        const renameCancelBtn = document.getElementById('renameCancelBtn');
-        const renameConfirmBtn = document.getElementById('renameConfirmBtn');
-
-        const deleteModalOverlay = document.getElementById('deleteModalOverlay');
-        const deleteCancelBtn = document.getElementById('deleteCancelBtn');
-        const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
 
         // 상세 정보 패널 관련
         const detailsPanel = document.getElementById('detailsPanel');
