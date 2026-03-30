@@ -568,11 +568,6 @@
             padding-left: 12px !important;
             padding-right: 12px !important;
         }
-        
-        /* 모바일 중앙 로고 숨김 (추천 질문 영역 확보) */
-        .center-logo {
-            display: none !important;
-        }
     }
 
     /* --- 채팅 영역 --- */
@@ -582,14 +577,15 @@
         margin: 0 auto; 
         padding-top: calc(var(--header-height) + 20px);
         padding-left: 20px; padding-right: 20px;
-        padding-bottom: 160px; /* 고정된 여백 (재생성시/타이핑시 점프 방지) */
+        padding-bottom: 160px;
         box-sizing: border-box;
         display: flex; flex-direction: column; gap: 24px; 
         overflow-anchor: none;
         
         /* 채팅 부드러운 전환을 위한 opacity 속성 추가 */
-        transition: opacity 0.25s ease-in-out, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                    width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        transition: opacity 0.3s ease, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                    width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                    padding-bottom 0.2s ease-out;
     }
 
     .center-logo {
@@ -620,24 +616,22 @@
         display: none !important; 
     }
 
-    /* 모바일 추천 질문 스타일 (입력창 위, 왼쪽 정렬) */
+    /* 모바일 추천 질문 스타일 */
     .mobile-suggestions-container {
         display: none;
         flex-direction: column;
         gap: 16px;
         margin-top: auto; 
-        padding-bottom: 10px;
-        padding-left: 10px;
+        padding-bottom: 20px;
         width: 100%;
         box-sizing: border-box;
-        align-items: flex-start;
     }
     @media (max-width: 768px) {
         .mobile-suggestions-container.show {
             display: flex;
         }
     }
-    .sugg-header { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 4px; text-align: left; }
+    .sugg-header { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 4px; }
     .sugg-item {
         display: flex; align-items: center; gap: 12px;
         background: transparent; border: none; cursor: pointer;
@@ -765,8 +759,8 @@
     .thought-container {
         margin-bottom: 12px;
         border: 1px solid #E5E7EB;
-        border-radius: 24px; /* 곡률 높임 */
-        background-color: #FFFFFF; /* 배경 흰색 */
+        border-radius: 20px;
+        background-color: #FFFFFF;
         cursor: pointer;
         width: 100%;
         max-width: 100%;
@@ -788,16 +782,17 @@
     }
     .thought-mask {
         padding: 0 12px;
-        max-height: 60px;
+        max-height: 60px; /* 정확히 중앙 라인만 또렷하게 보이도록 높이 지정 */
         overflow-y: hidden;
         position: relative;
+        /* 위, 아래 라인은 비네팅으로 흐릿하게 처리 */
         -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
         mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
         transition: max-height 0.4s ease, padding 0.4s ease;
         font-size: 13px;
         color: #6B7280;
         line-height: 20px;
-        scroll-behavior: smooth; 
+        scroll-behavior: smooth; /* 새로운 줄 추가시 부드럽게 위로 올라감 */
     }
     .thought-mask::-webkit-scrollbar { display: none; }
     .thought-container.expanded .thought-mask {
@@ -809,45 +804,39 @@
         overflow-y: auto;
     }
     .thought-inner {
-        padding-top: 20px; 
-        padding-bottom: 20px; 
+        padding-top: 20px; /* 초기 라인이 중앙에 오도록 여백 */
+        padding-bottom: 20px; /* 마지막 라인이 중앙에 오도록 여백 */
     }
     .thought-inner p { margin: 0 0 4px 0; }
     .thought-inner p:last-child { margin-bottom: 0; }
 
-    /* --- 하단 입력창 및 래퍼 (2단 구조 개편) --- */
+    /* --- 하단 입력창 및 래퍼 --- */
     .bottom-fixed-wrapper {
         position: fixed; bottom: 0; left: 0; width: 100%;
         display: flex; flex-direction: column; align-items: center;
-        padding-bottom: 12px; padding-top: 24px;
-        background: linear-gradient(to top, #ffffff 90%, rgba(255,255,255,0)); 
+        padding-bottom: 20px; padding-top: 10px;
+        background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0)); 
         z-index: 900; pointer-events: none;
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
-        background-color: #FFFFFF; border-radius: 26px; 
-        padding: 16px 20px 14px 20px; 
+        background-color: #F4F4F5; border-radius: 26px; 
+        padding: 12px; 
         box-sizing: border-box;
         display: flex; flex-direction: column; position: relative; 
-        transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         border: 1px solid #E5E7EB; 
     }
-    @media (max-width: 768px) {
-        .chat-input-container {
-            max-width: calc(100% - 24px); 
-            width: 100%;
-            padding: 14px 18px 12px 18px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        }
-    }
+
+    /* 전송 시 글로우 애니메이션 제거 완료 */
 
     .chat-textarea:focus { outline: none; }
 
-    /* 첨부 파일 미리보기 스타일 */
+    /* 첨부 파일 미리보기 스타일 (PC 여백 버그 수정) */
     #attachmentPreviewContainer {
-        display: none; 
+        display: none; /* 내용이 없을 때 gap으로 인한 PC 입력창 늘어남 방지 */
         gap: 8px;
         flex-wrap: wrap;
         margin-bottom: 0;
@@ -965,7 +954,6 @@
         font-size: 15px; color: #333; font-family: inherit; padding: 0;
         margin: 0; line-height: var(--line-height); height: var(--line-height);
         max-height: calc(var(--line-height) * 8); overflow-y: auto; scrollbar-width: none;
-        margin-bottom: 12px; /* 텍스트박스와 하단 버튼 사이 간격 */
     }
     .chat-textarea::-webkit-scrollbar { display: none; }
     .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
@@ -975,25 +963,25 @@
     }
 
     .input-left-tools { 
-        display: flex; align-items: center; gap: 4px; margin-left: -6px;
+        display: flex; align-items: center; gap: 4px;
     }
     .input-left-tools .icon-btn {
         background: none; border: none; padding: 0;
-        width: 34px; height: 34px;
+        width: 32px; height: 32px;
         cursor: pointer; display: flex; align-items: center; justify-content: center;
-        color: #6B7280; transition: background-color 0.2s, color 0.2s; border-radius: 50%;
+        color: #6B7280; transition: color 0.2s; border-radius: 50%;
     }
-    .input-left-tools .icon-btn:hover { background-color: #F3F4F6; color: #374151; }
+    .input-left-tools .icon-btn:hover { background-color: rgba(0,0,0,0.05); color: #374151; }
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
     .send-btn {
-        width: 34px; height: 34px; flex-shrink: 0;
+        width: 32px; height: 32px; flex-shrink: 0;
         background-color: #E5E7EB; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.2s, color 0.2s;
     }
-    .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; font-size: 22px !important; }
+    .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; }
     .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
     .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
     .send-btn.generating-state { background-color: #1F2937 !important; cursor: default; }
@@ -1001,15 +989,7 @@
     .stop-icon-square { width: 12px; height: 12px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
     /* PC/Mobile 공통 안내문구 위치 (입력창 바깥 하단) */
-    .disclaimer-text { 
-        font-size: 11px; color: #9CA3AF; margin-top: 8px; text-align: center; pointer-events: auto; 
-        display: block; position: static;
-    }
-    @media (max-width: 768px) {
-        .disclaimer-text {
-            font-size: 10px;
-        }
-    }
+    .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
 
     .attach-menu {
         display: none; position: absolute; bottom: 60px; left: 0; width: 130px;
@@ -1697,7 +1677,7 @@
 
         // 모바일 랜덤 추천 질문 리스트
         const SUGGESTIONS = [
-            { icon: 'ti-mood-happy', text: '기분 좋아지는 하루를 위한 꿀팁' },
+            { icon: 'ti-bird', text: '기분 좋아지는 하루를 위한 꿀팁' },
             { icon: 'ti-gift', text: '캐주얼한 모자 선물 추천해줘' },
             { icon: 'ti-map-pin', text: '삼청동 근처 카페 찾아줘' },
             { icon: 'ti-calendar-event', text: '이번 주 계획 나와 함께 세워줄래?' },
@@ -2216,7 +2196,7 @@
                     renderSidebar();
                     
                     chatContainer.style.opacity = '1';
-                }, 250);
+                }, 200);
             }
         }
 
@@ -2472,7 +2452,7 @@
                 if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
                 
                 chatContainer.style.opacity = '1';
-            }, 250);
+            }, 150);
         }
 
         newChatBtn.addEventListener('click', startNewChat);
@@ -2713,6 +2693,15 @@
 
             hideMobileSuggestions();
 
+            // 재생성 시 여백 고정
+            if (!isRegen) {
+                const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
+                const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
+                
+                chatContainer.style.transition = 'none'; 
+                chatContainer.style.paddingBottom = initialPadding + 'px';
+            }
+
             if (isFirstMessage) {
                 document.body.style.overflowY = 'auto';
                 isFirstMessage = false;
@@ -2750,7 +2739,7 @@
 
             isGenerating = true;
             
-            // 전송 시 1초 동안 스피너 아이콘 노출, 이후 정지 버튼으로 전환
+            // 전송버튼: 1초 동안 로딩 스피너 -> 그 후 정지버튼
             sendBtn.innerHTML = '<div class="spinner-small" style="width: 16px; height: 16px; color: #fff;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
@@ -2858,29 +2847,28 @@
                         return "";
                     });
 
-                    // 1. <think> 태그 파싱
-                    if (textWithoutCitations.includes('<think>')) {
-                        let s = textWithoutCitations.indexOf('<think>');
-                        let e = textWithoutCitations.indexOf('</think>');
-                        if (e !== -1) {
-                            thoughts = textWithoutCitations.substring(s + 7, e).trim();
-                            cleanText = textWithoutCitations.substring(e + 8).trim();
-                        } else {
-                            thoughts = textWithoutCitations.substring(s + 7).trim();
-                            cleanText = textWithoutCitations.substring(0, s).trim();
-                        }
-                    } 
-                    // 2. [Thought] 문자열 기준 파싱 (답변 시작 ~ [Thought] 전까지가 사고과정)
-                    else if (textWithoutCitations.match(/\[Thought\]/i)) {
-                        let match = textWithoutCitations.match(/\[Thought\]/i);
-                        thoughts = textWithoutCitations.substring(0, match.index).trim();
-                        cleanText = textWithoutCitations.substring(match.index + match[0].length).trim();
-                    } 
-                    // 3. Fallback: 태그가 발견되지 않으면 일반 텍스트로 취급 (정상적인 답변이 사고과정 컨테이너로 들어가는 문제 방지)
-                    else {
-                        thoughts = "";
-                        cleanText = textWithoutCitations.trim();
+                    let thoughtBoundary = textWithoutCitations.match(/(?:\n)?\[Thought\]/i);
+                    let standardClose = textWithoutCitations.match(/\[\/THOUGHT\]|<\/think>/i);
+                    let standardOpen = textWithoutCitations.match(/\[THOUGHT\]|<think>/i);
+
+                    if (thoughtBoundary) {
+                        thoughts = textWithoutCitations.substring(0, thoughtBoundary.index).trim();
+                        cleanText = textWithoutCitations.substring(thoughtBoundary.index + thoughtBoundary[0].length).trim();
+                    } else if (standardClose) {
+                        let openLen = standardOpen ? standardOpen.index + standardOpen[0].length : 0;
+                        if (standardOpen && standardOpen.index > standardClose.index) openLen = 0;
+                        thoughts = textWithoutCitations.substring(standardOpen ? openLen : 0, standardClose.index).trim();
+                        cleanText = textWithoutCitations.substring(standardClose.index + standardClose[0].length).trim();
+                    } else if (standardOpen) {
+                        thoughts = textWithoutCitations.substring(standardOpen.index + standardOpen[0].length).trim();
+                        cleanText = textWithoutCitations.substring(0, standardOpen.index).trim();
+                    } else {
+                        thoughts = textWithoutCitations;
+                        cleanText = "";
                     }
+
+                    // [Thought] 태그 화면 노출 방지
+                    thoughts = thoughts.replace(/^\[THOUGHT\]|^<think>|\[\/THOUGHT\]|<\/think>|\[Thought\]/gi, '').trim();
 
                     return { cleanText, thoughts, citations };
                 };
@@ -2910,6 +2898,7 @@
 
                                     const parsed = parseStream(displayedText);
                                     
+                                    const savedScrollY = window.scrollY;
                                     renderer.codeCount = 0; 
                                     
                                     if (parsed.thoughts.trim().length > 0) {
@@ -2947,11 +2936,13 @@
                                         console.error("Markdown parse error during stream:", err);
                                     }
                                     
-                                    // 자연스러운 스크롤 (동적 padding 조절 제거)
-                                    const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
-                                    if (isAtBottom) {
-                                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
+                                    if (!isRegen) {
+                                        const currentBotHeight = botContent.offsetHeight;
+                                        const initialPadding = window.innerHeight - (window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET);
+                                        chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
                                     }
+                                    
+                                    window.scrollTo(0, savedScrollY);
                                     
                                     if (window.navigator && window.navigator.vibrate) {
                                         window.navigator.vibrate(1);
@@ -3014,6 +3005,12 @@
                     analyzingText.style.color = "#9CA3AF";
                 }
 
+                if (!isRegen) {
+                    const finalBotHeight = botContent.offsetHeight;
+                    const initialPadding = window.innerHeight - (window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET);
+                    chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
+                }
+
                 const msgIndex = conversationHistory.length + 1; 
                 messageMetadata[msgIndex] = currentMetadata;
 
@@ -3047,6 +3044,8 @@
                 sendBtn.innerHTML = '<span class="material-symbols-rounded arrow-icon" style="font-variation-settings: \'wght\' 300; font-size: 20px;">arrow_upward</span>';
                 sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
+                
+                chatContainer.style.transition = 'padding-bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
                 
                 adjustHeight(); 
                 checkScrollPosition();
@@ -3276,4 +3275,4 @@
         });
     </script>
 </body>
-</html>
+           </html>
