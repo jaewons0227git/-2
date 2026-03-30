@@ -572,25 +572,26 @@
 
     /* --- 채팅 영역 --- */
     .chat-container {
-        width: 100%; 
-        max-width: var(--content-max-width); 
-        margin: 0 auto; 
+        width: 100%;
+        max-width: var(--content-max-width);
+        margin: 0 auto;
         padding-top: calc(var(--header-height) + 20px);
         padding-left: 20px; padding-right: 20px;
         padding-bottom: 160px;
         box-sizing: border-box;
-        display: flex; flex-direction: column; gap: 24px; 
+        display: flex; flex-direction: column; gap: 24px;
         overflow-anchor: none;
-        
+
         /* 채팅 부드러운 전환을 위한 opacity 속성 추가 */
-        transition: opacity 0.3s ease, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+        transition: opacity 0.3s ease, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     padding-bottom 0.2s ease-out;
+        position: relative;
     }
 
     .center-logo {
         position: fixed;
-        top: calc(50% - 40px); 
+        top: calc(50% - 40px);
         left: 50%;
         transform: translate(-50%, -50%);
         opacity: 0.8;
@@ -611,9 +612,12 @@
         body.pc-sidebar-open .center-logo, .center-logo, body:not(.pc-sidebar-open) .center-logo {
             left: 50%;
         }
+        .center-logo.mobile-hidden {
+            display: none !important;
+        }
     }
     .center-logo.hidden {
-        display: none !important; 
+        display: none !important;
     }
 
     /* 모바일 추천 질문 스타일 */
@@ -621,14 +625,23 @@
         display: none;
         flex-direction: column;
         gap: 16px;
-        margin-top: auto; 
+        margin-top: auto;
         padding-bottom: 20px;
         width: 100%;
         box-sizing: border-box;
+        position: fixed;
+        bottom: 140px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
     }
     @media (max-width: 768px) {
         .mobile-suggestions-container.show {
             display: flex;
+        }
+        .mobile-suggestions-container {
+            padding-left: 20px;
+            padding-right: 20px;
         }
     }
     .sugg-header { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 4px; }
@@ -815,19 +828,25 @@
         position: fixed; bottom: 0; left: 0; width: 100%;
         display: flex; flex-direction: column; align-items: center;
         padding-bottom: 20px; padding-top: 10px;
-        background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0)); 
+        background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0));
         z-index: 900; pointer-events: none;
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
-        background-color: #F4F4F5; border-radius: 26px; 
-        padding: 12px; 
+        background-color: #fff; border-radius: 26px;
+        padding: 16px;
         box-sizing: border-box;
-        display: flex; flex-direction: column; position: relative; 
-        transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        border: 1px solid #E5E7EB; 
+        display: flex; flex-direction: column; position: relative;
+        transition: all 0.3s ease; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        border: 1px solid #E5E7EB;
+    }
+
+    @media (max-width: 768px) {
+        .chat-input-container {
+            padding-bottom: 12px;
+        }
     }
 
     /* 전송 시 글로우 애니메이션 제거 완료 */
@@ -951,12 +970,12 @@
 
     .chat-textarea {
         flex: none; width: 100%; border: none; background: transparent; resize: none; outline: none;
-        font-size: 15px; color: #333; font-family: inherit; padding: 0;
+        font-size: 16px; color: #333; font-family: inherit; padding: 0;
         margin: 0; line-height: var(--line-height); height: var(--line-height);
         max-height: calc(var(--line-height) * 8); overflow-y: auto; scrollbar-width: none;
     }
     .chat-textarea::-webkit-scrollbar { display: none; }
-    .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
+    .chat-textarea::placeholder { color: #9CA3AF; font-size: 16px; }
 
     .input-bottom-row {
         display: flex; justify-content: space-between; align-items: center; width: 100%; margin: 0;
@@ -967,22 +986,22 @@
     }
     .input-left-tools .icon-btn {
         background: none; border: none; padding: 0;
-        width: 32px; height: 32px;
+        width: 36px; height: 36px;
         cursor: pointer; display: flex; align-items: center; justify-content: center;
-        color: #6B7280; transition: color 0.2s; border-radius: 50%;
+        color: #000; transition: color 0.2s; border-radius: 50%;
     }
-    .input-left-tools .icon-btn:hover { background-color: rgba(0,0,0,0.05); color: #374151; }
+    .input-left-tools .icon-btn:hover { background-color: #F5F5F5; color: #000; }
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
     .send-btn {
-        width: 32px; height: 32px; flex-shrink: 0;
-        background-color: #E5E7EB; border: none; border-radius: 50%;
+        width: 40px; height: 40px; flex-shrink: 0;
+        background-color: #F5F5F5; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.2s, color 0.2s;
     }
     .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; }
-    .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
+    .send-btn:not(:disabled) { background-color: #000; cursor: pointer; }
     .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
     .send-btn.generating-state { background-color: #1F2937 !important; cursor: default; }
     
@@ -1706,11 +1725,13 @@
                 container.className = 'mobile-suggestions-container show';
             }
             container.innerHTML = html;
+            centerLogo.classList.add('mobile-hidden');
         }
 
         function hideMobileSuggestions() {
             const container = document.getElementById('mobileSuggestionsContainer');
             if (container) container.classList.remove('show');
+            centerLogo.classList.remove('mobile-hidden');
         }
 
         window.sendSuggestion = function(text) {
