@@ -25,12 +25,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 
 <style>
-    /* 모바일 탭 터치 시 파란색 하이라이트 박스 제거 */
     * {
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* 초기 로딩 화면 스타일 */
     #initialLoader {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: #fff; z-index: 9999;
@@ -51,7 +49,6 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* 사이드바 로딩 스피너 */
     .sidebar-loader-container {
         display: flex; justify-content: center; align-items: center;
         flex: 1; 
@@ -59,7 +56,6 @@
     }
 
     :root {
-        /* 크기 및 반경 변수 */
         --radius-input: 24px;      
         --radius-send-btn: 10px;   
         --radius-window: 14px;     
@@ -78,7 +74,6 @@
         --content-max-width: 700px; 
     }
 
-    /* 커스텀 코드 블록 스타일 */
     .code-block-container {
         margin: 16px 0;
         border: 1px solid #E5E7EB;
@@ -142,7 +137,6 @@
         font-size: 16px;
     }
 
-    /* 실행/코드 토글 스위치 스타일 */
     .code-toggle-group {
         display: flex;
         background-color: #E5E7EB;
@@ -190,13 +184,11 @@
         text-shadow: none !important;
     }
 
-    /* 실행 불가 버튼 스타일 */
     .toggle-btn.disabled-run {
         opacity: 0.4;
         cursor: not-allowed;
     }
 
-    /* 에디터 스타일 */
     .code-editor {
         display: none;
         width: 100%;
@@ -212,7 +204,6 @@
         color: #1F2937;
     }
 
-    /* 프리뷰 스타일 */
     .code-preview {
         display: none;
         width: 100%;
@@ -286,7 +277,6 @@
     .mobile-drag-handle-container { display: none; }
 
     @media (max-width: 768px) {
-        /* [수정] 모바일 사이드바 드래그(스와이프)를 위해 !important 제거 */
         .sidebar {
             width: 100% !important;
             background-color: #fff !important;
@@ -339,7 +329,6 @@
 
     .sidebar-close-btn { cursor: pointer; color: #000; padding: 4px; border-radius: 4px; transition: opacity 0.3s, visibility 0.3s; }
     .sidebar-close-btn:hover { background-color: #E5E7EB; }
-    /* [수정] PC 사이드바 닫기 아이콘 크기 키움 */
     .sidebar-close-btn .ti { font-size: 24px; vertical-align: middle; }
 
     .sidebar-content { flex: 1; padding: 10px; display: flex; flex-direction: column; overflow: hidden; }
@@ -403,7 +392,6 @@
         transition: opacity 0.3s, visibility 0.3s;
     }
 
-    /* 채팅 목록 리스트 스타일 */
     #savedChatList {
         display: flex; flex-direction: column; gap: 2px;
         overflow-y: auto; flex: 1;
@@ -453,7 +441,6 @@
         display: flex; align-items: center; justify-content: center;
     }
 
-    /* 채팅 목록 옵션 메뉴 */
     .history-menu-dropdown {
         position: absolute; right: 10px; top: 30px;
         width: 110px;
@@ -550,6 +537,7 @@
         .mobile-only { display: none !important; }
     }
 
+    /* --- 모바일 뷰 전용 스타일 --- */
     @media (max-width: 768px) {
         .pc-only { display: none !important; }
         .mobile-only { display: flex; align-items: center; }
@@ -575,33 +563,15 @@
 
         .user-bubble { font-size: 12px; padding: 5px 10px; }
         .bot-text { font-size: 12px; }
-
-        .bottom-fixed-wrapper { 
-            padding-bottom: 20px !important; 
-            padding-top: 10px !important;
-            background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0)) !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         
         .chat-container {
             padding-left: 12px !important;
             padding-right: 12px !important;
         }
-
-        .chat-input-container {
-            width: 95% !important; 
-            max-width: var(--content-max-width) !important;
-            margin: 0 auto !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .bottom-fixed-wrapper::after { display: none; }
-        .disclaimer-text { 
-            position: static !important;
-            display: block !important; 
-            font-size: 10px; 
-            margin-top: 8px;
+        
+        /* 모바일 중앙 로고 숨김 (추천 질문 영역 확보) */
+        .center-logo {
+            display: none !important;
         }
     }
 
@@ -612,14 +582,14 @@
         margin: 0 auto; 
         padding-top: calc(var(--header-height) + 20px);
         padding-left: 20px; padding-right: 20px;
-        padding-bottom: 160px;
+        padding-bottom: 160px; /* 고정된 여백 (재생성시/타이핑시 점프 방지) */
         box-sizing: border-box;
         display: flex; flex-direction: column; gap: 24px; 
         overflow-anchor: none;
         
-        transition: margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                    width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-                    padding-bottom 0.2s ease-out;
+        /* 채팅 부드러운 전환을 위한 opacity 속성 추가 */
+        transition: opacity 0.25s ease-in-out, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                    width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .center-logo {
@@ -649,6 +619,31 @@
     .center-logo.hidden {
         display: none !important; 
     }
+
+    /* 모바일 추천 질문 스타일 (입력창 위, 왼쪽 정렬) */
+    .mobile-suggestions-container {
+        display: none;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: auto; 
+        padding-bottom: 10px;
+        padding-left: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: flex-start;
+    }
+    @media (max-width: 768px) {
+        .mobile-suggestions-container.show {
+            display: flex;
+        }
+    }
+    .sugg-header { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 4px; text-align: left; }
+    .sugg-item {
+        display: flex; align-items: center; gap: 12px;
+        background: transparent; border: none; cursor: pointer;
+        font-size: 16px; color: #4B5563; text-align: left; padding: 4px 0; font-family: inherit;
+    }
+    .sugg-item i { font-size: 24px; color: #4B5563; }
 
     .message-row { display: flex; width: 100%; flex-direction: column; position: relative; }
     .message-row.user { align-items: flex-end; }
@@ -766,70 +761,109 @@
     }
     .analyzing-text:hover { background: none; -webkit-text-fill-color: #000000; color: #000000; animation: none; }
 
-    /* --- 하단 입력창 및 래퍼 --- */
+    /* --- 생각 과정 (Thought) 인라인 애니메이션 및 비네팅 --- */
+    .thought-container {
+        margin-bottom: 12px;
+        border: 1px solid #E5E7EB;
+        border-radius: 24px; /* 곡률 높임 */
+        background-color: #FFFFFF; /* 배경 흰색 */
+        cursor: pointer;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .thought-header {
+        font-size: 12px;
+        color: #6B7280;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.3s;
+    }
+    .thought-container.expanded .thought-header {
+        border-bottom-color: #E5E7EB;
+    }
+    .thought-mask {
+        padding: 0 12px;
+        max-height: 60px;
+        overflow-y: hidden;
+        position: relative;
+        -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+        mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        font-size: 13px;
+        color: #6B7280;
+        line-height: 20px;
+        scroll-behavior: smooth; 
+    }
+    .thought-mask::-webkit-scrollbar { display: none; }
+    .thought-container.expanded .thought-mask {
+        max-height: 400px;
+        -webkit-mask-image: none;
+        mask-image: none;
+        padding-bottom: 12px;
+        padding-top: 8px;
+        overflow-y: auto;
+    }
+    .thought-inner {
+        padding-top: 20px; 
+        padding-bottom: 20px; 
+    }
+    .thought-inner p { margin: 0 0 4px 0; }
+    .thought-inner p:last-child { margin-bottom: 0; }
+
+    /* --- 하단 입력창 및 래퍼 (2단 구조 개편) --- */
     .bottom-fixed-wrapper {
         position: fixed; bottom: 0; left: 0; width: 100%;
         display: flex; flex-direction: column; align-items: center;
-        padding-bottom: 20px; padding-top: 10px;
-        background: linear-gradient(to top, #ffffff 80%, rgba(255,255,255,0)); 
+        padding-bottom: 12px; padding-top: 24px;
+        background: linear-gradient(to top, #ffffff 90%, rgba(255,255,255,0)); 
         z-index: 900; pointer-events: none;
         transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .chat-input-container {
         pointer-events: auto; width: var(--content-max-width); max-width: 90%;
-        background-color: #F4F4F5; border-radius: 26px; 
-        padding: 12px; 
+        background-color: #FFFFFF; border-radius: 26px; 
+        padding: 16px 20px 14px 20px; 
         box-sizing: border-box;
         display: flex; flex-direction: column; position: relative; 
-        transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         border: 1px solid #E5E7EB; 
-        gap: 8px; 
+    }
+    @media (max-width: 768px) {
+        .chat-input-container {
+            max-width: calc(100% - 24px); 
+            width: 100%;
+            padding: 14px 18px 12px 18px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
     }
 
-    @keyframes rotate-glow {
-        from { transform: translate(-50%, -50%) rotate(0deg); }
-        to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    .chat-input-container.generating {
-        position: relative;
-        overflow: hidden; 
-        border: 1px solid transparent;
-        background-color: transparent; 
-    }
-    .chat-input-container.generating::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 200%; 
-        aspect-ratio: 1;
-        background: conic-gradient(
-            from 0deg,
-            transparent 0%,
-            #FFB6C1 5%,  
-            #87CEEB 15%, 
-            transparent 25%,
-            transparent 50%,
-            #FFB6C1 55%,
-            #87CEEB 65%,
-            transparent 75%
-        );
-        animation: rotate-glow 3s linear infinite;
-        z-index: -2;
-        filter: blur(4px); 
-    }
-    .chat-input-container.generating::after {
-        content: "";
-        position: absolute;
-        inset: 2px; 
-        background: #F4F4F5;
-        border-radius: 24px;
-        z-index: -1;
-    }
     .chat-textarea:focus { outline: none; }
 
-    /* [NEW] 첨부 파일 미리보기 스타일 */
+    /* 첨부 파일 미리보기 스타일 */
+    #attachmentPreviewContainer {
+        display: none; 
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+        transition: max-height 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+    }
+    #attachmentPreviewContainer.has-items {
+        display: flex;
+        max-height: 100px;
+        opacity: 1;
+        margin-bottom: 8px;
+    }
+
     .attach-preview-item {
         position: relative;
         width: 60px; height: 60px;
@@ -852,7 +886,6 @@
         font-size: 12px; cursor: pointer; border: 1px solid #fff;
     }
 
-    /* [수정] 모든 모달 공통 오버레이 스타일 (부드러운 전환 효과 추가) */
     .modal-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: rgba(0,0,0,0.4); z-index: 3000;
@@ -880,7 +913,6 @@
     .delete-modal-actions { display: flex; gap: 8px; justify-content: center; }
     .delete-btn-confirm { background-color: #EF4444 !important; color: #fff !important; }
 
-    /* 모바일 맞춤 링크 모달 */
     .link-modal-window {
         background: #fff; width: 340px; max-width: 90%; border-radius: 24px; padding: 24px; box-sizing: border-box;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;
@@ -933,6 +965,7 @@
         font-size: 15px; color: #333; font-family: inherit; padding: 0;
         margin: 0; line-height: var(--line-height); height: var(--line-height);
         max-height: calc(var(--line-height) * 8); overflow-y: auto; scrollbar-width: none;
+        margin-bottom: 12px; /* 텍스트박스와 하단 버튼 사이 간격 */
     }
     .chat-textarea::-webkit-scrollbar { display: none; }
     .chat-textarea::placeholder { color: #9CA3AF; font-size: 15px; }
@@ -942,32 +975,41 @@
     }
 
     .input-left-tools { 
-        display: flex; align-items: center; gap: 4px;
+        display: flex; align-items: center; gap: 4px; margin-left: -6px;
     }
     .input-left-tools .icon-btn {
         background: none; border: none; padding: 0;
-        width: 32px; height: 32px;
+        width: 34px; height: 34px;
         cursor: pointer; display: flex; align-items: center; justify-content: center;
-        color: #6B7280; transition: color 0.2s; border-radius: 50%;
+        color: #6B7280; transition: background-color 0.2s, color 0.2s; border-radius: 50%;
     }
-    .input-left-tools .icon-btn:hover { background-color: rgba(0,0,0,0.05); color: #374151; }
+    .input-left-tools .icon-btn:hover { background-color: #F3F4F6; color: #374151; }
     .input-left-tools .icon-btn .ti { font-size: 24px; }
     #searchBtn.active .ti { color: #0EA5E9; }
 
     .send-btn {
-        width: 32px; height: 32px; flex-shrink: 0;
+        width: 34px; height: 34px; flex-shrink: 0;
         background-color: #E5E7EB; border: none; border-radius: 50%;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.2s, color 0.2s;
     }
-    .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; }
+    .send-btn .arrow-icon { color: #9CA3AF; transition: color 0.2s; font-size: 22px !important; }
     .send-btn:not(:disabled) { background-color: #1F2937; cursor: pointer; }
     .send-btn:not(:disabled) .arrow-icon { color: #ffffff; }
     .send-btn.generating-state { background-color: #1F2937 !important; cursor: default; }
     
     .stop-icon-square { width: 12px; height: 12px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
-    .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
+    /* PC/Mobile 공통 안내문구 위치 (입력창 바깥 하단) */
+    .disclaimer-text { 
+        font-size: 11px; color: #9CA3AF; margin-top: 8px; text-align: center; pointer-events: auto; 
+        display: block; position: static;
+    }
+    @media (max-width: 768px) {
+        .disclaimer-text {
+            font-size: 10px;
+        }
+    }
 
     .attach-menu {
         display: none; position: absolute; bottom: 60px; left: 0; width: 130px;
@@ -1073,10 +1115,6 @@
         overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     }
 
-
-    /* ==========================================================================
-       [PC 레이아웃 (769px 이상)]
-       ========================================================================== */
     @media (min-width: 769px) {
         .sidebar { box-shadow: none; border-right: 1px solid #E5E7EB; }
         .mobile-menu-icon { display: none !important; }
@@ -1476,7 +1514,7 @@
                 <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>파일</span></div>
             </div>
 
-            <div id="attachmentPreviewContainer" style="display: none; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; max-height: 100px; overflow-y: auto; scrollbar-width: none;"></div>
+            <div id="attachmentPreviewContainer" style="display: none;"></div>
 
             <textarea id="chatInput" class="chat-textarea" placeholder="무엇이든 물어보세요" rows="1"></textarea>
             
@@ -1490,8 +1528,9 @@
                     <span class="material-symbols-rounded arrow-icon" style="font-variation-settings: 'wght' 300; font-size: 20px;">arrow_upward</span>
                 </button>
             </div>
+            
+            <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
         </div>
-        <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
     </div>
 
     <div id="pcSearchModalOverlay" class="modal-overlay">
@@ -1585,7 +1624,6 @@
             window.open(targetLinkUrl, '_blank');
         });
 
-        // 모달 관련 요소
         const renameModalOverlay = document.getElementById('renameModalOverlay');
         const renameInput = document.getElementById('renameInput');
         const renameCancelBtn = document.getElementById('renameCancelBtn');
@@ -1595,7 +1633,6 @@
         const deleteCancelBtn = document.getElementById('deleteCancelBtn');
         const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
 
-        // 모달 닫기 공통 (오버레이 클릭 시)
         [document.getElementById('pcSearchModalOverlay'), deleteModalOverlay, renameModalOverlay, document.getElementById('settingsModalOverlay'), linkModalOverlay].forEach(overlay => {
             if(overlay) {
                 overlay.addEventListener('click', () => {
@@ -1604,9 +1641,8 @@
             }
         });
 
-        // 스크롤 시 여백 오차 조정 (PC와 모바일을 각각 세밀하게 조정)
         const PC_SCROLL_PADDING_OFFSET = 150; 
-        const MOBILE_SCROLL_PADDING_OFFSET = 120; // 모바일 전용 여백 조정값
+        const MOBILE_SCROLL_PADDING_OFFSET = 120; 
 
         const chatContainer = document.getElementById('chatContainer');
         const centerLogo = document.getElementById('centerLogo');
@@ -1619,7 +1655,6 @@
         const newChatBtn = document.getElementById('newChatBtn');
         const savedChatList = document.getElementById('savedChatList');
 
-        // 프로필 및 설정 관련
         const sidebarFooter = document.getElementById('sidebarFooter');
         const profileMenu = document.getElementById('profileMenu');
         const settingsBtn = document.getElementById('settingsBtn');
@@ -1627,7 +1662,6 @@
         const settingsCloseBtn = document.getElementById('settingsCloseBtn');
         const themeOptions = document.querySelectorAll('.theme-option');
 
-        // 모바일 전용 프로필 액션 버튼
         const mobileSettingsIcon = document.getElementById('mobileSettingsIcon');
         const mobileThemeIcon = document.getElementById('mobileThemeIcon');
 
@@ -1637,19 +1671,15 @@
         const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
         const pcSidebarOpenBtn = document.getElementById('pcSidebarOpenBtn');
         
-        // 모바일 전용 버튼 연동
         const mobileMenuBtnRight = document.getElementById('mobileMenuBtnRight');
         const mobileNewChatBtn = document.getElementById('mobileNewChatBtn');
 
-        // 모바일 사이드바 드래그 핸들 연동
         const sidebarHandle = document.getElementById('mobileDragHandle');
 
-        // 검색 관련
         const sidebarSearchBtn = document.getElementById('sidebarSearchBtn');
         const sidebarSearchContainer = document.getElementById('sidebarSearchContainer');
         const sidebarSearchInput = document.getElementById('sidebarSearchInput');
 
-        // PC 미니 사이드바 전용 검색 모달 관련
         const pcSearchModalOverlay = document.getElementById('pcSearchModalOverlay');
         const pcSearchInputModal = document.getElementById('pcSearchInputModal');
         const pcSearchListContent = document.getElementById('pcSearchListContent');
@@ -1657,17 +1687,57 @@
         const pcSearchGoBtn = document.getElementById('pcSearchGoBtn');
         let previewChatId = null;
 
-        // 상세 정보 패널 관련
         const detailsPanel = document.getElementById('detailsPanel');
         const detailsCloseBtn = document.getElementById('detailsCloseBtn');
         const detailsTabs = document.getElementById('detailsTabs');
         const detailsContent = document.getElementById('detailsContent');
 
-        // --- 프로필 메뉴 및 테마/설정 로직 ---
         const themeItem = document.querySelector('.theme-item');
         const themeSubmenu = document.querySelector('.theme-submenu');
 
-        // PC 프로필 토글 (모바일에서는 작동안함)
+        // 모바일 랜덤 추천 질문 리스트
+        const SUGGESTIONS = [
+            { icon: 'ti-mood-happy', text: '기분 좋아지는 하루를 위한 꿀팁' },
+            { icon: 'ti-gift', text: '캐주얼한 모자 선물 추천해줘' },
+            { icon: 'ti-map-pin', text: '삼청동 근처 카페 찾아줘' },
+            { icon: 'ti-calendar-event', text: '이번 주 계획 나와 함께 세워줄래?' },
+            { icon: 'ti-messages', text: '나랑 끝말잇기 하자' },
+            { icon: 'ti-plane-departure', text: '주말 1박 2일 여행지 추천해줘' },
+            { icon: 'ti-bulb', text: '오늘 저녁 메뉴 랜덤으로 골라줘' },
+            { icon: 'ti-music', text: '비 오는 날 듣기 좋은 노래 추천' }
+        ];
+
+        function showMobileSuggestions() {
+            if (window.innerWidth > 768) return;
+            const shuffled = [...SUGGESTIONS].sort(() => 0.5 - Math.random()).slice(0, 5);
+            let html = `<div class="sugg-header">무엇을 도와드릴까요?</div>`;
+            shuffled.forEach(s => {
+                html += `<button class="sugg-item" onclick="sendSuggestion('${s.text}')">
+                            <i class="ti ${s.icon}"></i> <span>${s.text}</span>
+                         </button>`;
+            });
+            let container = document.getElementById('mobileSuggestionsContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'mobileSuggestionsContainer';
+                container.className = 'mobile-suggestions-container show';
+                chatContainer.appendChild(container);
+            } else {
+                container.className = 'mobile-suggestions-container show';
+            }
+            container.innerHTML = html;
+        }
+
+        function hideMobileSuggestions() {
+            const container = document.getElementById('mobileSuggestionsContainer');
+            if (container) container.classList.remove('show');
+        }
+
+        window.sendSuggestion = function(text) {
+            chatInput.value = text;
+            sendMessage();
+        };
+
         sidebarFooter.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) return; 
             e.stopPropagation();
@@ -1675,7 +1745,6 @@
             themeSubmenu.classList.remove('show');
         });
 
-        // 모바일 프로필 전용 설정 / 테마 아이콘 클릭
         if (mobileSettingsIcon) mobileSettingsIcon.addEventListener('click', () => {
             settingsModalOverlay.classList.add('open');
             if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
@@ -1711,7 +1780,6 @@
             settingsModalOverlay.classList.remove('open');
         });
 
-        // 테마 설정 함수
         window.setTheme = function(theme) {
             localStorage.setItem('quorvTheme', theme);
             updateThemeUI(theme);
@@ -1744,7 +1812,6 @@
             if (!pyodide) pyodide = await loadPyodide();
         }
 
-        // 초기 로더 처리
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const loader = document.getElementById('initialLoader');
@@ -1757,7 +1824,6 @@
                 }
             }, 1000);
             
-            // 파일 첨부 메뉴 연결
             document.querySelectorAll('.attach-menu .menu-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.getElementById('hiddenFileInput').click();
@@ -1767,7 +1833,6 @@
             });
         });
 
-        // --- [NEW] 첨부 파일 로직 ---
         let pendingAttachments = []; 
 
         document.getElementById('hiddenFileInput').addEventListener('change', async (e) => {
@@ -1807,14 +1872,15 @@
 
         function renderAttachmentPreviews() {
             const container = document.getElementById('attachmentPreviewContainer');
+            container.innerHTML = '';
             if (pendingAttachments.length === 0) {
+                container.classList.remove('has-items');
                 container.style.display = 'none';
-                container.innerHTML = '';
                 adjustHeight();
                 return;
             }
             container.style.display = 'flex';
-            container.innerHTML = '';
+            container.classList.add('has-items');
             pendingAttachments.forEach((att, index) => {
                 const div = document.createElement('div');
                 div.className = 'attach-preview-item';
@@ -1836,7 +1902,6 @@
 
         let messageMetadata = {}; 
 
-        // --- Marked.js 커스텀 렌더러 ---
         const renderer = new marked.Renderer();
         renderer.codeCount = 0;
         renderer.codePrefix = 'static';
@@ -1909,7 +1974,6 @@
         
         marked.setOptions({ renderer: renderer, breaks: true, sanitize: false });
 
-        // --- 코드 블록 기능 함수들 ---
         window.copyCode = function(id) {
             const editor = document.getElementById(`editor-${id}`);
             if (!editor) return;
@@ -2095,39 +2159,64 @@
         function loadChatFromStorage(id) {
             const chats = getSavedChats();
             if (chats[id]) {
-                currentChatId = id;
-                conversationHistory = chats[id].history || [];
-                messageMetadata = chats[id].metadata || {};
+                chatContainer.style.opacity = '0';
                 
-                chatContainer.innerHTML = '';
-                centerLogo.classList.add('hidden');
-                
-                renderer.codeCount = 0;
-                renderer.codePrefix = 'history-' + id;
+                setTimeout(() => {
+                    currentChatId = id;
+                    conversationHistory = chats[id].history || [];
+                    messageMetadata = chats[id].metadata || {};
+                    
+                    chatContainer.innerHTML = '';
+                    centerLogo.classList.add('hidden');
+                    hideMobileSuggestions();
+                    
+                    renderer.codeCount = 0;
+                    renderer.codePrefix = 'history-' + id;
 
-                conversationHistory.forEach((msg, index) => {
-                    const row = addMessage(msg.content, msg.role, false, msg.attachments);
-                    if (msg.role === 'assistant') {
-                         if (messageMetadata[index]) {
-                             addBotButtons(row, msg.content, messageMetadata[index]);
-                         } else {
-                             addBotButtons(row, msg.content, null);
-                         }
-                    }
-                });
-                
-                Prism.highlightAllUnder(chatContainer);
-                
-                isFirstMessage = false;
-                document.body.style.overflowY = 'auto';
-                
-                const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
-                history.pushState({ chatId: id }, '', newUrl);
-                
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
-                scrollToBottomBtn.classList.remove('show');
-                
-                renderSidebar();
+                    conversationHistory.forEach((msg, index) => {
+                        const row = addMessage(msg.content, msg.role, false, msg.attachments);
+                        
+                        if (msg.role === 'assistant') {
+                            const msgMetadata = messageMetadata[index + 1] || messageMetadata[index]; 
+                            
+                            if (msgMetadata && msgMetadata.thought && msgMetadata.thought.trim().length > 0) {
+                                const thoughtContainer = document.createElement('div');
+                                thoughtContainer.className = 'thought-container';
+                                thoughtContainer.innerHTML = `
+                                    <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
+                                    <div class="thought-mask">
+                                        <div class="thought-inner">${marked.parse(msgMetadata.thought)}</div>
+                                    </div>
+                                `;
+                                thoughtContainer.addEventListener('click', () => {
+                                    thoughtContainer.classList.toggle('expanded');
+                                });
+                                row.insertBefore(thoughtContainer, row.querySelector('.bot-text'));
+                            }
+
+                            if (msgMetadata) {
+                                addBotButtons(row, msg.content, msgMetadata);
+                            } else {
+                                addBotButtons(row, msg.content, null);
+                            }
+                        }
+                    });
+                    
+                    Prism.highlightAllUnder(chatContainer);
+                    
+                    isFirstMessage = false;
+                    document.body.style.overflowY = 'auto';
+                    
+                    const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
+                    history.pushState({ chatId: id }, '', newUrl);
+                    
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
+                    scrollToBottomBtn.classList.remove('show');
+                    
+                    renderSidebar();
+                    
+                    chatContainer.style.opacity = '1';
+                }, 250);
             }
         }
 
@@ -2187,7 +2276,6 @@
             input.addEventListener('blur', finishRename);
         }
 
-        // --- PC 전용 검색 모달 로직 ---
         function openPcSearchModal() {
             pcSearchModalOverlay.classList.add('open');
             renderPcSearchList('');
@@ -2254,7 +2342,6 @@
             }
         });
 
-        // --- 사이드바 렌더링 및 검색 ---
         let sidebarLoading = false;
         function renderSidebar(filterText = '', skipDelay = false) {
             const chats = getSavedChats();
@@ -2296,7 +2383,6 @@
                 itemDiv.addEventListener('click', (e) => {
                     if (e.target.closest('.chat-item-options') || e.target.closest('.history-menu-dropdown') || e.target.closest('.chat-title-input')) return;
                     loadChatFromStorage(chat.id);
-                    // 모바일 자동 닫기 연동
                     if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
                 });
 
@@ -2330,7 +2416,6 @@
             });
         }
         
-        // 검색 버튼 토글
         sidebarSearchBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (window.innerWidth > 768) {
@@ -2363,24 +2448,31 @@
 
         function startNewChat() {
             if (isGenerating && abortController) abortController.abort();
-            currentChatId = null;
-            conversationHistory = [];
-            messageMetadata = {}; 
-            isFirstMessage = true;
-            chatContainer.innerHTML = '';
-            centerLogo.classList.remove('hidden');
-            chatInput.value = '';
-            pendingAttachments = [];
-            renderAttachmentPreviews();
-            sendBtn.disabled = true;
-            adjustHeight();
-            scrollToBottomBtn.classList.remove('show'); 
-
-            history.pushState({}, '', window.location.origin + window.location.pathname);
-            renderSidebar();
             
-            // 모바일 자동 닫기 연동
-            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+            chatContainer.style.opacity = '0';
+            setTimeout(() => {
+                currentChatId = null;
+                conversationHistory = [];
+                messageMetadata = {}; 
+                isFirstMessage = true;
+                chatContainer.innerHTML = '';
+                centerLogo.classList.remove('hidden');
+                chatInput.value = '';
+                pendingAttachments = [];
+                renderAttachmentPreviews();
+                sendBtn.disabled = true;
+                adjustHeight();
+                scrollToBottomBtn.classList.remove('show'); 
+                
+                showMobileSuggestions();
+
+                history.pushState({}, '', window.location.origin + window.location.pathname);
+                renderSidebar();
+                
+                if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+                
+                chatContainer.style.opacity = '1';
+            }, 250);
         }
 
         newChatBtn.addEventListener('click', startNewChat);
@@ -2391,6 +2483,8 @@
             const chatId = urlParams.get('chat');
             if (chatId) {
                 loadChatFromStorage(chatId);
+            } else {
+                showMobileSuggestions();
             }
         });
 
@@ -2432,28 +2526,39 @@
             }
         }
 
-        // 모바일 사이드바 드래그 핸들 이벤트 리스너
         let dragStartY = 0;
         let dragCurrentY = 0;
         let isDragging = false;
 
-        sidebarHandle.addEventListener('touchstart', (e) => {
+        sidebar.addEventListener('touchstart', (e) => {
             if (window.innerWidth > 768) return;
             dragStartY = e.touches[0].clientY;
             isDragging = true;
             sidebar.style.transition = 'none'; 
         }, { passive: true });
 
-        sidebarHandle.addEventListener('touchmove', (e) => {
+        sidebar.addEventListener('touchmove', (e) => {
             if (!isDragging || window.innerWidth > 768) return;
-            dragCurrentY = e.touches[0].clientY;
-            let diff = dragCurrentY - dragStartY;
-            if (diff > 0) { 
+            
+            const chatList = e.target.closest('#savedChatList');
+            const diff = e.touches[0].clientY - dragStartY;
+            
+            if (chatList) {
+                const isAtTop = chatList.scrollTop <= 0;
+                const isMovingDown = diff > 0;
+                if (!isAtTop || !isMovingDown) {
+                    return; 
+                }
+            }
+
+            if (diff > 0) {
+                if(e.cancelable) e.preventDefault();
+                dragCurrentY = e.touches[0].clientY;
                 sidebar.style.transform = `translateY(${diff}px)`;
             }
-        }, { passive: true });
+        }, { passive: false });
 
-        sidebarHandle.addEventListener('touchend', (e) => {
+        sidebar.addEventListener('touchend', (e) => {
             if (!isDragging || window.innerWidth > 768) return;
             isDragging = false;
             sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; 
@@ -2525,7 +2630,6 @@
             sendMessage(lastUserMsg.content, true, lastUserMsg.attachments);
         }
 
-        // --- 상세 정보 패널 제어 ---
         detailsCloseBtn.addEventListener('click', () => {
             detailsPanel.classList.remove('open');
         });
@@ -2596,7 +2700,6 @@
         }
 
 
-        // --- 메시지 전송 및 파싱 로직 ---
         async function sendMessage(textOverride = null, isRegen = false, attachmentsOverride = null) {
             if (isGenerating) {
                 if (abortController) abortController.abort();
@@ -2608,11 +2711,7 @@
             
             if (text.length === 0 && attachmentsToSend.length === 0) return;
 
-            const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
-            const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
-            
-            chatContainer.style.transition = 'none'; 
-            chatContainer.style.paddingBottom = initialPadding + 'px';
+            hideMobileSuggestions();
 
             if (isFirstMessage) {
                 document.body.style.overflowY = 'auto';
@@ -2650,15 +2749,18 @@
             saveCurrentChat();
 
             isGenerating = true;
-            const inputContainer = document.querySelector('.chat-input-container');
-            if (inputContainer) inputContainer.classList.add('generating');
             
-            sendBtn.innerHTML = '<div class="stop-icon-square"></div>'; 
+            // 전송 시 1초 동안 스피너 아이콘 노출, 이후 정지 버튼으로 전환
+            sendBtn.innerHTML = '<div class="spinner-small" style="width: 16px; height: 16px; color: #fff;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
             
-            let allocatedPadding = 160;
-
+            setTimeout(() => {
+                if (isGenerating) {
+                    sendBtn.innerHTML = '<div class="stop-icon-square"></div>';
+                }
+            }, 1000);
+            
             const isManualSearch = searchBtn.classList.contains('active');
             const searchKeywords = [
                 "검색해줘", "검색해", "찾아줘", "찾아봐", "알려줘", "뉴스", "날씨", "주가", 
@@ -2747,38 +2849,40 @@
                 let isStreamingFinished = false;
 
                 const parseStream = (fullText) => {
-                    let extractedThoughts = "";
+                    let thoughts = "";
+                    let cleanText = "";
                     let citations = [];
-                    
-                    let tempText = fullText.replace(/\[THOUGHT\]([\s\S]*?)\[\/THOUGHT\]/g, (match, p1) => {
-                        if (p1.includes("Title:") && p1.includes("URL:") && p1.includes("Content:")) {
-                            let titleMatch = p1.match(/Title:\s*(.*?)(?=\n|$)/);
-                            let urlMatch = p1.match(/URL:\s*(.*?)(?=\n|$)/);
-                            let contentMatch = p1.match(/Content:\s*(.*?)(?=\nScore:|$)/s); 
-                            
-                            if (titleMatch && urlMatch) {
-                                citations.push({
-                                    title: titleMatch[1].trim(),
-                                    url: urlMatch[1].trim(),
-                                    content: contentMatch ? contentMatch[1].trim() : ""
-                                });
-                            }
-                        } else {
-                            extractedThoughts += p1 + "\n\n";
-                        }
-                        return ""; 
+
+                    let textWithoutCitations = fullText.replace(/Title:\s*(.*?)\nURL:\s*(.*?)\nContent:\s*(.*?)(?=\nScore:|$)/gis, (match, t, u, c) => {
+                        citations.push({ title: t.trim(), url: u.trim(), content: c.trim() });
+                        return "";
                     });
 
-                    const openTagIndex = tempText.indexOf("[THOUGHT]");
-                    if (openTagIndex !== -1) {
-                        tempText = tempText.substring(0, openTagIndex);
+                    // 1. <think> 태그 파싱
+                    if (textWithoutCitations.includes('<think>')) {
+                        let s = textWithoutCitations.indexOf('<think>');
+                        let e = textWithoutCitations.indexOf('</think>');
+                        if (e !== -1) {
+                            thoughts = textWithoutCitations.substring(s + 7, e).trim();
+                            cleanText = textWithoutCitations.substring(e + 8).trim();
+                        } else {
+                            thoughts = textWithoutCitations.substring(s + 7).trim();
+                            cleanText = textWithoutCitations.substring(0, s).trim();
+                        }
+                    } 
+                    // 2. [Thought] 문자열 기준 파싱 (답변 시작 ~ [Thought] 전까지가 사고과정)
+                    else if (textWithoutCitations.match(/\[Thought\]/i)) {
+                        let match = textWithoutCitations.match(/\[Thought\]/i);
+                        thoughts = textWithoutCitations.substring(0, match.index).trim();
+                        cleanText = textWithoutCitations.substring(match.index + match[0].length).trim();
+                    } 
+                    // 3. Fallback: 태그가 발견되지 않으면 일반 텍스트로 취급 (정상적인 답변이 사고과정 컨테이너로 들어가는 문제 방지)
+                    else {
+                        thoughts = "";
+                        cleanText = textWithoutCitations.trim();
                     }
 
-                    return {
-                        cleanText: tempText,
-                        thoughts: extractedThoughts.trim(),
-                        citations: citations
-                    };
+                    return { cleanText, thoughts, citations };
                 };
 
                 const processBuffer = async () => {
@@ -2806,9 +2910,34 @@
 
                                     const parsed = parseStream(displayedText);
                                     
-                                    const savedScrollY = window.scrollY;
                                     renderer.codeCount = 0; 
                                     
+                                    if (parsed.thoughts.trim().length > 0) {
+                                        let thoughtContainer = botRow.querySelector('.thought-container');
+                                        if (!thoughtContainer) {
+                                            thoughtContainer = document.createElement('div');
+                                            thoughtContainer.className = 'thought-container';
+                                            thoughtContainer.innerHTML = `
+                                                <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
+                                                <div class="thought-mask">
+                                                    <div class="thought-inner"></div>
+                                                </div>
+                                            `;
+                                            thoughtContainer.addEventListener('click', () => {
+                                                thoughtContainer.classList.toggle('expanded');
+                                            });
+                                            botRow.insertBefore(thoughtContainer, botContent);
+                                        }
+                                        
+                                        const inner = thoughtContainer.querySelector('.thought-inner');
+                                        inner.innerHTML = marked.parse(parsed.thoughts);
+                                        
+                                        const mask = thoughtContainer.querySelector('.thought-mask');
+                                        if (!thoughtContainer.classList.contains('expanded')) {
+                                            mask.scrollTo({ top: mask.scrollHeight, behavior: 'smooth' });
+                                        }
+                                    }
+
                                     try {
                                         botContent.innerHTML = marked.parse(parsed.cleanText);
                                         if (parsed.cleanText.includes('```')) {
@@ -2818,10 +2947,11 @@
                                         console.error("Markdown parse error during stream:", err);
                                     }
                                     
-                                    const currentBotHeight = botContent.offsetHeight;
-                                    chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
-                                    
-                                    window.scrollTo(0, savedScrollY);
+                                    // 자연스러운 스크롤 (동적 padding 조절 제거)
+                                    const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
+                                    if (isAtBottom) {
+                                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
+                                    }
                                     
                                     if (window.navigator && window.navigator.vibrate) {
                                         window.navigator.vibrate(1);
@@ -2884,9 +3014,6 @@
                     analyzingText.style.color = "#9CA3AF";
                 }
 
-                const finalBotHeight = botContent.offsetHeight;
-                chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
-
                 const msgIndex = conversationHistory.length + 1; 
                 messageMetadata[msgIndex] = currentMetadata;
 
@@ -2915,15 +3042,11 @@
                 }
             } finally {
                 isGenerating = false;
-                const inputContainer = document.querySelector('.chat-input-container');
-                if (inputContainer) inputContainer.classList.remove('generating');
                 
                 abortController = null;
                 sendBtn.innerHTML = '<span class="material-symbols-rounded arrow-icon" style="font-variation-settings: \'wght\' 300; font-size: 20px;">arrow_upward</span>';
                 sendBtn.classList.remove('generating-state');
                 sendBtn.disabled = true; 
-                
-                chatContainer.style.transition = 'padding-bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
                 
                 adjustHeight(); 
                 checkScrollPosition();
@@ -3045,49 +3168,72 @@
             rowDiv.classList.add('message-row', sender); 
             
             if (sender === 'user') {
-                const container = document.createElement('div');
-                container.className = 'user-bubble-container';
+                const wrapper = document.createElement('div');
+                wrapper.className = 'user-message-wrapper';
+                wrapper.style.display = 'flex';
+                wrapper.style.flexDirection = 'column';
+                wrapper.style.alignItems = 'flex-end';
+                wrapper.style.gap = '6px';
+                wrapper.style.maxWidth = '75%';
 
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'user-copy-btn';
-                copyBtn.title = '복사';
-                copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">content_copy</span>';
-                
-                copyBtn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(text).then(() => {
-                        const originalHTML = copyBtn.innerHTML;
-                        copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">check</span>';
-                        setTimeout(() => copyBtn.innerHTML = originalHTML, 2000);
-                    });
-                });
-
-                const contentDiv = document.createElement('div');
-                contentDiv.classList.add('user-bubble');
-                
-                // [NEW] 첨부 파일 렌더링 추가
-                let attachmentHtml = '';
                 if (attachments && attachments.length > 0) {
-                    attachmentHtml = '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; justify-content: flex-end; width: 100%;">';
+                    const attDiv = document.createElement('div');
+                    attDiv.className = 'user-attachments-container';
+                    attDiv.style.display = 'flex';
+                    attDiv.style.flexWrap = 'wrap';
+                    attDiv.style.gap = '8px';
+                    attDiv.style.justifyContent = 'flex-end';
+                    
+                    let attHtml = '';
                     attachments.forEach(att => {
                         if (att.type === 'image') {
-                            attachmentHtml += `<div style="width:140px; border-radius:12px; overflow:hidden; border:1px solid #E5E7EB;"><img src="${att.data}" style="width:100%; display:block; object-fit:cover;"></div>`;
+                            attHtml += `<div style="width:140px; border-radius:12px; overflow:hidden; border:1px solid #E5E7EB;"><img src="${att.data}" style="width:100%; display:block; object-fit:cover;"></div>`;
                         } else {
-                            attachmentHtml += `<div style="background:#fff; border: 1px solid #E5E7EB; color:#1F2937; padding:10px 14px; border-radius:12px; font-size:12px; display:flex; flex-direction:column; max-width: 160px; text-align:left;">
+                            attHtml += `<div style="background:#fff; border: 1px solid #E5E7EB; color:#1F2937; padding:10px 14px; border-radius:12px; font-size:12px; display:flex; flex-direction:column; max-width: 160px; text-align:left;">
                                 <i class="ti ti-file" style="font-size:20px; margin-bottom:4px; color:#6B7280;"></i>
                                 <span style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${att.name}</span>
                                 <span style="color:#6B7280; margin-top:2px;">${att.extension} • ${att.size}</span>
                             </div>`;
                         }
                     });
-                    attachmentHtml += '</div>';
+                    attDiv.innerHTML = attHtml;
+                    wrapper.appendChild(attDiv);
                 }
 
-                const textHtml = text.trim() ? `<div>${text.replace(/\n/g, '<br>')}</div>` : '';
-                contentDiv.innerHTML = attachmentHtml + textHtml;
+                if (text.trim()) {
+                    const bubbleRow = document.createElement('div');
+                    bubbleRow.style.display = 'flex';
+                    bubbleRow.style.alignItems = 'center';
+                    bubbleRow.style.gap = '8px';
+                    bubbleRow.style.flexDirection = 'row-reverse';
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'user-copy-btn';
+                    copyBtn.title = '복사';
+                    copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">content_copy</span>';
+                    
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(text).then(() => {
+                            const originalHTML = copyBtn.innerHTML;
+                            copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">check</span>';
+                            setTimeout(() => copyBtn.innerHTML = originalHTML, 2000);
+                        });
+                    });
+
+                    const contentDiv = document.createElement('div');
+                    contentDiv.classList.add('user-bubble');
+                    contentDiv.innerHTML = text.replace(/\n/g, '<br>');
+                    
+                    bubbleRow.appendChild(contentDiv);
+                    bubbleRow.appendChild(copyBtn);
+                    
+                    wrapper.addEventListener('mouseenter', () => copyBtn.style.opacity = '1');
+                    wrapper.addEventListener('mouseleave', () => copyBtn.style.opacity = '0');
+                    
+                    wrapper.appendChild(bubbleRow);
+                }
                 
-                container.appendChild(contentDiv);
-                container.appendChild(copyBtn);
-                rowDiv.appendChild(container);
+                rowDiv.appendChild(wrapper);
             } else {
                 const contentDiv = document.createElement('div');
                 contentDiv.classList.add('bot-text'); 
@@ -3130,4 +3276,4 @@
         });
     </script>
 </body>
-   </html>
+</html>
