@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>로그인 - quorv</title>
-    <link rel="stylesheet" href="[https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css](https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css)">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         :root {
             --primary-color: #000;
@@ -21,6 +21,8 @@
             min-height: 100vh;
             background-color: #fff;
             color: var(--text-main);
+            /* 모바일에서 텍스트 선택 방지 등 네이티브 앱 느낌 추가 */
+            -webkit-tap-highlight-color: transparent;
         }
         header {
             padding: 16px 20px;
@@ -54,6 +56,7 @@
             max-width: 400px;
             margin: -50px auto 0 auto;
             width: 100%;
+            box-sizing: border-box;
         }
         h1 {
             font-size: 28px;
@@ -81,13 +84,20 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: background-color 0.2s;
+            /* 애니메이션 효과 추가 (배경색 및 크기 조절) */
+            transition: background-color 0.2s ease, transform 0.1s ease;
             color: #000;
             text-decoration: none;
             box-sizing: border-box;
+            user-select: none;
         }
         .login-btn:hover {
             background-color: #f9f9f9;
+        }
+        /* 버튼이 눌렸을 때(액티브) 작아지고 어두워지는 효과 추가 */
+        .login-btn:active {
+            transform: scale(0.96);
+            background-color: #ebebeb;
         }
         .login-btn.black {
             background-color: #000;
@@ -97,9 +107,16 @@
         .login-btn.black:hover {
             background-color: #222;
         }
+        /* 검은색 버튼이 눌렸을 때 효과 */
+        .login-btn.black:active {
+            transform: scale(0.96);
+            background-color: #333;
+        }
         .login-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            /* 비활성화 시 눌림 효과 방지 */
+            transform: scale(1);
         }
         .login-btn img {
             width: 20px;
@@ -129,6 +146,8 @@
             font-size: 16px;
             box-sizing: border-box;
             outline: none;
+            /* 모바일에서 네이티브 스타일 초기화 */
+            -webkit-appearance: none;
         }
         input:focus {
             border-color: #000;
@@ -191,6 +210,7 @@
             width: 90%;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
         .modal-content h2 {
             margin-top: 0;
@@ -206,6 +226,8 @@
         @media (max-width: 480px) {
             h1 { font-size: 24px; }
             .top-right-info { display: none; }
+            /* 모바일에서 화면 여백 최적화 */
+            .main-container { padding: 20px 16px; margin-top: -30px; }
         }
     </style>
 </head>
