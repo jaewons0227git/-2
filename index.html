@@ -563,48 +563,10 @@
 
         .user-bubble { font-size: 12px; padding: 5px 10px; }
         .bot-text { font-size: 12px; }
-
-        /* 모바일 하단 입력 영역 조정 (완전 흰색, 상단 그림자, 하단 텍스트 공간) */
-        .bottom-fixed-wrapper { 
-            padding-bottom: 0 !important; 
-            padding-top: 0 !important; 
-            background: transparent !important; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: fixed;
-        }
         
         .chat-container {
             padding-left: 12px !important;
             padding-right: 12px !important;
-        }
-
-        .chat-input-container {
-            width: 100% !important; 
-            max-width: 100% !important;
-            margin: 0 !important;
-            border: none !important; /* 외곽선 제거 */
-            border-radius: 20px 20px 0 0 !important; /* 위쪽 두 모서리만 곡률 */
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.06) !important; /* 위쪽 그림자 추가 */
-            padding: 12px 16px 36px 16px !important; /* 하단 확장 및 텍스트 공간 확보 */
-            background-color: #FFFFFF !important; /* 완전 흰색으로 변경 */
-        }
-        .bottom-fixed-wrapper::after { display: none; }
-        
-        /* 알림 텍스트를 하단 여백 공간 중앙으로 이동 */
-        .disclaimer-text { 
-            position: absolute !important;
-            bottom: 12px !important;
-            left: 0;
-            width: 100%;
-            display: block !important; 
-            font-size: 10px; 
-            margin: 0 !important;
-            text-shadow: none !important;
-            text-align: center;
-            color: #9CA3AF;
-            z-index: 10;
         }
     }
 
@@ -620,7 +582,8 @@
         display: flex; flex-direction: column; gap: 24px; 
         overflow-anchor: none;
         
-        transition: margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+        /* 채팅 부드러운 전환을 위한 opacity 속성 추가 */
+        transition: opacity 0.3s ease, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     padding-bottom 0.2s ease-out;
     }
@@ -652,6 +615,29 @@
     .center-logo.hidden {
         display: none !important; 
     }
+
+    /* 모바일 추천 질문 스타일 */
+    .mobile-suggestions-container {
+        display: none;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: auto; 
+        padding-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    @media (max-width: 768px) {
+        .mobile-suggestions-container.show {
+            display: flex;
+        }
+    }
+    .sugg-header { font-size: 22px; font-weight: 700; color: #1F2937; margin-bottom: 4px; }
+    .sugg-item {
+        display: flex; align-items: center; gap: 12px;
+        background: transparent; border: none; cursor: pointer;
+        font-size: 16px; color: #4B5563; text-align: left; padding: 4px 0; font-family: inherit;
+    }
+    .sugg-item i { font-size: 24px; color: #4B5563; }
 
     .message-row { display: flex; width: 100%; flex-direction: column; position: relative; }
     .message-row.user { align-items: flex-end; }
@@ -769,12 +755,12 @@
     }
     .analyzing-text:hover { background: none; -webkit-text-fill-color: #000000; color: #000000; animation: none; }
 
-    /* --- [수정] 생각 과정 (Thought) 인라인 애니메이션 및 비네팅 --- */
+    /* --- 생각 과정 (Thought) 인라인 애니메이션 및 비네팅 --- */
     .thought-container {
         margin-bottom: 12px;
         border: 1px solid #E5E7EB;
-        border-radius: 12px;
-        background-color: #F9FAFB;
+        border-radius: 20px;
+        background-color: #FFFFFF;
         cursor: pointer;
         width: 100%;
         max-width: 100%;
@@ -1002,7 +988,7 @@
     
     .stop-icon-square { width: 12px; height: 12px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
-    /* PC버전 기본 안내문구 위치 (입력창 바깥 하단) */
+    /* PC/Mobile 공통 안내문구 위치 (입력창 바깥 하단) */
     .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
 
     .attach-menu {
@@ -1689,6 +1675,49 @@
         const themeItem = document.querySelector('.theme-item');
         const themeSubmenu = document.querySelector('.theme-submenu');
 
+        // 모바일 랜덤 추천 질문 리스트
+        const SUGGESTIONS = [
+            { icon: 'ti-bird', text: '기분 좋아지는 하루를 위한 꿀팁' },
+            { icon: 'ti-gift', text: '캐주얼한 모자 선물 추천해줘' },
+            { icon: 'ti-map-pin', text: '삼청동 근처 카페 찾아줘' },
+            { icon: 'ti-calendar-event', text: '이번 주 계획 나와 함께 세워줄래?' },
+            { icon: 'ti-messages', text: '나랑 끝말잇기 하자' },
+            { icon: 'ti-plane-departure', text: '주말 1박 2일 여행지 추천해줘' },
+            { icon: 'ti-bulb', text: '오늘 저녁 메뉴 랜덤으로 골라줘' },
+            { icon: 'ti-music', text: '비 오는 날 듣기 좋은 노래 추천' }
+        ];
+
+        function showMobileSuggestions() {
+            if (window.innerWidth > 768) return;
+            const shuffled = [...SUGGESTIONS].sort(() => 0.5 - Math.random()).slice(0, 5);
+            let html = `<div class="sugg-header">무엇을 도와드릴까요?</div>`;
+            shuffled.forEach(s => {
+                html += `<button class="sugg-item" onclick="sendSuggestion('${s.text}')">
+                            <i class="ti ${s.icon}"></i> <span>${s.text}</span>
+                         </button>`;
+            });
+            let container = document.getElementById('mobileSuggestionsContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'mobileSuggestionsContainer';
+                container.className = 'mobile-suggestions-container show';
+                chatContainer.appendChild(container);
+            } else {
+                container.className = 'mobile-suggestions-container show';
+            }
+            container.innerHTML = html;
+        }
+
+        function hideMobileSuggestions() {
+            const container = document.getElementById('mobileSuggestionsContainer');
+            if (container) container.classList.remove('show');
+        }
+
+        window.sendSuggestion = function(text) {
+            chatInput.value = text;
+            sendMessage();
+        };
+
         sidebarFooter.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) return; 
             e.stopPropagation();
@@ -2110,58 +2139,64 @@
         function loadChatFromStorage(id) {
             const chats = getSavedChats();
             if (chats[id]) {
-                currentChatId = id;
-                conversationHistory = chats[id].history || [];
-                messageMetadata = chats[id].metadata || {};
+                chatContainer.style.opacity = '0';
                 
-                chatContainer.innerHTML = '';
-                centerLogo.classList.add('hidden');
-                
-                renderer.codeCount = 0;
-                renderer.codePrefix = 'history-' + id;
-
-                conversationHistory.forEach((msg, index) => {
-                    const row = addMessage(msg.content, msg.role, false, msg.attachments);
+                setTimeout(() => {
+                    currentChatId = id;
+                    conversationHistory = chats[id].history || [];
+                    messageMetadata = chats[id].metadata || {};
                     
-                    if (msg.role === 'assistant') {
-                        const msgMetadata = messageMetadata[index + 1] || messageMetadata[index]; 
-                        
-                        // 기존에 저장된 Thought 렌더링 유지
-                        if (msgMetadata && msgMetadata.thought && msgMetadata.thought.trim().length > 0) {
-                            const thoughtContainer = document.createElement('div');
-                            thoughtContainer.className = 'thought-container';
-                            thoughtContainer.innerHTML = `
-                                <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
-                                <div class="thought-mask">
-                                    <div class="thought-inner">${marked.parse(msgMetadata.thought)}</div>
-                                </div>
-                            `;
-                            thoughtContainer.addEventListener('click', () => {
-                                thoughtContainer.classList.toggle('expanded');
-                            });
-                            row.insertBefore(thoughtContainer, row.querySelector('.bot-text'));
-                        }
+                    chatContainer.innerHTML = '';
+                    centerLogo.classList.add('hidden');
+                    hideMobileSuggestions();
+                    
+                    renderer.codeCount = 0;
+                    renderer.codePrefix = 'history-' + id;
 
-                        if (msgMetadata) {
-                            addBotButtons(row, msg.content, msgMetadata);
-                        } else {
-                            addBotButtons(row, msg.content, null);
+                    conversationHistory.forEach((msg, index) => {
+                        const row = addMessage(msg.content, msg.role, false, msg.attachments);
+                        
+                        if (msg.role === 'assistant') {
+                            const msgMetadata = messageMetadata[index + 1] || messageMetadata[index]; 
+                            
+                            if (msgMetadata && msgMetadata.thought && msgMetadata.thought.trim().length > 0) {
+                                const thoughtContainer = document.createElement('div');
+                                thoughtContainer.className = 'thought-container';
+                                thoughtContainer.innerHTML = `
+                                    <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
+                                    <div class="thought-mask">
+                                        <div class="thought-inner">${marked.parse(msgMetadata.thought)}</div>
+                                    </div>
+                                `;
+                                thoughtContainer.addEventListener('click', () => {
+                                    thoughtContainer.classList.toggle('expanded');
+                                });
+                                row.insertBefore(thoughtContainer, row.querySelector('.bot-text'));
+                            }
+
+                            if (msgMetadata) {
+                                addBotButtons(row, msg.content, msgMetadata);
+                            } else {
+                                addBotButtons(row, msg.content, null);
+                            }
                         }
-                    }
-                });
-                
-                Prism.highlightAllUnder(chatContainer);
-                
-                isFirstMessage = false;
-                document.body.style.overflowY = 'auto';
-                
-                const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
-                history.pushState({ chatId: id }, '', newUrl);
-                
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
-                scrollToBottomBtn.classList.remove('show');
-                
-                renderSidebar();
+                    });
+                    
+                    Prism.highlightAllUnder(chatContainer);
+                    
+                    isFirstMessage = false;
+                    document.body.style.overflowY = 'auto';
+                    
+                    const newUrl = window.location.origin + window.location.pathname + '?chat=' + id;
+                    history.pushState({ chatId: id }, '', newUrl);
+                    
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
+                    scrollToBottomBtn.classList.remove('show');
+                    
+                    renderSidebar();
+                    
+                    chatContainer.style.opacity = '1';
+                }, 200);
             }
         }
 
@@ -2393,23 +2428,31 @@
 
         function startNewChat() {
             if (isGenerating && abortController) abortController.abort();
-            currentChatId = null;
-            conversationHistory = [];
-            messageMetadata = {}; 
-            isFirstMessage = true;
-            chatContainer.innerHTML = '';
-            centerLogo.classList.remove('hidden');
-            chatInput.value = '';
-            pendingAttachments = [];
-            renderAttachmentPreviews();
-            sendBtn.disabled = true;
-            adjustHeight();
-            scrollToBottomBtn.classList.remove('show'); 
-
-            history.pushState({}, '', window.location.origin + window.location.pathname);
-            renderSidebar();
             
-            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+            chatContainer.style.opacity = '0';
+            setTimeout(() => {
+                currentChatId = null;
+                conversationHistory = [];
+                messageMetadata = {}; 
+                isFirstMessage = true;
+                chatContainer.innerHTML = '';
+                centerLogo.classList.remove('hidden');
+                chatInput.value = '';
+                pendingAttachments = [];
+                renderAttachmentPreviews();
+                sendBtn.disabled = true;
+                adjustHeight();
+                scrollToBottomBtn.classList.remove('show'); 
+                
+                showMobileSuggestions();
+
+                history.pushState({}, '', window.location.origin + window.location.pathname);
+                renderSidebar();
+                
+                if (window.innerWidth <= 768 && sidebar.classList.contains('open')) toggleSidebar();
+                
+                chatContainer.style.opacity = '1';
+            }, 150);
         }
 
         newChatBtn.addEventListener('click', startNewChat);
@@ -2420,6 +2463,8 @@
             const chatId = urlParams.get('chat');
             if (chatId) {
                 loadChatFromStorage(chatId);
+            } else {
+                showMobileSuggestions();
             }
         });
 
@@ -2646,11 +2691,16 @@
             
             if (text.length === 0 && attachmentsToSend.length === 0) return;
 
-            const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
-            const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
-            
-            chatContainer.style.transition = 'none'; 
-            chatContainer.style.paddingBottom = initialPadding + 'px';
+            hideMobileSuggestions();
+
+            // 재생성 시 여백 고정
+            if (!isRegen) {
+                const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
+                const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
+                
+                chatContainer.style.transition = 'none'; 
+                chatContainer.style.paddingBottom = initialPadding + 'px';
+            }
 
             if (isFirstMessage) {
                 document.body.style.overflowY = 'auto';
@@ -2689,12 +2739,17 @@
 
             isGenerating = true;
             
-            sendBtn.innerHTML = '<div class="stop-icon-square"></div>'; 
+            // 전송버튼: 1초 동안 로딩 스피너 -> 그 후 정지버튼
+            sendBtn.innerHTML = '<div class="spinner-small" style="width: 16px; height: 16px; color: #fff;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
             
-            let allocatedPadding = 160;
-
+            setTimeout(() => {
+                if (isGenerating) {
+                    sendBtn.innerHTML = '<div class="stop-icon-square"></div>';
+                }
+            }, 1000);
+            
             const isManualSearch = searchBtn.classList.contains('active');
             const searchKeywords = [
                 "검색해줘", "검색해", "찾아줘", "찾아봐", "알려줘", "뉴스", "날씨", "주가", 
@@ -2782,7 +2837,6 @@
                 let displayedText = "";
                 let isStreamingFinished = false;
 
-                // [수정] 첫 글자부터 Thought로 인식하고 [Thought]가 나올 때 일반 메시지로 전환
                 const parseStream = (fullText) => {
                     let thoughts = "";
                     let cleanText = "";
@@ -2793,7 +2847,6 @@
                         return "";
                     });
 
-                    // Check boundaries
                     let thoughtBoundary = textWithoutCitations.match(/(?:\n)?\[Thought\]/i);
                     let standardClose = textWithoutCitations.match(/\[\/THOUGHT\]|<\/think>/i);
                     let standardOpen = textWithoutCitations.match(/\[THOUGHT\]|<think>/i);
@@ -2810,11 +2863,11 @@
                         thoughts = textWithoutCitations.substring(standardOpen.index + standardOpen[0].length).trim();
                         cleanText = textWithoutCitations.substring(0, standardOpen.index).trim();
                     } else {
-                        // boundary 가 나타날때까지 모든 텍스트를 사고 과정(thought)으로 취급
                         thoughts = textWithoutCitations;
                         cleanText = "";
                     }
 
+                    // [Thought] 태그 화면 노출 방지
                     thoughts = thoughts.replace(/^\[THOUGHT\]|^<think>|\[\/THOUGHT\]|<\/think>|\[Thought\]/gi, '').trim();
 
                     return { cleanText, thoughts, citations };
@@ -2848,7 +2901,6 @@
                                     const savedScrollY = window.scrollY;
                                     renderer.codeCount = 0; 
                                     
-                                    // 사고 과정 컨테이너 생성 및 업데이트
                                     if (parsed.thoughts.trim().length > 0) {
                                         let thoughtContainer = botRow.querySelector('.thought-container');
                                         if (!thoughtContainer) {
@@ -2884,8 +2936,11 @@
                                         console.error("Markdown parse error during stream:", err);
                                     }
                                     
-                                    const currentBotHeight = botContent.offsetHeight;
-                                    chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
+                                    if (!isRegen) {
+                                        const currentBotHeight = botContent.offsetHeight;
+                                        const initialPadding = window.innerHeight - (window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET);
+                                        chatContainer.style.paddingBottom = Math.max(160, initialPadding - currentBotHeight) + 'px';
+                                    }
                                     
                                     window.scrollTo(0, savedScrollY);
                                     
@@ -2950,8 +3005,11 @@
                     analyzingText.style.color = "#9CA3AF";
                 }
 
-                const finalBotHeight = botContent.offsetHeight;
-                chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
+                if (!isRegen) {
+                    const finalBotHeight = botContent.offsetHeight;
+                    const initialPadding = window.innerHeight - (window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET);
+                    chatContainer.style.paddingBottom = Math.max(160, initialPadding - finalBotHeight) + 'px';
+                }
 
                 const msgIndex = conversationHistory.length + 1; 
                 messageMetadata[msgIndex] = currentMetadata;
