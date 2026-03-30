@@ -243,7 +243,7 @@
         vertical-align: middle;
     }
 
-    /* --- 사이드바 (Sidebar) --- */
+    /* --- ?ъ씠?쒕컮 (Sidebar) --- */
     .sidebar-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: transparent; z-index: 1900;
@@ -485,7 +485,7 @@
     .user-plan { font-size: 11px; color: #6B7280; }
 
 
-    /* --- 상단바 (Header) --- */
+    /* --- ?곷떒諛?(Header) --- */
     .top-bar {
         position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
         background-color: rgba(255, 255, 255, 0.95);
@@ -537,7 +537,7 @@
         .mobile-only { display: none !important; }
     }
 
-    /* --- 모바일 뷰 전용 스타일 --- */
+    /* --- 紐⑤컮??酉??꾩슜 ?ㅽ???--- */
     @media (max-width: 768px) {
         .pc-only { display: none !important; }
         .mobile-only { display: flex; align-items: center; }
@@ -570,7 +570,7 @@
         }
     }
 
-    /* --- 채팅 영역 --- */
+    /* --- 梨꾪똿 ?곸뿭 --- */
     .chat-container {
         width: 100%;
         max-width: var(--content-max-width);
@@ -582,7 +582,7 @@
         display: flex; flex-direction: column; gap: 24px;
         overflow-anchor: none;
 
-        /* 채팅 부드러운 전환을 위한 opacity 속성 추가 */
+        /* 梨꾪똿 遺?쒕윭???꾪솚???꾪븳 opacity ?띿꽦 異붽? */
         transition: opacity 0.3s ease, margin-left 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                     padding-bottom 0.2s ease-out;
@@ -620,7 +620,7 @@
         display: none !important;
     }
 
-    /* 모바일 추천 질문 스타일 */
+    /* 紐⑤컮??異붿쿇 吏덈Ц ?ㅽ???*/
     .mobile-suggestions-container {
         display: none;
         flex-direction: column;
@@ -768,7 +768,7 @@
     }
     .analyzing-text:hover { background: none; -webkit-text-fill-color: #000000; color: #000000; animation: none; }
 
-    /* --- 생각 과정 (Thought) 인라인 애니메이션 및 비네팅 --- */
+    /* --- ?앷컖 怨쇱젙 (Thought) ?몃씪???좊땲硫붿씠??諛?鍮꾨꽕??--- */
     .thought-container {
         margin-bottom: 12px;
         border: 1px solid #E5E7EB;
@@ -795,17 +795,17 @@
     }
     .thought-mask {
         padding: 0 12px;
-        max-height: 60px; /* 정확히 중앙 라인만 또렷하게 보이도록 높이 지정 */
+        max-height: 60px; /* ?뺥솗??以묒븰 ?쇱씤留??먮졆?섍쾶 蹂댁씠?꾨줉 ?믪씠 吏??*/
         overflow-y: hidden;
         position: relative;
-        /* 위, 아래 라인은 비네팅으로 흐릿하게 처리 */
+        /* ?? ?꾨옒 ?쇱씤? 鍮꾨꽕?낆쑝濡??먮┸?섍쾶 泥섎━ */
         -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
         mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
         transition: max-height 0.4s ease, padding 0.4s ease;
         font-size: 13px;
         color: #6B7280;
         line-height: 20px;
-        scroll-behavior: smooth; /* 새로운 줄 추가시 부드럽게 위로 올라감 */
+        scroll-behavior: smooth; /* ?덈줈??以?異붽???遺?쒕읇寃??꾨줈 ?щ씪媛?*/
     }
     .thought-mask::-webkit-scrollbar { display: none; }
     .thought-container.expanded .thought-mask {
@@ -817,13 +817,13 @@
         overflow-y: auto;
     }
     .thought-inner {
-        padding-top: 20px; /* 초기 라인이 중앙에 오도록 여백 */
-        padding-bottom: 20px; /* 마지막 라인이 중앙에 오도록 여백 */
+        padding-top: 20px; /* 珥덇린 ?쇱씤??以묒븰???ㅻ룄濡??щ갚 */
+        padding-bottom: 20px; /* 留덉?留??쇱씤??以묒븰???ㅻ룄濡??щ갚 */
     }
     .thought-inner p { margin: 0 0 4px 0; }
     .thought-inner p:last-child { margin-bottom: 0; }
 
-    /* --- 하단 입력창 및 래퍼 --- */
+    /* --- ?섎떒 ?낅젰李?諛??섑띁 --- */
     .bottom-fixed-wrapper {
         position: fixed; bottom: 0; left: 0; width: 100%;
         display: flex; flex-direction: column; align-items: center;
@@ -849,13 +849,13 @@
         }
     }
 
-    /* 전송 시 글로우 애니메이션 제거 완료 */
+    /* ?꾩넚 ??湲濡쒖슦 ?좊땲硫붿씠???쒓굅 ?꾨즺 */
 
     .chat-textarea:focus { outline: none; }
 
-    /* 첨부 파일 미리보기 스타일 (PC 여백 버그 수정) */
+    /* 泥⑤? ?뚯씪 誘몃━蹂닿린 ?ㅽ???(PC ?щ갚 踰꾧렇 ?섏젙) */
     #attachmentPreviewContainer {
-        display: none; /* 내용이 없을 때 gap으로 인한 PC 입력창 늘어남 방지 */
+        display: none; /* ?댁슜???놁쓣 ??gap?쇰줈 ?명븳 PC ?낅젰李??섏뼱??諛⑹? */
         gap: 8px;
         flex-wrap: wrap;
         margin-bottom: 0;
@@ -1007,7 +1007,7 @@
     
     .stop-icon-square { width: 12px; height: 12px; background-color: #ffffff; border-radius: 2px; display: inline-block; }
 
-    /* PC/Mobile 공통 안내문구 위치 (입력창 바깥 하단) */
+    /* PC/Mobile 怨듯넻 ?덈궡臾멸뎄 ?꾩튂 (?낅젰李?諛붽묑 ?섎떒) */
     .disclaimer-text { font-size: 11px; color: #9CA3AF; margin-top: 10px; text-align: center; pointer-events: auto; }
 
     .attach-menu {
@@ -1337,6 +1337,75 @@
         padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: opacity 0.2s;
     }
+
+    /* test.html 입력창 스타일 적용 */
+    .chat-input-container {
+        background-color: #F4F4F5 !important;
+        border-radius: 26px !important;
+        padding: 12px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        gap: 8px !important;
+    }
+
+    /* 검색 버튼 숨김 */
+    #searchBtn {
+        display: none !important;
+    }
+
+    /* chat-textarea 스타일 */
+    .chat-textarea {
+        font-size: 15px !important;
+    }
+    .chat-textarea::placeholder {
+        color: #9CA3AF !important;
+        font-size: 15px !important;
+    }
+
+    /* input-left-tools 스타일 */
+    .input-left-tools .icon-btn {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        color: #6B7280 !important;
+    }
+    .input-left-tools .icon-btn:hover {
+        background-color: rgba(0,0,0,0.05) !important;
+        color: #374151 !important;
+    }
+    .input-left-tools .icon-btn .ti {
+        font-size: 24px !important;
+    }
+
+    /* 전송 버튼 스타일 */
+    .send-btn {
+        width: 32px !important;
+        height: 32px !important;
+        background-color: #E5E7EB !important;
+        border-radius: 50% !important;
+    }
+    .send-btn .arrow-icon {
+        color: #9CA3AF !important;
+    }
+    .send-btn:not(:disabled) {
+        background-color: #1F2937 !important;
+    }
+    .send-btn:not(:disabled) .arrow-icon {
+        color: #ffffff !important;
+    }
+
+    /* disclaimer - input-bottom-row 아래로 배치 */
+    .input-bottom-row {
+        margin-bottom: 0 !important;
+    }
+
+    /* disclaimer 를 chat-input-container 밖으로 */
+    .disclaimer-text {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        margin-top: 10px !important;
+        margin-bottom: 0 !important;
+    }
 </style>
 </head>
 <body class="pc-sidebar-open"> 
@@ -1369,7 +1438,7 @@
                     const adminItem = document.createElement('div');
                     adminItem.className = 'profile-menu-item';
                     adminItem.onclick = () => location.href = 'admin.html';
-                    adminItem.innerHTML = '<i class="ti ti-shield-check"></i> <span>관리자 페이지</span>';
+                    adminItem.innerHTML = '<i class="ti ti-shield-check"></i> <span>愿由ъ옄 ?섏씠吏</span>';
                     profileMenu.insertBefore(adminItem, profileMenu.firstChild);
                 }
             } catch (e) {
@@ -1408,31 +1477,31 @@
             <div class="sidebar-logo">
                 <img src="https://i.postimg.cc/Sxd0rHV1/image-removebg-preview.png" alt="Logo">
             </div>
-            <div id="sidebarCloseBtn" class="sidebar-close-btn" title="사이드바 닫기">
+            <div id="sidebarCloseBtn" class="sidebar-close-btn" title="?ъ씠?쒕컮 ?リ린">
                 <i class="ti ti-layout-sidebar-left-collapse"></i>
             </div>
         </div>
         
         <div class="sidebar-content">
             <button class="sidebar-menu-btn" id="newChatBtn">
-                <i class="ti ti-edit"></i> <span>새 채팅</span>
+                <i class="ti ti-edit"></i> <span>??梨꾪똿</span>
             </button>
             <button class="sidebar-menu-btn" id="sidebarSearchBtn">
-                <i class="ti ti-search"></i> <span>검색</span>
+                <i class="ti ti-search"></i> <span>寃??/span>
             </button>
             
             <div id="sidebarSearchContainer">
                 <div class="search-input-wrapper">
                     <i class="ti ti-search search-icon-inside"></i>
-                    <input type="text" id="sidebarSearchInput" placeholder="채팅 제목 검색...">
+                    <input type="text" id="sidebarSearchInput" placeholder="梨꾪똿 ?쒕ぉ 寃??..">
                 </div>
             </div>
 
             <button class="sidebar-menu-btn">
-                <i class="ti ti-photo"></i> <span>이미지</span>
+                <i class="ti ti-photo"></i> <span>?대?吏</span>
             </button>
             
-            <div class="sidebar-section-title">내 채팅</div>
+            <div class="sidebar-section-title">??梨꾪똿</div>
             <div id="savedChatList"></div>
         </div>
 
@@ -1442,30 +1511,30 @@
                     <img id="userAvatar" src="" alt="User">
                 </div>
                 <div class="user-info">
-                    <span class="user-name">게스트</span>
+                    <span class="user-name">寃뚯뒪??/span>
                     <span class="user-plan">Free</span>
                 </div>
             </div>
             <div class="mobile-profile-actions">
-                <button class="mobile-footer-btn" id="mobileSettingsIcon" title="설정"><i class="ti ti-settings"></i></button>
-                <button class="mobile-footer-btn" id="mobileThemeIcon" title="테마"><i class="ti ti-palette"></i></button>
-                <button class="mobile-footer-btn" onclick="logout()" title="로그아웃"><i class="ti ti-logout"></i></button>
+                <button class="mobile-footer-btn" id="mobileSettingsIcon" title="?ㅼ젙"><i class="ti ti-settings"></i></button>
+                <button class="mobile-footer-btn" id="mobileThemeIcon" title="?뚮쭏"><i class="ti ti-palette"></i></button>
+                <button class="mobile-footer-btn" onclick="logout()" title="濡쒓렇?꾩썐"><i class="ti ti-logout"></i></button>
             </div>
         </div>
 
         <div id="profileMenu" class="profile-menu">
             <div class="profile-menu-item" onclick="logout()">
-                <i class="ti ti-logout"></i> <span>로그아웃</span>
+                <i class="ti ti-logout"></i> <span>濡쒓렇?꾩썐</span>
             </div>
             <div class="profile-menu-item" id="settingsBtn">
-                <i class="ti ti-settings"></i> <span>설정</span>
+                <i class="ti ti-settings"></i> <span>?ㅼ젙</span>
             </div>
             <div class="profile-menu-item theme-item">
-                <i class="ti ti-palette"></i> <span>테마</span>
+                <i class="ti ti-palette"></i> <span>?뚮쭏</span>
                 <i class="ti ti-chevron-right" style="margin-left: auto; font-size: 14px;"></i>
                 <div class="theme-submenu">
                     <div class="theme-option" onclick="setTheme('light')" data-theme-val="light">
-                        <span>라이트</span> <i class="ti ti-check check-icon"></i>
+                        <span>?쇱씠??/span> <i class="ti ti-check check-icon"></i>
                     </div>
                 </div>
             </div>
@@ -1474,7 +1543,7 @@
 
     <header class="top-bar">
         <div class="top-left pc-only" id="headerTitleArea">
-            <span id="pcSidebarOpenBtn" class="pc-sidebar-open-btn" title="사이드바 열기">
+            <span id="pcSidebarOpenBtn" class="pc-sidebar-open-btn" title="?ъ씠?쒕컮 ?닿린">
                 <i class="ti ti-layout-sidebar-left-expand"></i>
             </span>
             <span id="mobileMenuBtn" class="material-symbols-rounded mobile-menu-icon" style="margin-right: 8px;">menu</span>
@@ -1482,7 +1551,7 @@
             <span class="material-symbols-rounded" style="font-size:20px; color:#9CA3AF;">expand_more</span>
         </div>
         <div class="top-right pc-only">
-            <button class="share-btn"><span class="material-symbols-rounded">ios_share</span> 공유하기</button>
+            <button class="share-btn"><span class="material-symbols-rounded">ios_share</span> 怨듭쑀?섍린</button>
             <button class="dots-btn"><span class="material-symbols-rounded">more_horiz</span></button>
         </div>
 
@@ -1503,24 +1572,24 @@
 
     <div class="bottom-fixed-wrapper">
         <div class="chat-input-container">
-            <div id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="맨 아래로 이동">
+            <div id="scrollToBottomBtn" class="scroll-to-bottom-btn" title="留??꾨옒濡??대룞">
                 <span class="material-symbols-rounded">arrow_downward</span>
             </div>
 
             <div id="attachMenu" class="attach-menu">
-                <div class="menu-item"><span class="material-symbols-rounded">image</span> <span>이미지</span></div>
-                <div class="menu-item"><span class="material-symbols-rounded">description</span> <span>문서</span></div>
-                <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>파일</span></div>
+                <div class="menu-item"><span class="material-symbols-rounded">image</span> <span>?대?吏</span></div>
+                <div class="menu-item"><span class="material-symbols-rounded">description</span> <span>臾몄꽌</span></div>
+                <div class="menu-item"><span class="material-symbols-rounded">folder</span> <span>?뚯씪</span></div>
             </div>
 
             <div id="attachmentPreviewContainer" style="display: none;"></div>
 
-            <textarea id="chatInput" class="chat-textarea" placeholder="무엇이든 물어보세요" rows="1"></textarea>
+            <textarea id="chatInput" class="chat-textarea" placeholder="臾댁뾿?대뱺 臾쇱뼱蹂댁꽭?? rows="1"></textarea>
             
             <div class="input-bottom-row">
                 <div class="input-left-tools">
-                    <button id="attachBtn" class="icon-btn" title="첨부하기"><i class="ti ti-plus"></i></button>
-                    <button id="searchBtn" class="icon-btn" title="검색 모드"><i class="ti ti-world"></i></button>
+                    <button id="attachBtn" class="icon-btn" title="泥⑤??섍린"><i class="ti ti-plus"></i></button>
+                    <button id="searchBtn" class="icon-btn" title="寃??紐⑤뱶"><i class="ti ti-world"></i></button>
                 </div>
                 
                 <button id="sendBtn" class="send-btn" disabled>
@@ -1528,72 +1597,72 @@
                 </button>
             </div>
             
-            <div class="disclaimer-text">quorv는 실수할 수 있습니다. 중요한 정보는 한번더 확인하세요.</div>
+            <div class="disclaimer-text">quorv???ㅼ닔?????덉뒿?덈떎. 以묒슂???뺣낫???쒕쾲???뺤씤?섏꽭??</div>
         </div>
     </div>
 
     <div id="pcSearchModalOverlay" class="modal-overlay">
         <div class="pc-search-modal-window" onclick="event.stopPropagation()">
             <div class="pc-search-left">
-                <input type="text" id="pcSearchInputModal" class="pc-search-left-input" placeholder="채팅 제목 검색...">
+                <input type="text" id="pcSearchInputModal" class="pc-search-left-input" placeholder="梨꾪똿 ?쒕ぉ 寃??..">
                 <div class="pc-search-list-content" id="pcSearchListContent"></div>
             </div>
             <div class="pc-search-right">
                 <div class="pc-search-preview-content" id="pcSearchPreviewContent">
-                    <div style="color:#9CA3AF; text-align:center; margin-top:50px;">대화를 선택하면 미리보기가 표시됩니다.</div>
+                    <div style="color:#9CA3AF; text-align:center; margin-top:50px;">??붾? ?좏깮?섎㈃ 誘몃━蹂닿린媛 ?쒖떆?⑸땲??</div>
                 </div>
-                <button class="pc-search-go-btn" id="pcSearchGoBtn" style="display:none;">대화로 이동</button>
+                <button class="pc-search-go-btn" id="pcSearchGoBtn" style="display:none;">??붾줈 ?대룞</button>
             </div>
         </div>
     </div>
 
     <div id="deleteModalOverlay" class="modal-overlay">
         <div class="delete-modal-window" onclick="event.stopPropagation()">
-            <div class="delete-modal-title">채팅 삭제</div>
-            <div class="delete-modal-desc">이 채팅을 정말 삭제하시겠습니까?</div>
+            <div class="delete-modal-title">梨꾪똿 ??젣</div>
+            <div class="delete-modal-desc">??梨꾪똿???뺣쭚 ??젣?섏떆寃좎뒿?덇퉴?</div>
             <div class="modal-actions delete-modal-actions">
-                <button class="modal-btn btn-cancel" id="deleteCancelBtn">취소</button>
-                <button class="modal-btn btn-confirm delete-btn-confirm" id="deleteConfirmBtn">삭제</button>
+                <button class="modal-btn btn-cancel" id="deleteCancelBtn">痍⑥냼</button>
+                <button class="modal-btn btn-confirm delete-btn-confirm" id="deleteConfirmBtn">??젣</button>
             </div>
         </div>
     </div>
 
     <div id="renameModalOverlay" class="modal-overlay">
         <div class="modal-window" onclick="event.stopPropagation()">
-            <div class="modal-title">채팅 이름 변경</div>
-            <input type="text" id="renameInput" class="modal-input" placeholder="새 이름을 입력하세요">
+            <div class="modal-title">梨꾪똿 ?대쫫 蹂寃?/div>
+            <input type="text" id="renameInput" class="modal-input" placeholder="???대쫫???낅젰?섏꽭??>
             <div class="modal-actions">
-                <button class="modal-btn btn-cancel" id="renameCancelBtn">취소</button>
-                <button class="modal-btn btn-confirm" id="renameConfirmBtn">저장</button>
+                <button class="modal-btn btn-cancel" id="renameCancelBtn">痍⑥냼</button>
+                <button class="modal-btn btn-confirm" id="renameConfirmBtn">???/button>
             </div>
         </div>
     </div>
 
     <div id="linkModalOverlay" class="modal-overlay">
         <div class="link-modal-window" onclick="event.stopPropagation()">
-            <div class="link-modal-title">다음링크로 이동할까요?</div>
-            <div class="link-modal-desc">아래 링크는 안전하지 않을 수 있습니다.<br>신뢰할 수 있는경우 이동하세요.</div>
+            <div class="link-modal-title">?ㅼ쓬留곹겕濡??대룞?좉퉴??</div>
+            <div class="link-modal-desc">?꾨옒 留곹겕???덉쟾?섏? ?딆쓣 ???덉뒿?덈떎.<br>?좊ː?????덈뒗寃쎌슦 ?대룞?섏꽭??</div>
             <div class="link-modal-box" id="linkModalUrlDisplay"></div>
             <div class="link-modal-actions">
-                <button class="modal-btn btn-gray" id="linkCancelBtn">취소</button>
-                <button class="modal-btn btn-black" id="linkGoBtn">이동</button>
+                <button class="modal-btn btn-gray" id="linkCancelBtn">痍⑥냼</button>
+                <button class="modal-btn btn-black" id="linkGoBtn">?대룞</button>
             </div>
         </div>
     </div>
 
     <div id="settingsModalOverlay" class="modal-overlay">
         <div class="settings-modal-window" onclick="event.stopPropagation()">
-            <div class="settings-title">설정</div>
-            <div class="settings-desc">아직 준비 중입니다. 곧 찾아뵐게요!</div>
+            <div class="settings-title">?ㅼ젙</div>
+            <div class="settings-desc">?꾩쭅 以鍮?以묒엯?덈떎. 怨?李얠븘逾먭쾶??</div>
             <div class="modal-actions" style="justify-content: center;">
-                <button class="modal-btn btn-confirm" id="settingsCloseBtn">확인</button>
+                <button class="modal-btn btn-confirm" id="settingsCloseBtn">?뺤씤</button>
             </div>
         </div>
     </div>
 
     <div id="detailsPanel" class="details-panel">
         <div class="details-header">
-            <span>상세 정보</span>
+            <span>?곸꽭 ?뺣낫</span>
             <div class="details-close" id="detailsCloseBtn"><span class="material-symbols-rounded">close</span></div>
         </div>
         <div class="details-tabs" id="detailsTabs">
@@ -1694,22 +1763,21 @@
         const themeItem = document.querySelector('.theme-item');
         const themeSubmenu = document.querySelector('.theme-submenu');
 
-        // 모바일 랜덤 추천 질문 리스트
-        const SUGGESTIONS = [
-            { icon: 'ti-bird', text: '기분 좋아지는 하루를 위한 꿀팁' },
-            { icon: 'ti-gift', text: '캐주얼한 모자 선물 추천해줘' },
-            { icon: 'ti-map-pin', text: '삼청동 근처 카페 찾아줘' },
-            { icon: 'ti-calendar-event', text: '이번 주 계획 나와 함께 세워줄래?' },
-            { icon: 'ti-messages', text: '나랑 끝말잇기 하자' },
-            { icon: 'ti-plane-departure', text: '주말 1박 2일 여행지 추천해줘' },
-            { icon: 'ti-bulb', text: '오늘 저녁 메뉴 랜덤으로 골라줘' },
-            { icon: 'ti-music', text: '비 오는 날 듣기 좋은 노래 추천' }
+        // 紐⑤컮???쒕뜡 異붿쿇 吏덈Ц 由ъ뒪??        const SUGGESTIONS = [
+            { icon: 'ti-bird', text: '湲곕텇 醫뗭븘吏???섎（瑜??꾪븳 轅?? },
+            { icon: 'ti-gift', text: '罹먯＜?쇳븳 紐⑥옄 ?좊Ъ 異붿쿇?댁쨾' },
+            { icon: 'ti-map-pin', text: '?쇱껌??洹쇱쿂 移댄럹 李얠븘以? },
+            { icon: 'ti-calendar-event', text: '?대쾲 二?怨꾪쉷 ?섏? ?④퍡 ?몄썙以꾨옒?' },
+            { icon: 'ti-messages', text: '?섎옉 ?앸쭚?뉕린 ?섏옄' },
+            { icon: 'ti-plane-departure', text: '二쇰쭚 1諛?2???ы뻾吏 異붿쿇?댁쨾' },
+            { icon: 'ti-bulb', text: '?ㅻ뒛 ???硫붾돱 ?쒕뜡?쇰줈 怨⑤씪以? },
+            { icon: 'ti-music', text: '鍮??ㅻ뒗 ???ｊ린 醫뗭? ?몃옒 異붿쿇' }
         ];
 
         function showMobileSuggestions() {
             if (window.innerWidth > 768) return;
             const shuffled = [...SUGGESTIONS].sort(() => 0.5 - Math.random()).slice(0, 5);
-            let html = `<div class="sugg-header">무엇을 도와드릴까요?</div>`;
+            let html = `<div class="sugg-header">臾댁뾿???꾩??쒕┫源뚯슂?</div>`;
             shuffled.forEach(s => {
                 html += `<button class="sugg-item" onclick="sendSuggestion('${s.text}')">
                             <i class="ti ${s.icon}"></i> <span>${s.text}</span>
@@ -1948,17 +2016,17 @@
                         <span>${lang}</span>
                     </div>
                     <div class="code-actions">
-                        <button class="code-action-btn" onclick="copyCode('${uniqueId}')" title="복사">
+                        <button class="code-action-btn" onclick="copyCode('${uniqueId}')" title="蹂듭궗">
                             <i class="ti ti-copy"></i>
                         </button>
-                        <button class="code-action-btn" id="edit-btn-${uniqueId}" onclick="toggleEdit('${uniqueId}')" title="편집">
+                        <button class="code-action-btn" id="edit-btn-${uniqueId}" onclick="toggleEdit('${uniqueId}')" title="?몄쭛">
                             <i class="ti ti-pencil"></i>
                         </button>
                         <div class="code-toggle-group">
-                            <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="코드 보기">
+                            <button class="toggle-btn active" id="view-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'code')" title="肄붾뱶 蹂닿린">
                                 <i class="ti ti-terminal"></i>
                             </button>
-                            <button class="toggle-btn ${!isExecutable ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isExecutable}, '${langLower}')" title="${isExecutable ? '실행' : '실행 불가'}">
+                            <button class="toggle-btn ${!isExecutable ? 'disabled-run' : ''}" id="run-code-${uniqueId}" onclick="setViewMode('${uniqueId}', 'run', ${isExecutable}, '${langLower}')" title="${isExecutable ? '?ㅽ뻾' : '?ㅽ뻾 遺덇?'}">
                                 <i class="ti ti-player-play"></i>
                             </button>
                         </div>
@@ -1980,7 +2048,7 @@
             if (!editor) return;
             const code = editor.value;
             navigator.clipboard.writeText(code).then(() => {
-                const btn = document.querySelector(`#container-${id} [title="복사"]`);
+                const btn = document.querySelector(`#container-${id} [title="蹂듭궗"]`);
                 const originalHTML = btn.innerHTML;
                 btn.innerHTML = '<i class="ti ti-check" style="color:#10B981;"></i>';
                 setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
@@ -2084,12 +2152,12 @@
             if (!editor || !outputDiv) return;
 
             outputDiv.style.display = 'block';
-            outputDiv.innerText = "Python 실행 중...";
+            outputDiv.innerText = "Python ?ㅽ뻾 以?..";
             outputDiv.style.color = "#0f0";
             
             try {
                 if (!pyodide) {
-                    outputDiv.innerText = "Pyodide 로딩 중 (처음 실행 시 몇 초 정도 소요될 수 있습니다)...";
+                    outputDiv.innerText = "Pyodide 濡쒕뵫 以?(泥섏쓬 ?ㅽ뻾 ??紐?珥??뺣룄 ?뚯슂?????덉뒿?덈떎)...";
                     await initPyodide();
                 }
                 
@@ -2105,9 +2173,9 @@
                 const stdout = pyodide.runPython("sys.stdout.getvalue()");
                 const stderr = pyodide.runPython("sys.stderr.getvalue()");
                 
-                outputDiv.innerText = (stdout + stderr) || "(출력 없음)";
+                outputDiv.innerText = (stdout + stderr) || "(異쒕젰 ?놁쓬)";
             } catch (err) {
-                outputDiv.innerText = "에러: " + err.message;
+                outputDiv.innerText = "?먮윭: " + err.message;
                 outputDiv.style.color = "#ff4444";
             }
         }
@@ -2136,7 +2204,7 @@
             if (!currentChatId) return;
             const chats = getSavedChats();
             
-            let title = "새로운 채팅";
+            let title = "?덈줈??梨꾪똿";
             if (conversationHistory.length > 0) {
                 const firstUserMsg = conversationHistory.find(m => m.role === 'user');
                 if (firstUserMsg) {
@@ -2184,7 +2252,7 @@
                                 const thoughtContainer = document.createElement('div');
                                 thoughtContainer.className = 'thought-container';
                                 thoughtContainer.innerHTML = `
-                                    <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
+                                    <div class="thought-header"><i class="ti ti-brain"></i> ?앷컖 怨쇱젙</div>
                                     <div class="thought-mask">
                                         <div class="thought-inner">${marked.parse(msgMetadata.thought)}</div>
                                     </div>
@@ -2305,10 +2373,10 @@
             });
             
             if (count === 0) {
-                pcSearchListContent.innerHTML = '<div style="color:#9CA3AF; padding:10px; font-size:13px;">결과가 없습니다.</div>';
+                pcSearchListContent.innerHTML = '<div style="color:#9CA3AF; padding:10px; font-size:13px;">寃곌낵媛 ?놁뒿?덈떎.</div>';
             }
             
-            pcSearchPreviewContent.innerHTML = '<div style="color:#9CA3AF; text-align:center; margin-top:50px;">대화를 선택하면 미리보기가 표시됩니다.</div>';
+            pcSearchPreviewContent.innerHTML = '<div style="color:#9CA3AF; text-align:center; margin-top:50px;">??붾? ?좏깮?섎㈃ 誘몃━蹂닿린媛 ?쒖떆?⑸땲??</div>';
             pcSearchGoBtn.style.display = 'none';
         }
 
@@ -2395,8 +2463,8 @@
                     const dropdown = document.createElement('div');
                     dropdown.className = 'history-menu-dropdown show';
                     dropdown.innerHTML = `
-                        <div class="history-menu-item" id="menuRename"><i class="ti ti-pencil"></i> 이름 변경</div>
-                        <div class="history-menu-item delete" id="menuDelete"><i class="ti ti-trash"></i> 삭제</div>
+                        <div class="history-menu-item" id="menuRename"><i class="ti ti-pencil"></i> ?대쫫 蹂寃?/div>
+                        <div class="history-menu-item delete" id="menuDelete"><i class="ti ti-trash"></i> ??젣</div>
                     `;
                     itemDiv.appendChild(dropdown);
 
@@ -2645,14 +2713,14 @@
             if (hasThought) {
                 const tBtn = document.createElement('button');
                 tBtn.className = `details-tab-btn ${defaultTab === 'thought' ? 'active' : ''}`;
-                tBtn.innerText = '사고 과정';
+                tBtn.innerText = '?ш퀬 怨쇱젙';
                 tBtn.onclick = () => showTabContent('thought', data);
                 detailsTabs.appendChild(tBtn);
             }
             if (hasCitations) {
                 const cBtn = document.createElement('button');
                 cBtn.className = `details-tab-btn ${(!hasThought || defaultTab === 'citations') ? 'active' : ''}`;
-                cBtn.innerText = '인용';
+                cBtn.innerText = '?몄슜';
                 cBtn.onclick = () => showTabContent('citations', data);
                 detailsTabs.appendChild(cBtn);
             }
@@ -2665,7 +2733,7 @@
 
         function showTabContent(type, data) {
             Array.from(detailsTabs.children).forEach(btn => {
-                if (btn.innerText === (type === 'thought' ? '사고 과정' : '인용')) btn.classList.add('active');
+                if (btn.innerText === (type === 'thought' ? '?ш퀬 怨쇱젙' : '?몄슜')) btn.classList.add('active');
                 else btn.classList.remove('active');
             });
 
@@ -2714,7 +2782,7 @@
 
             hideMobileSuggestions();
 
-            // 재생성 시 여백 고정
+            // ?ъ깮?????щ갚 怨좎젙
             if (!isRegen) {
                 const SCROLL_PADDING_OFFSET = window.innerWidth > 768 ? PC_SCROLL_PADDING_OFFSET : MOBILE_SCROLL_PADDING_OFFSET;
                 const initialPadding = window.innerHeight - SCROLL_PADDING_OFFSET;
@@ -2760,7 +2828,7 @@
 
             isGenerating = true;
             
-            // 전송버튼: 1초 동안 로딩 스피너 -> 그 후 정지버튼
+            // ?꾩넚踰꾪듉: 1珥??숈븞 濡쒕뵫 ?ㅽ뵾??-> 洹????뺤?踰꾪듉
             sendBtn.innerHTML = '<div class="spinner-small" style="width: 16px; height: 16px; color: #fff;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47715 2 2 6.47715 2 12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>'; 
             sendBtn.classList.add('generating-state');
             sendBtn.disabled = false;
@@ -2773,9 +2841,9 @@
             
             const isManualSearch = searchBtn.classList.contains('active');
             const searchKeywords = [
-                "검색해줘", "검색해", "찾아줘", "찾아봐", "알려줘", "뉴스", "날씨", "주가", 
-                "최신", "현재", "오늘", "정보", "어떻게 돼", "뭐야", "위키", "구글", 
-                "네이버", "실시간", "확인해줘", "나무위키", "검색"
+                "寃?됲빐以?, "寃?됲빐", "李얠븘以?, "李얠븘遊?, "?뚮젮以?, "?댁뒪", "?좎뵪", "二쇨?", 
+                "理쒖떊", "?꾩옱", "?ㅻ뒛", "?뺣낫", "?대뼸寃???, "萸먯빞", "?꾪궎", "援ш?", 
+                "?ㅼ씠踰?, "?ㅼ떆媛?, "?뺤씤?댁쨾", "?섎Т?꾪궎", "寃??
             ];
             const hasSearchIntent = searchKeywords.some(keyword => text.includes(keyword));
             const isSearchMode = isManualSearch || hasSearchIntent;
@@ -2813,11 +2881,11 @@
                     const loadingElem = document.getElementById(loadingId);
                     const analyzingText = loadingElem ? loadingElem.querySelector('.analyzing-text') : null;
                     if (analyzingText) {
-                        analyzingText.innerHTML = '<div style="color: #EF4444; margin-bottom: 4px;">검색에 실패함</div>';
+                        analyzingText.innerHTML = '<div style="color: #EF4444; margin-bottom: 4px;">寃?됱뿉 ?ㅽ뙣??/div>';
                         const failMsg = document.createElement('div');
                         failMsg.style.fontSize = '0.85em';
                         failMsg.style.color = '#EF4444';
-                        failMsg.innerText = "한도 초과로 인해 빠른 모델로 전환합니다.";
+                        failMsg.innerText = "?쒕룄 珥덇낵濡??명빐 鍮좊Ⅸ 紐⑤뜽濡??꾪솚?⑸땲??";
                         analyzingText.appendChild(failMsg);
                     }
                     
@@ -2829,7 +2897,7 @@
                         },
                         credentials: 'include',
                         body: JSON.stringify({ 
-                            message: "⚠️ 현재 검색 한도를 초과하여 검색을 사용할 수 없습니다.\n\n" + text, 
+                            message: "?좑툘 ?꾩옱 寃???쒕룄瑜?珥덇낵?섏뿬 寃?됱쓣 ?ъ슜?????놁뒿?덈떎.\n\n" + text, 
                             history: conversationHistory,
                             image_base64: imageBase64List 
                         }),
@@ -2888,7 +2956,7 @@
                         cleanText = "";
                     }
 
-                    // [Thought] 태그 화면 노출 방지
+                    // [Thought] ?쒓렇 ?붾㈃ ?몄텧 諛⑹?
                     thoughts = thoughts.replace(/^\[THOUGHT\]|^<think>|\[\/THOUGHT\]|<\/think>|\[Thought\]/gi, '').trim();
 
                     return { cleanText, thoughts, citations };
@@ -2928,7 +2996,7 @@
                                             thoughtContainer = document.createElement('div');
                                             thoughtContainer.className = 'thought-container';
                                             thoughtContainer.innerHTML = `
-                                                <div class="thought-header"><i class="ti ti-brain"></i> 생각 과정</div>
+                                                <div class="thought-header"><i class="ti ti-brain"></i> ?앷컖 怨쇱젙</div>
                                                 <div class="thought-mask">
                                                     <div class="thought-inner"></div>
                                                 </div>
@@ -3019,7 +3087,7 @@
 
                 const analyzingText = loadingElem.querySelector('.analyzing-text');
                 if (analyzingText) {
-                    analyzingText.innerText = "답변완료됨";
+                    analyzingText.innerText = "?듬??꾨즺??;
                     analyzingText.style.animation = "none";
                     analyzingText.style.background = "none";
                     analyzingText.style.webkitTextFillColor = "#9CA3AF";
@@ -3051,12 +3119,12 @@
                     if (botContent) {
                         const stopMsg = document.createElement('div');
                         stopMsg.style.color = '#9CA3AF'; 
-                        stopMsg.innerText = "[답변중단됨]";
+                        stopMsg.innerText = "[?듬?以묐떒??";
                         botContent.appendChild(stopMsg);
                     }
                 } else {
                     console.error(error);
-                    simulateBotError("죄송합니다. 오류가 발생했습니다.");
+                    simulateBotError("二꾩넚?⑸땲?? ?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎.");
                 }
             } finally {
                 isGenerating = false;
@@ -3081,7 +3149,7 @@
             
             const copyBtn = document.createElement('button');
             copyBtn.className = 'action-btn';
-            copyBtn.title = '복사';
+            copyBtn.title = '蹂듭궗';
             copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span>';
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(textContent).then(() => {
@@ -3093,7 +3161,7 @@
 
             const regenBtn = document.createElement('button');
             regenBtn.className = 'action-btn';
-            regenBtn.title = '재생성';
+            regenBtn.title = '?ъ깮??;
             regenBtn.innerHTML = '<span class="material-symbols-rounded">refresh</span>';
             regenBtn.addEventListener('click', regenerateResponse);
 
@@ -3103,7 +3171,7 @@
             if (metadata && (metadata.thought || (metadata.citations && metadata.citations.length > 0))) {
                 const thoughtBtn = document.createElement('button');
                 thoughtBtn.className = 'action-btn';
-                thoughtBtn.title = '사고 과정';
+                thoughtBtn.title = '?ш퀬 怨쇱젙';
                 thoughtBtn.innerHTML = '<span class="material-symbols-rounded">psychology</span>';
                 thoughtBtn.addEventListener('click', () => {
                     openDetailsPanel(metadata, metadata.thought ? 'thought' : 'citations');
@@ -3145,14 +3213,14 @@
             
             let timers = [];
             if (isSearchMode) {
-                contentDiv.innerHTML = '<div style="margin-bottom: 4px;">질문을 분석하는중...</div>';
+                contentDiv.innerHTML = '<div style="margin-bottom: 4px;">吏덈Ц??遺꾩꽍?섎뒗以?..</div>';
                 
                 timers.push(setTimeout(() => {
                     const searchProgress = document.createElement('div');
                     searchProgress.style.fontSize = '0.85em';
                     searchProgress.style.opacity = '0.7';
                     searchProgress.style.fontWeight = 'normal';
-                    searchProgress.innerText = "검색을 진행하는 중";
+                    searchProgress.innerText = "寃?됱쓣 吏꾪뻾?섎뒗 以?;
                     contentDiv.appendChild(searchProgress);
                 }, 1000));
 
@@ -3162,7 +3230,7 @@
                     analysisProgress.style.opacity = '0.7';
                     analysisProgress.style.fontWeight = 'normal';
                     analysisProgress.style.marginTop = '2px';
-                    analysisProgress.innerText = "검색한 내용을 분석하는 중";
+                    analysisProgress.innerText = "寃?됲븳 ?댁슜??遺꾩꽍?섎뒗 以?;
                     contentDiv.appendChild(analysisProgress);
                 }, 2000));
 
@@ -3172,11 +3240,11 @@
                     finalProgress.style.opacity = '0.7';
                     finalProgress.style.fontWeight = 'normal';
                     finalProgress.style.marginTop = '2px';
-                    finalProgress.innerText = "마무리 하는중";
+                    finalProgress.innerText = "留덈Т由??섎뒗以?;
                     contentDiv.appendChild(finalProgress);
                 }, 5000));
             } else {
-                contentDiv.innerText = "질문을 분석하는중...";
+                contentDiv.innerText = "吏덈Ц??遺꾩꽍?섎뒗以?..";
             }
             rowDiv.appendChild(contentDiv);
             chatContainer.appendChild(rowDiv);
@@ -3212,7 +3280,7 @@
                             attHtml += `<div style="background:#fff; border: 1px solid #E5E7EB; color:#1F2937; padding:10px 14px; border-radius:12px; font-size:12px; display:flex; flex-direction:column; max-width: 160px; text-align:left;">
                                 <i class="ti ti-file" style="font-size:20px; margin-bottom:4px; color:#6B7280;"></i>
                                 <span style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${att.name}</span>
-                                <span style="color:#6B7280; margin-top:2px;">${att.extension} • ${att.size}</span>
+                                <span style="color:#6B7280; margin-top:2px;">${att.extension} ??${att.size}</span>
                             </div>`;
                         }
                     });
@@ -3229,7 +3297,7 @@
 
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'user-copy-btn';
-                    copyBtn.title = '복사';
+                    copyBtn.title = '蹂듭궗';
                     copyBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px;">content_copy</span>';
                     
                     copyBtn.addEventListener('click', () => {
@@ -3297,3 +3365,4 @@
     </script>
 </body>
            </html>
+
